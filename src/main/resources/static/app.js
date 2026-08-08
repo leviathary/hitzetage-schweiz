@@ -25,6 +25,12 @@ Object.assign(translations.it, { analyze: 'Analizza la stazione', selectOne: 'Se
 Object.assign(translations.rm, { analyze: 'Evaluar la staziun', selectOne: 'Tscherna almain ina staziun.' });
 Object.assign(translations.en, { analyze: 'Analyse station', selectOne: 'Please select at least one station.' });
 Object.assign(translations.zh, { analyze: '分析气象站', selectOne: '请至少选择一个气象站。' });
+Object.assign(translations.de, { mapToggle:'Station auf Karte wählen', mapSearch:'Station suchen', mapSearchPlaceholder:'Name oder Kanton', mapHint:'Punkt anklicken, um eine Station zur Auswertung hinzuzufügen.', altitude:'Höhe', altitudeUnit:'m ü. M.', alreadySelected:'Bereits ausgewählt', addedFromMap:'Zur Auswertung hinzugefügt', mapFull:'Es können höchstens sechs Stationen ausgewählt werden.' });
+Object.assign(translations.fr, { mapToggle:'Choisir sur la carte', mapSearch:'Rechercher une station', mapSearchPlaceholder:'Nom ou canton', mapHint:'Cliquez sur un point pour ajouter une station à l’analyse.', altitude:'Altitude', altitudeUnit:'m', alreadySelected:'Déjà sélectionnée', addedFromMap:'Ajoutée à l’analyse', mapFull:'Six stations au maximum peuvent être sélectionnées.' });
+Object.assign(translations.it, { mapToggle:'Scegli sulla mappa', mapSearch:'Cerca stazione', mapSearchPlaceholder:'Nome o cantone', mapHint:'Seleziona un punto per aggiungere la stazione all’analisi.', altitude:'Altitudine', altitudeUnit:'m s.l.m.', alreadySelected:'Già selezionata', addedFromMap:'Aggiunta all’analisi', mapFull:'È possibile selezionare al massimo sei stazioni.' });
+Object.assign(translations.rm, { mapToggle:'Tscherner sin la charta', mapSearch:'Tschertgar staziun', mapSearchPlaceholder:'Num u chantun', mapHint:'Clicca sin in punct per agiuntar la staziun a l’evaluaziun.', altitude:'Autezza', altitudeUnit:'m s.m.', alreadySelected:'Gia tschernì', addedFromMap:'Agiuntà a l’evaluaziun', mapFull:'I pon vegnir tschernidas maximalmain sis staziuns.' });
+Object.assign(translations.en, { mapToggle:'Choose on map', mapSearch:'Search station', mapSearchPlaceholder:'Name or canton', mapHint:'Select a point to add that station to the analysis.', altitude:'Elevation', altitudeUnit:'m a.s.l.', alreadySelected:'Already selected', addedFromMap:'Added to analysis', mapFull:'A maximum of six stations can be selected.' });
+Object.assign(translations.zh, { mapToggle:'在地图上选择', mapSearch:'搜索气象站', mapSearchPlaceholder:'名称或州', mapHint:'点击站点，将其添加到分析中。', altitude:'海拔', altitudeUnit:'米', alreadySelected:'已选择', addedFromMap:'已添加到分析', mapFull:'最多可以选择六个气象站。' });
 let currentLanguage = 'de';
 const tr = key => translations[currentLanguage][key] || translations.de[key] || key;
 const locale = () => ({de:'de-CH',fr:'fr-CH',it:'it-CH',rm:'rm-CH',en:'en-GB',zh:'zh-CN'}[currentLanguage]);
@@ -32,6 +38,8 @@ const metricInfo = key => key === 'heatDays'
   ? { label: tr('heatDays'), threshold: tr('heatThreshold'), extremeLabel: tr('highest'), extremeKey: 'maximumTemperatureCelsius' }
   : { label: tr('tropicalNights'), threshold: tr('tropicalThreshold'), extremeLabel: tr('lowest'), extremeKey: 'minimumTemperatureCelsius' };
 let stations = [];
+let stationMap;
+let stationMarkerLayer;
 const currentYear = new Date().getFullYear();
 document.querySelector('#fromYear').value = currentYear - 10;
 document.querySelector('#toYear').value = currentYear;
@@ -43,17 +51,19 @@ function applyLanguage() {
   document.querySelector('#metric option[value="tropicalNights"]').textContent = tr('tropicalOption');
   document.querySelectorAll('.station-row label').forEach(label => { label.childNodes[0].textContent = tr('station'); });
   document.querySelectorAll('.remove-station').forEach(button => button.setAttribute('aria-label', tr('removeStation')));
+  document.querySelector('#map-search').placeholder = tr('mapSearchPlaceholder');
   updateStationCount();
 }
 
 function stationOptions(selectedId) {
-  return stations.map(({ id, name, canton }) => `<option value="${id}" ${id === selectedId ? 'selected' : ''}>${name} (${canton})</option>`).join('');
+  return stations.map(({ id, name, canton, elevationMetres }) => `<option value="${id}" ${id === selectedId ? 'selected' : ''}>${name} (${canton})${elevationMetres ? ` · ${elevationMetres} ${tr('altitudeUnit')}` : ''}</option>`).join('');
 }
 
 function addStation(selectedId = '', removable = true) {
   const row = document.createElement('div');
   row.className = 'station-row';
   row.innerHTML = `<label>${tr('station')}<select class="station-select">${stationOptions(selectedId)}</select></label>${removable ? `<button class="remove-station" type="button" aria-label="${tr('removeStation')}">×</button>` : ''}`;
+  row.querySelector('.station-select').addEventListener('change', updateStationCount);
   row.querySelector('.remove-station')?.addEventListener('click', () => { row.remove(); updateStationCount(); });
   selectors.append(row); updateStationCount();
 }
@@ -63,6 +73,62 @@ function updateStationCount() {
   stationCount.textContent = currentLanguage === 'zh' ? `${count} ${tr('stations')}` : `${count} ${count === 1 ? tr('station') : tr('stations')}`;
   document.querySelector('#compare').textContent = count === 1 ? tr('analyze') : tr('compare');
   document.querySelector('#add-station').disabled = count >= colors.length;
+  if (stations.length) renderMap();
+}
+
+function normalized(value) {
+  return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+}
+
+function showMapInfo(station, note = '') {
+  const info = document.querySelector('#map-info');
+  info.replaceChildren();
+  const title = document.createElement('strong');
+  title.textContent = `${station.name} (${station.canton})`;
+  const details = document.createElement('span');
+  details.textContent = `${tr('altitude')}: ${station.elevationMetres || '–'} ${tr('altitudeUnit')}${note ? ` · ${note}` : ''}`;
+  info.append(title, details);
+}
+
+function renderMap() {
+  const panel = document.querySelector('#map-panel');
+  if (!stationMap && panel.hidden) return;
+  if (!stationMap) {
+    stationMap = L.map('station-map', { minZoom: 6, maxZoom: 14 }).fitBounds([[45.75, 5.8], [47.85, 10.55]], { padding: [8, 8] });
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+    }).addTo(stationMap);
+    stationMarkerLayer = L.layerGroup().addTo(stationMap);
+  }
+  const selectedIds = selectedStationIds();
+  const query = normalized(document.querySelector('#map-search').value.trim());
+  stationMarkerLayer.clearLayers();
+  stations.filter(station => Number.isFinite(station.latitude) && Number.isFinite(station.longitude)).forEach(station => {
+    const selectedIndex = selectedIds.indexOf(station.id);
+    const searchText = normalized(`${station.name} ${station.canton} ${station.id}`);
+    if (query && !searchText.includes(query)) return;
+    const marker = L.circleMarker([station.latitude, station.longitude], {
+      radius: selectedIndex >= 0 ? 11 : 7,
+      color: selectedIndex >= 0 ? '#7f2118' : '#ffffff',
+      weight: selectedIndex >= 0 ? 3 : 2,
+      fillColor: selectedIndex >= 0 ? '#d65337' : '#26322e',
+      fillOpacity: selectedIndex >= 0 ? 1 : .9
+    });
+    marker.bindTooltip(`${station.name} (${station.canton}) · ${station.elevationMetres} ${tr('altitudeUnit')}`, { direction: 'top', offset: [0, -4] });
+    marker.on('mouseover', () => showMapInfo(station, selectedIndex >= 0 ? tr('alreadySelected') : ''));
+    marker.on('click', () => {
+      if (selectedStationIds().includes(station.id)) return showMapInfo(station, tr('alreadySelected'));
+      if (selectors.children.length >= colors.length) return showMapInfo(station, tr('mapFull'));
+      addStation(station.id);
+      showMapInfo(station, tr('addedFromMap'));
+    });
+    marker.addTo(stationMarkerLayer);
+    if (selectedIndex >= 0) marker.bringToFront();
+  });
+  if (!document.querySelector('#map-info').hasChildNodes() && stations.length) {
+    document.querySelector('#map-info').textContent = tr('mapHint');
+  }
 }
 
 async function loadStations() {
@@ -246,6 +312,17 @@ async function compare() {
 }
 
 document.querySelector('#add-station').addEventListener('click', () => addStation(stations[selectors.children.length]?.id));
+document.querySelector('#map-toggle').addEventListener('click', event => {
+  const button = event.currentTarget;
+  const open = button.getAttribute('aria-expanded') === 'true';
+  button.setAttribute('aria-expanded', String(!open));
+  document.querySelector('#map-panel').hidden = open;
+  if (!open) {
+    renderMap();
+    setTimeout(() => stationMap.invalidateSize(), 0);
+  }
+});
+document.querySelector('#map-search').addEventListener('input', renderMap);
 document.querySelector('#compare').addEventListener('click', compare);
 document.querySelector('#metric').addEventListener('change', compare);
 document.querySelector('#language').addEventListener('change', event => { currentLanguage = event.target.value; applyLanguage(); if (stations.length) compare(); });

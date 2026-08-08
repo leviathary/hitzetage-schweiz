@@ -11,9 +11,9 @@ import java.util.Map;
 @Profile("demo")
 class DemoStationDataSource implements StationDataSource {
     private static final List<Station> STATIONS = List.of(
-            new Station("ZRH", "Zürich / Fluntern", "ZH", 556),
-            new Station("GVE", "Genève / Cointrin", "GE", 411),
-            new Station("BAS", "Basel / Binningen", "BL", 316)
+            new Station("ZRH", "Zürich / Fluntern", "ZH", 556, 47.3782, 8.5659),
+            new Station("GVE", "Genève / Cointrin", "GE", 411, 46.2475, 6.1275),
+            new Station("BAS", "Basel / Binningen", "BL", 316, 47.5411, 7.5836)
     );
 
     private static final Map<String, List<AnnualHeatValue>> VALUES = Map.of(

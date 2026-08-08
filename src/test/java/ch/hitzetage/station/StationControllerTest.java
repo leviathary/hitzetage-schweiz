@@ -20,6 +20,15 @@ class StationControllerTest {
     MockMvc mockMvc;
 
     @Test
+    void returnsMapMetadataForStations() throws Exception {
+        mockMvc.perform(get("/api/stations"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].elevationMetres").isNumber())
+                .andExpect(jsonPath("$[0].latitude").isNumber())
+                .andExpect(jsonPath("$[0].longitude").isNumber());
+    }
+
+    @Test
     void returnsAnnualValuesForKnownStation() throws Exception {
         mockMvc.perform(get("/api/stations/ZRH/annual-values").param("fromYear", "2023").param("toYear", "2024"))
                 .andExpect(status().isOk())

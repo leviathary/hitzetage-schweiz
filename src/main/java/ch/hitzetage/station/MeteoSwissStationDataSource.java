@@ -86,7 +86,9 @@ class MeteoSwissStationDataSource implements StationDataSource {
         String name = value(row, "station_name", "name");
         String canton = value(row, "station_canton", "canton");
         int elevation = parseInteger(value(row, "station_height_masl", "station_height", "elevation"));
-        return new Station(id, name.isBlank() ? id : name, canton, elevation);
+        double latitude = parseCoordinate(value(row, "station_coordinates_wgs84_lat", "latitude"));
+        double longitude = parseCoordinate(value(row, "station_coordinates_wgs84_lon", "longitude"));
+        return new Station(id, name.isBlank() ? id : name, canton, elevation, latitude, longitude);
     }
 
     private String downloadCached(URI uri) {
@@ -198,6 +200,11 @@ class MeteoSwissStationDataSource implements StationDataSource {
     private static int parseInteger(String value) {
         Double number = parseNumber(value);
         return number == null ? 0 : number.intValue();
+    }
+
+    private static double parseCoordinate(String value) {
+        Double number = parseNumber(value);
+        return number == null ? Double.NaN : number;
     }
 
     private record CacheEntry<T>(T value, long createdAtNanos) {
