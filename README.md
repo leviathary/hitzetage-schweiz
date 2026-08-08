@@ -109,6 +109,20 @@ mvn test
 - weitere Klimaindikatoren aufklappen
 - Prognose für die nächsten neun Tage anzeigen
 
+## Screenshots
+
+### Stationsauswahl
+
+![Stationsauswahl mit Zeitraum und Kennzahl](docs/screenshots/stationsauswahl.png)
+
+### Jahresvergleich und Einordnung
+
+![Jahresvergleich mit Prognose und langjährigen Vergleichswerten](docs/screenshots/jahresvergleich.png)
+
+### Rangliste und Neun-Tage-Prognose
+
+![Top-5-Jahre und lokale Neun-Tage-Prognose](docs/screenshots/rangliste-und-prognose.png)
+
 ## Datenquelle
 
 Messwerte und Prognosen stammen aus dem offiziellen [MeteoSwiss-Open-Data-Angebot](https://www.meteoswiss.admin.ch/service-und-publikationen/service/open-data.html). Die Daten dürfen gemäß den [MeteoSwiss-Nutzungsbedingungen](https://opendatadocs.meteoswiss.ch/general/terms-of-use) auch bearbeitet und weiterverwendet werden; die Quelle muss genannt werden.
