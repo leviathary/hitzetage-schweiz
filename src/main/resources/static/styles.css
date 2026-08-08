@@ -52,6 +52,39 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 .summary strong { display: block; font-family: Georgia, serif; font-size: 2rem; margin: 4px 0; }
 .summary strong em { font-family: Inter, system-ui, sans-serif; font-size: .9rem; font-style: normal; color: #7b5d2a; }
 .summary small { color: #63716c; }
+.climate-context-heading { display: flex; justify-content: space-between; align-items: start; gap: 12px; margin-top: 34px; }
+.climate-context-heading h2 { margin-bottom: 4px; }
+.climate-context-heading p { margin: 0; color: #63716c; font-size: .8rem; }
+.climate-context { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-top: 14px; }
+.context-card { border: 1px solid #ffffffd4; border-left: 5px solid var(--station-color); border-radius: 14px; padding: 17px; background: linear-gradient(145deg, #ffffffa8, #edf5ef69); box-shadow: 0 12px 25px #173c2c17, inset 0 1px #fff; backdrop-filter: blur(14px) saturate(135%); }
+.context-card h3 { margin: 0; font-size: .95rem; }
+.context-current { display: flex; align-items: baseline; gap: 7px; margin: 10px 0 14px; }
+.context-current strong { font-family: Georgia, serif; font-size: 1.8rem; }
+.context-current span { color: #63716c; font-size: .76rem; }
+.context-facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.context-fact { padding-top: 8px; border-top: 1px solid #b9c9c2; }
+.context-fact span, .context-fact small { display: block; color: #63716c; font-size: .68rem; }
+.context-fact strong { display: block; margin: 3px 0; font-size: 1rem; }
+.top-years-title { margin: 26px 0 10px; font-size: .95rem; }
+.top-years { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+.top-years-card { padding: 14px 16px; border: 1px solid #ffffffd4; border-left: 5px solid var(--station-color); border-radius: 14px; background: linear-gradient(145deg, #ffffff9c, #edf5ef60); box-shadow: 0 9px 20px #173c2c12, inset 0 1px #fff; }
+.top-years-card h4 { margin: 0 0 8px; font-size: .85rem; }
+.top-year-row { display: grid; grid-template-columns: 24px 1fr auto; align-items: center; gap: 8px; padding: 6px 0; border-top: 1px solid #c6d2cc; font-size: .78rem; }
+.top-year-row:first-of-type { border-top: 0; }
+.top-year-rank { color: #63716c; }
+.top-year-value { font-weight: 800; }
+.top-year-row.provisional { color: #80501c; }
+.top-year-row small { grid-column: 2 / 4; color: #80501c; font-size: .66rem; }
+.climate-details-toggle { display: flex; width: 100%; justify-content: space-between; margin-top: 14px; padding: 11px 2px 3px; border-radius: 0; border-top: 1px solid #b9c9c2; color: #1c2925; background: transparent; box-shadow: none; }
+.climate-details-toggle:hover { color: #176249; background: transparent; }
+.climate-details-toggle span:last-child { transition: transform .2s ease; }
+.climate-details-toggle[aria-expanded='true'] span:last-child { transform: rotate(180deg); }
+.climate-details { display: none; margin-top: 8px; overflow-x: auto; }
+.climate-details.open { display: block; }
+.climate-table { width: 100%; border-collapse: collapse; font-size: .78rem; }
+.climate-table th, .climate-table td { padding: 9px 7px; border-bottom: 1px solid #cbd4cf; text-align: left; }
+.climate-table th:not(:first-child), .climate-table td:not(:first-child) { text-align: right; }
+.climate-table th { color: #63716c; }
 .forecast-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-top: 36px; }
 .forecast-heading h2 { margin-bottom: 12px; }
 #forecast-updated { color: #72807a; font-size: .75rem; }
@@ -70,4 +103,4 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 .event.tropical { color: #64458a; background: #eee5f7; }
 footer { color: #29453b; text-align: center; font-size: .85rem; padding: 22px 10px; text-shadow: 0 1px 8px #fff; }
 @media (max-width: 760px) { h1, .intro { white-space: normal; } h1 { font-size: clamp(2.5rem, 10vw, 4rem); } }
-@media (max-width: 520px) { main { padding-top: 36px; } .years { grid-template-columns: 1fr 1fr; } section { padding: 20px; } .chart { height: 280px; } }
+@media (max-width: 520px) { main { padding-top: 36px; } .years { grid-template-columns: 1fr 1fr; } section { padding: 20px; } .chart { height: 280px; } .context-facts { grid-template-columns: 1fr; } }

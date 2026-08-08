@@ -72,8 +72,12 @@ class MeteoSwissStationDataSource implements StationDataSource {
                         entry.getKey(),
                         entry.getValue().heatDays,
                         entry.getValue().tropicalNights,
+                        entry.getValue().summerDays,
+                        entry.getValue().veryHotDays,
+                        entry.getValue().longestHeatWaveDays,
                         entry.getValue().maximumValue(),
-                        entry.getValue().minimumValue()))
+                        entry.getValue().minimumValue(),
+                        entry.getValue().warmestNightValue()))
                 .toList();
     }
 
@@ -205,25 +209,40 @@ class MeteoSwissStationDataSource implements StationDataSource {
     private static final class YearAccumulator {
         int heatDays;
         int tropicalNights;
+        int summerDays;
+        int veryHotDays;
+        int longestHeatWaveDays;
+        int currentHeatWaveDays;
         double maximum = -Double.MAX_VALUE;
         double minimum = Double.MAX_VALUE;
+        double warmestNight = -Double.MAX_VALUE;
         boolean hasMaximum;
         boolean hasMinimum;
 
         void add(Double dailyMaximum, Double dailyMinimum) {
             if (dailyMaximum != null) {
                 hasMaximum = true;
-                if (dailyMaximum >= 30.0) heatDays++;
+                if (dailyMaximum >= 25.0) summerDays++;
+                if (dailyMaximum >= 35.0) veryHotDays++;
+                if (dailyMaximum >= 30.0) {
+                    heatDays++;
+                    currentHeatWaveDays++;
+                    longestHeatWaveDays = Math.max(longestHeatWaveDays, currentHeatWaveDays);
+                } else {
+                    currentHeatWaveDays = 0;
+                }
                 maximum = Math.max(maximum, dailyMaximum);
             }
             if (dailyMinimum != null) {
                 hasMinimum = true;
                 if (dailyMinimum >= 20.0) tropicalNights++;
                 minimum = Math.min(minimum, dailyMinimum);
+                warmestNight = Math.max(warmestNight, dailyMinimum);
             }
         }
 
         double maximumValue() { return hasMaximum ? maximum : 0.0; }
         double minimumValue() { return hasMinimum ? minimum : 0.0; }
+        double warmestNightValue() { return hasMinimum ? warmestNight : 0.0; }
     }
 }

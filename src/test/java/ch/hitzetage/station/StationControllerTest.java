@@ -25,7 +25,11 @@ class StationControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.station.id").value("ZRH"))
                 .andExpect(jsonPath("$.dataStatus").value("meteoswiss"))
-                .andExpect(jsonPath("$.values", hasSize(2)));
+                .andExpect(jsonPath("$.values", hasSize(2)))
+                .andExpect(jsonPath("$.values[0].summerDays").isNumber())
+                .andExpect(jsonPath("$.values[0].veryHotDays").isNumber())
+                .andExpect(jsonPath("$.values[0].longestHeatWaveDays").isNumber())
+                .andExpect(jsonPath("$.values[0].warmestNightCelsius").isNumber());
     }
 
     @Test
