@@ -101,6 +101,8 @@ mvn test
 ## Funktionen
 
 - eine oder mehrere Messstationen auswählen
+- Messstationen auf einer interaktiven Schweizkarte suchen und hinzufügen
+- Stationshöhe in Auswahl und Karteninformation anzeigen
 - Hitzetage und Tropennächte pro Jahr darstellen
 - gemessene und prognostizierte Ereignisse im aktuellen Jahr unterscheiden
 - ausgewählte Stationen miteinander vergleichen
@@ -108,6 +110,19 @@ mvn test
 - Rang und Top-5-Jahre seit 1990 anzeigen
 - weitere Klimaindikatoren aufklappen
 - Prognose für die nächsten neun Tage anzeigen
+
+## Stationskarte verwenden
+
+Über **„Station auf Karte wählen“** lässt sich eine zoombare OpenStreetMap-Karte öffnen. Sie zeigt die MeteoSwiss-Stationen an ihren offiziellen WGS84-Koordinaten:
+
+- nicht ausgewählte Stationen erscheinen als schwarze Punkte
+- ausgewählte Stationen werden größer und rot hervorgehoben
+- ein Klick auf einen schwarzen Punkt fügt die Station zur Auswertung hinzu
+- der Tooltip und das Informationsfeld zeigen Name, Kanton und Stationshöhe
+- das Suchfeld filtert nach Stationsname, MeteoSwiss-Kürzel oder Kanton
+- maximal sechs Stationen können gleichzeitig ausgewählt werden
+
+Die Kartenbibliothek Leaflet wird lokal aus dem Docker-Container ausgeliefert. Zum Laden der Kartenkacheln ist eine Internetverbindung zu OpenStreetMap erforderlich; Stations- und Wetterdaten werden weiterhin ausschließlich über das Backend von MeteoSwiss bezogen.
 
 ## Screenshots
 
@@ -130,6 +145,8 @@ Messwerte und Prognosen stammen aus dem offiziellen [MeteoSwiss-Open-Data-Angebo
 `MeteoSwissStationDataSource` lädt Stationsmetadaten sowie historische und aktuelle Tageswerte über `data.geo.admin.ch`. Die Prognose stammt aus der Sammlung `ch.meteoschweiz.ogd-local-forecasting`. Häufig benötigte Daten werden im Arbeitsspeicher zwischengespeichert, um unnötige Mehrfachabrufe zu vermeiden.
 
 Die Anwendung ist kein offizielles Angebot von MeteoSwiss. MeteoSwiss übernimmt keine Gewähr für Richtigkeit, Aktualität oder Vollständigkeit der bereitgestellten Open Data.
+
+Die interaktive Stationskarte verwendet die lokal eingebundene Open-Source-Bibliothek [Leaflet](https://leafletjs.com/) und Kartenkacheln von [OpenStreetMap](https://www.openstreetmap.org/copyright). Die jeweilige Quellenangabe wird direkt auf der Karte angezeigt.
 
 ## API
 
