@@ -1,25 +1,92 @@
 # Hitzetage Schweiz
 
-Deutschsprachige Webanwendung zur Auswertung von Hitzetagen an MeteoSwiss-Messstationen. Ein **Hitzetag** ist hier ein Tag mit einer Tageshöchsttemperatur von mindestens 30 °C.
+Webanwendung zum Vergleichen von Hitzetagen und Tropennächten an MeteoSwiss-Messstationen. Historische Jahreswerte, langjährige Vergleiche und die aktuelle Neun-Tage-Prognose werden in einer gemeinsamen Oberfläche dargestellt.
 
-Das Projekt ist als schlanker, lauffähiger Ausgangspunkt aufgebaut: Spring Boot stellt API und statisches JavaScript-Frontend gemeinsam bereit. Stationsliste und Tageshöchstwerte werden live aus dem offiziellen MeteoSwiss-Open-Data-Angebot geladen und für sechs Stunden im Arbeitsspeicher zwischengespeichert.
+- **Hitzetag:** Tagesmaximum mindestens 30 °C
+- **Tropennacht:** Tagesminimum mindestens 20 °C
+- **Backend:** Java 21 und Spring Boot
+- **Frontend:** HTML, CSS und JavaScript
+- **Betrieb:** ein Docker-Container, keine Datenbank erforderlich
+- **Sprachen:** Deutsch, Französisch, Italienisch, Rätoromanisch, Englisch und Chinesisch
 
-## Voraussetzungen
+## Schnellstart mit Docker
 
-Wahlweise:
-
-- Docker mit Docker Compose, oder
-- JDK 21 und Maven 3.9+
-
-## Start mit Docker
+Benötigt werden [Git](https://git-scm.com/downloads) und [Docker Desktop](https://www.docker.com/products/docker-desktop/). Nach dem Start von Docker Desktop in einem Terminal ausführen:
 
 ```bash
-docker compose up --build
+git clone https://github.com/leviathary/hitzetage-schweiz.git
+cd hitzetage-schweiz
+docker compose up --build -d
 ```
 
-Danach im Browser <http://localhost:8080> öffnen. Beenden mit `Ctrl+C`; Container entfernen mit `docker compose down`.
+Anschließend **<http://localhost:8080>** im Browser öffnen. Beim ersten Start lädt Docker die benötigten Basis-Images und baut die Anwendung; das kann einige Minuten dauern.
 
-## Start mit Java und Maven
+Status und Protokoll anzeigen:
+
+```bash
+docker compose ps
+docker compose logs -f app
+```
+
+Anwendung stoppen:
+
+```bash
+docker compose down
+```
+
+## Konfiguration
+
+Die Voreinstellungen funktionieren ohne zusätzliche Konfiguration. Optional kann eine lokale `.env`-Datei angelegt werden:
+
+```bash
+cp .env.example .env
+```
+
+Unter Windows PowerShell funktioniert alternativ:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Verfügbare Einstellungen:
+
+| Variable | Standard | Bedeutung |
+|---|---:|---|
+| `APP_PORT` | `8080` | Port, unter dem die Webseite lokal erreichbar ist |
+| `SPRING_PROFILES_ACTIVE` | `default` | `default` für MeteoSwiss oder `demo` für Offline-Beispieldaten |
+
+Ist Port 8080 bereits belegt, in `.env` beispielsweise `APP_PORT=8081` setzen und danach <http://localhost:8081> öffnen.
+
+### Offline-Demomodus
+
+Für Entwicklung ohne Zugriff auf MeteoSwiss in `.env` Folgendes setzen:
+
+```dotenv
+SPRING_PROFILES_ACTIVE=demo
+```
+
+Danach den Container neu erstellen:
+
+```bash
+docker compose up --build -d
+```
+
+Der Live-Betrieb ersetzt fehlgeschlagene MeteoSwiss-Abfragen nicht unbemerkt durch Demodaten. Ist die Datenquelle beim ersten Abruf nicht erreichbar, meldet die API HTTP 503.
+
+## Aktualisieren
+
+Eine vorhandene Installation auf den neuesten Stand bringen:
+
+```bash
+git pull
+docker compose up --build -d
+```
+
+Lokale Änderungen sollten vor `git pull` committed oder anderweitig gesichert werden.
+
+## Lokaler Start ohne Docker
+
+Voraussetzungen: JDK 21 und Maven 3.9 oder neuer.
 
 ```bash
 mvn spring-boot:run
@@ -31,40 +98,71 @@ Tests ausführen:
 mvn test
 ```
 
-## Schnittstellen
+## Funktionen
 
-- `GET /api/stations` – verfügbare Stationen
-- `GET /api/stations/{stationId}/annual-values?fromYear=2022&toYear=2024` – Jahreswerte einer Station
-- `GET /api/stations/{stationId}/forecast` – lokale Neun-Tage-Prognose mit Minimum, Maximum sowie erwarteten Hitzetagen und Tropennächten
+- eine oder mehrere Messstationen auswählen
+- Hitzetage und Tropennächte pro Jahr darstellen
+- gemessene und prognostizierte Ereignisse im aktuellen Jahr unterscheiden
+- ausgewählte Stationen miteinander vergleichen
+- aktuelles Jahr mit dem Mittel der letzten 20 Jahre und der Norm 1991–2020 einordnen
+- Rang und Top-5-Jahre seit 1990 anzeigen
+- weitere Klimaindikatoren aufklappen
+- Prognose für die nächsten neun Tage anzeigen
+
+## Datenquelle
+
+Messwerte und Prognosen stammen aus dem offiziellen [MeteoSwiss-Open-Data-Angebot](https://www.meteoswiss.admin.ch/service-und-publikationen/service/open-data.html). Die Daten dürfen gemäß den [MeteoSwiss-Nutzungsbedingungen](https://opendatadocs.meteoswiss.ch/general/terms-of-use) auch bearbeitet und weiterverwendet werden; die Quelle muss genannt werden.
+
+`MeteoSwissStationDataSource` lädt Stationsmetadaten sowie historische und aktuelle Tageswerte über `data.geo.admin.ch`. Die Prognose stammt aus der Sammlung `ch.meteoschweiz.ogd-local-forecasting`. Häufig benötigte Daten werden im Arbeitsspeicher zwischengespeichert, um unnötige Mehrfachabrufe zu vermeiden.
+
+Die Anwendung ist kein offizielles Angebot von MeteoSwiss. MeteoSwiss übernimmt keine Gewähr für Richtigkeit, Aktualität oder Vollständigkeit der bereitgestellten Open Data.
+
+## API
+
+| Aufruf | Beschreibung |
+|---|---|
+| `GET /api/stations` | verfügbare Messstationen |
+| `GET /api/stations/{id}/annual-values?fromYear=2022&toYear=2024` | Jahreswerte einer Station |
+| `GET /api/stations/{id}/forecast` | lokale Neun-Tage-Prognose |
 
 Beispiel:
 
 ```bash
-curl "http://localhost:8080/api/stations/ZRH/annual-values?fromYear=2022&toYear=2024"
+curl "http://localhost:8080/api/stations/SMA/annual-values?fromYear=2022&toYear=2024"
 ```
 
-Die Antwort nennt über `dataStatus: "meteoswiss"` die Datenquelle. `heatDayThresholdCelsius` dokumentiert den verwendeten Schwellenwert.
-
-## Datenquelle und nächster Ausbauschritt
-
-Quelle ist das offizielle [MeteoSwiss Open-Data-Angebot](https://opendatadocs.meteoswiss.ch/a-data-groundbased/a1-automatic-weather-stations). Der Datenzugriff ist durch `StationDataSource` von API und Oberfläche getrennt. `MeteoSwissStationDataSource` lädt die dokumentierten Stationsmetadaten sowie tägliche historische und aktuelle Dateien über `data.geo.admin.ch`. Aus dem offiziellen Tagesmaximum `tre200dx` wird die Anzahl der Tage ab 30 °C berechnet.
-
-Die Prognose stammt aus der offiziellen Sammlung `ch.meteoschweiz.ogd-local-forecasting`. Messstationen werden über ihr MeteoSwiss-Stationskürzel den Prognosepunkten zugeordnet. Verwendet werden `tre200pn` (lokales Tagesminimum) und `tre200px` (lokales Tagesmaximum); Messwerte und Prognosen werden in der Oberfläche getrennt dargestellt.
-
-Für Offline-Entwicklung lässt sich die Anwendung mit `SPRING_PROFILES_ACTIVE=demo` weiterhin mit drei Beispieldatensätzen starten. Live-Daten werden nicht still durch Demo-Werte ersetzt: Ist MeteoSwiss beim ersten Abruf nicht erreichbar, antwortet die API mit HTTP 503.
-
-## Struktur
+## Projektstruktur
 
 ```text
 src/main/java/ch/hitzetage/          Spring-Boot-Anwendung
-src/main/java/ch/hitzetage/station/  API, Datenmodell und Datenquellen-Abstraktion
-src/main/resources/static/           HTML, CSS und JavaScript
+src/main/java/ch/hitzetage/station/  API, Modelle und MeteoSwiss-Anbindung
+src/main/resources/static/           HTML, CSS, JavaScript und Bilder
 src/test/                             API-Tests
 Dockerfile                            zweistufiges Container-Build
 compose.yaml                          lokaler Ein-Container-Start
+.env.example                          optionale lokale Einstellungen
 ```
 
-## Noch offen
+## Häufige Probleme
 
-- Visualisierung, Datenqualitäts-Hinweise und Export
-- CI-Pipeline und später ein Remote-Repository
+**Docker-Befehl kann den Docker-Dienst nicht erreichen**
+
+Docker Desktop starten und warten, bis dort „Engine running“ angezeigt wird.
+
+**Port 8080 ist bereits belegt**
+
+In `.env` einen anderen Port setzen, beispielsweise `APP_PORT=8081`, und den Container neu starten.
+
+**Die erste Auswertung dauert länger**
+
+Beim ersten Abruf werden die benötigten MeteoSwiss-Dateien geladen und ausgewertet. Weitere Abrufe verwenden den Cache.
+
+**Änderungen sind im Browser nicht sichtbar**
+
+`docker compose up --build -d` erneut ausführen und den Browser mit `Strg+F5` aktualisieren.
+
+## Lizenz
+
+Der Quellcode steht unter der [MIT-Lizenz](LICENSE). Er darf verwendet, verändert und weitergegeben werden, sofern der Copyright- und Lizenzhinweis erhalten bleibt.
+
+Die MeteoSwiss-Daten sind davon unabhängig und unterliegen den oben verlinkten Nutzungsbedingungen von MeteoSwiss.

@@ -4,3 +4,4 @@ target/
 work/
 *.iml
 .DS_Store
+.env
