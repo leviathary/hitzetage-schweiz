@@ -5,22 +5,23 @@
   <title>Hitzetage Schweiz</title><link rel="stylesheet" href="/styles.css">
 </head>
 <body><main>
-  <header><p class="eyebrow">MeteoSwiss-Messstationen</p><h1>Hitzetage in der Schweiz</h1><p class="intro">Vergleiche Messstationen und entdecke, wie häufig die Tageshöchsttemperatur 30&nbsp;°C erreicht hat.</p></header>
+  <div class="language-switcher"><label for="language" data-i18n="language">Sprache</label><select id="language"><option value="de">Deutsch</option><option value="fr">Français</option><option value="it">Italiano</option><option value="rm">Rumantsch</option><option value="en">English</option><option value="zh">中文</option></select></div>
+  <header><p class="eyebrow" data-i18n="eyebrow">MeteoSwiss-Messstationen</p><h1 data-i18n="title">Hitzetage in der Schweiz</h1><p class="intro" data-i18n="intro">Vergleiche Messstationen und entdecke, wie häufig die Tageshöchsttemperatur 30&nbsp;°C erreicht hat.</p></header>
   <section class="controls" aria-labelledby="selection-title">
-    <div class="section-heading"><h2 id="selection-title">Stationen und Zeitraum</h2><span id="station-count" class="badge">2 Stationen</span></div>
+    <div class="section-heading"><h2 id="selection-title" data-i18n="selectionTitle">Stationen und Zeitraum</h2><span id="station-count" class="badge">2 Stationen</span></div>
     <div id="station-selectors" class="station-selectors" aria-label="Ausgewählte Messstationen"></div>
-    <button id="add-station" class="secondary-button" type="button">+ Station hinzufügen</button>
-    <div class="years"><label>Von <input id="fromYear" type="number" min="1864"></label><label>Bis <input id="toYear" type="number" min="1864"></label></div>
-    <label class="metric-label">Kennzahl<select id="metric"><option value="heatDays">Hitzetage (Maximum ≥ 30 °C)</option><option value="tropicalNights">Tropennächte (Minimum ≥ 20 °C)</option></select></label>
-    <button id="compare" type="button">Stationen vergleichen</button><p id="status" role="status"></p>
+    <button id="add-station" class="secondary-button" type="button" data-i18n="addStation">+ Station hinzufügen</button>
+    <div class="years"><label><span data-i18n="from">Von</span><input id="fromYear" type="number" min="1864"></label><label><span data-i18n="to">Bis</span><input id="toYear" type="number" min="1864"></label></div>
+    <label class="metric-label"><span data-i18n="metric">Kennzahl</span><select id="metric"><option value="heatDays">Hitzetage (Maximum ≥ 30 °C)</option><option value="tropicalNights">Tropennächte (Minimum ≥ 20 °C)</option></select></label>
+    <button id="compare" type="button" data-i18n="compare">Stationen vergleichen</button><p id="status" role="status"></p>
   </section>
   <section aria-labelledby="result-title">
-    <div class="section-heading"><h2 id="result-title">Hitzetage pro Jahr</h2><span class="badge">Quelle: MeteoSwiss</span></div>
+    <div class="section-heading"><h2 id="result-title">Hitzetage pro Jahr</h2><span class="badge" data-i18n="source">Quelle: MeteoSwiss</span></div>
     <div id="legend" class="legend" aria-label="Legende"></div>
     <div id="chart" class="chart-empty"><p>Wähle mindestens zwei Stationen und einen Zeitraum.</p></div>
     <div id="results" class="results"></div>
-    <div class="forecast-heading"><h2>Prognose für die nächsten neun Tage</h2><span id="forecast-updated"></span></div>
-    <div id="forecast" class="forecast"><p>Prognose wird mit dem Vergleich geladen.</p></div>
+    <div class="forecast-heading"><h2 data-i18n="forecastTitle">Prognose für die nächsten neun Tage</h2><span id="forecast-updated"></span></div>
+    <div id="forecast" class="forecast"><p data-i18n="forecastLoading">Prognose wird mit dem Vergleich geladen.</p></div>
   </section>
-  <footer>Quelle: MeteoSwiss Open Data · Hitzetag: Maximum ≥ 30 °C · Tropennacht: Minimum ≥ 20 °C</footer>
+  <footer data-i18n="footer">Quelle: MeteoSwiss Open Data · Hitzetag: Maximum ≥ 30 °C · Tropennacht: Minimum ≥ 20 °C</footer>
 </main><script src="/app.js" defer></script></body></html>

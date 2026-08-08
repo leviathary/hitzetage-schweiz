@@ -1,22 +1,29 @@
-:root { color-scheme: light; font-family: Inter, system-ui, sans-serif; color: #1c2925; background: #edf1ed; }
+:root { color-scheme: light; font-family: Inter, system-ui, sans-serif; color: #14251f; background: #dce8df; }
 * { box-sizing: border-box; }
-body { margin: 0; }
+body { margin: 0; min-height: 100vh; background: linear-gradient(180deg, #d9eff942 0%, #edf3e817 45%, #dfe8dc52 100%), url('/images/swiss-summer-weather.png') center top / cover fixed no-repeat; }
+body::before { content: ''; position: fixed; inset: 0; z-index: -1; background: linear-gradient(90deg, #ffffff12, transparent 65%), linear-gradient(180deg, transparent 48%, #e7eee442 100%); }
 main { width: min(1080px, calc(100% - 32px)); margin: 0 auto; padding: 64px 0 32px; }
-header { max-width: 760px; margin-bottom: 42px; }
-.eyebrow { color: #b8442b; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; font-size: .78rem; }
-h1 { font-family: Georgia, serif; font-size: clamp(2.6rem, 7vw, 5.4rem); line-height: .96; margin: 12px 0 20px; font-weight: 500; }
-.intro { font-size: 1.2rem; line-height: 1.6; color: #52615c; }
-section { background: #fff; border: 1px solid #d9e0dc; border-radius: 16px; padding: 28px; margin: 20px 0; box-shadow: 0 12px 35px #31453c0c; }
+.language-switcher { display: flex; justify-content: flex-end; align-items: center; gap: 9px; margin-bottom: 24px; }
+.language-switcher label { margin: 0; color: #173f34; }
+.language-switcher select { width: auto; min-width: 145px; margin: 0; padding: 8px 34px 8px 11px; background: #ffffffa8; }
+header { max-width: 1040px; margin-bottom: 42px; }
+.eyebrow { color: #173f34; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; font-size: .78rem; }
+h1 { font-family: Inter, system-ui, sans-serif; font-size: clamp(2.7rem, 5.6vw, 4.6rem); line-height: 1; margin: 12px 0 20px; font-weight: 760; letter-spacing: -.045em; white-space: nowrap; text-shadow: 0 1px 18px #fff8; }
+.intro { max-width: none; font-size: 1.15rem; line-height: 1.6; color: #263d35; white-space: nowrap; text-shadow: 0 1px 12px #fff; }
+section { background: #ffffff8c; border: 1px solid #ffffffd9; border-radius: 22px; padding: 28px; margin: 20px 0; box-shadow: 0 22px 55px #173c2c29, 0 5px 14px #173c2c14, inset 0 1px 0 #fff, inset 0 -1px 0 #ffffff66; backdrop-filter: blur(17px) saturate(145%); -webkit-backdrop-filter: blur(17px) saturate(145%); }
+main > section { position: relative; isolation: isolate; overflow: hidden; }
+main > section::before { content: ''; position: absolute; z-index: -1; inset: 0; pointer-events: none; border-radius: inherit; background: linear-gradient(145deg, #ffffff70 0%, #ffffff12 38%, transparent 62%), radial-gradient(circle at 82% 8%, #ffffff54, transparent 28%); }
+main > section::after { content: ''; position: absolute; inset: 1px; pointer-events: none; border-radius: 20px; border-top: 1px solid #fff; border-left: 1px solid #ffffffb0; box-shadow: inset 0 -12px 22px #345b4912; }
 h2 { margin: 0 0 22px; font-size: 1.1rem; }
 label { display: block; font-size: .84rem; font-weight: 700; margin-bottom: 8px; }
-select, input { width: 100%; padding: 12px; margin-top: 7px; border: 1px solid #b8c4be; border-radius: 8px; background: #fff; font: inherit; }
-.station-selectors { display: grid; gap: 10px; }
-.station-row { display: grid; grid-template-columns: 1fr 42px; gap: 8px; align-items: end; }
-.station-row:first-child { grid-template-columns: 1fr; }
-.remove-station { height: 43px; padding: 0; margin: 0 0 8px; background: #f3e7e3; color: #8b321f; font-size: 1.4rem; }
-.years { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 20px; }
+select, input { width: 100%; padding: 12px; margin-top: 7px; border: 1px solid #aebdb6; border-radius: 12px; background: #ffffffc7; box-shadow: inset 0 1px #fff, 0 5px 14px #1c40330b; font: inherit; }
+.station-selectors { display: grid; gap: 10px; padding-right: 48px; }
+.station-row { position: relative; display: block; }
+.station-row label { width: 100%; }
+.remove-station { position: absolute; right: -48px; bottom: 14px; width: 36px; height: 34px; padding: 0; margin: 0; border-radius: 9px; background: #f3e7e3; color: #8b321f; box-shadow: none; font-size: 1.2rem; }
+.years { display: grid; grid-template-columns: repeat(2, minmax(130px, 190px)); gap: 14px; margin-top: 20px; }
 .metric-label { margin-top: 12px; }
-button { margin-top: 18px; border: 0; border-radius: 8px; padding: 13px 18px; background: #1e5745; color: #fff; font-weight: 750; cursor: pointer; }
+button { margin-top: 18px; border: 0; border-radius: 12px; padding: 13px 18px; background: linear-gradient(135deg, #197451, #279463); color: #fff; box-shadow: 0 8px 20px #15573d30; font-weight: 750; cursor: pointer; }
 button:hover { background: #143e31; }
 button:disabled { opacity: .5; cursor: not-allowed; }
 .secondary-button { margin-top: 4px; padding: 9px 12px; background: transparent; color: #1e5745; border: 1px solid #b8c4be; }
@@ -30,7 +37,7 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 .legend .forecast-key i { border: 1px solid #52615c; background: repeating-linear-gradient(135deg, #52615c 0 2px, #fff 2px 4px); }
 .chart { display: grid; grid-template-columns: 34px 1fr; height: 330px; overflow-x: auto; border-bottom: 1px solid #cbd4cf; }
 .chart-empty { display: grid; place-items: center; min-height: 220px; color: #66746e; background: #f6f8f7; border-radius: 10px; }
-.y-axis { position: sticky; left: 0; z-index: 2; display: flex; flex-direction: column; justify-content: space-between; padding: 0 5px 30px 0; color: #72807a; font-size: .7rem; background: #fff; }
+.y-axis { position: sticky; left: 0; z-index: 2; display: flex; flex-direction: column; justify-content: space-between; padding: 0 5px 30px 0; color: #586c64; font-size: .7rem; background: #f8faf8d9; }
 .plot { min-width: 640px; display: flex; align-items: stretch; gap: 12px; padding: 0 12px; background: repeating-linear-gradient(to bottom, #dfe5e1 0, #dfe5e1 1px, transparent 1px, transparent 50%); }
 .year-group { flex: 1; min-width: 50px; display: grid; grid-template-rows: 1fr 30px; }
 .bars { display: flex; justify-content: center; align-items: end; gap: 3px; }
@@ -40,7 +47,8 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 .bar-forecast { width: 100%; min-height: 3px; border: 1px solid var(--bar-color); border-bottom: 0; border-radius: 3px 3px 0 0; background: repeating-linear-gradient(135deg, var(--bar-color) 0 2px, #fff 2px 5px); }
 .year-label { align-self: center; text-align: center; font-size: .72rem; color: #66746e; }
 .results { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 24px; }
-.summary { border: 1px solid #d9e0dc; border-left-width: 5px; border-radius: 10px; padding: 16px; }
+.summary { position: relative; overflow: hidden; border: 1px solid #ffffffd4; border-left: 5px solid var(--station-color); border-radius: 14px; padding: 17px; background: linear-gradient(145deg, #ffffffa8, #edf5ef69); box-shadow: 0 12px 25px #173c2c17, inset 0 1px #fff, inset 0 -1px #ffffff80; backdrop-filter: blur(14px) saturate(135%); -webkit-backdrop-filter: blur(14px) saturate(135%); }
+.summary::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(115deg, #ffffff50, transparent 38%); }
 .summary strong { display: block; font-family: Georgia, serif; font-size: 2rem; margin: 4px 0; }
 .summary strong em { font-family: Inter, system-ui, sans-serif; font-size: .9rem; font-style: normal; color: #7b5d2a; }
 .summary small { color: #63716c; }
@@ -48,15 +56,18 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 .forecast-heading h2 { margin-bottom: 12px; }
 #forecast-updated { color: #72807a; font-size: .75rem; }
 .forecast { display: grid; gap: 16px; }
-.forecast-station { margin: 0; padding: 16px; border-left: 5px solid var(--station-color); background: #f7f9f8; box-shadow: none; }
+.forecast-station { position: relative; overflow: hidden; margin: 0; padding: 17px; border: 1px solid #ffffffd1; border-left: 5px solid var(--station-color); border-radius: 15px; background: linear-gradient(145deg, #ffffff9e, #eff6f07a); box-shadow: 0 14px 30px #173c2c1a, inset 0 1px #fff, inset 0 -1px #ffffff70; backdrop-filter: blur(15px) saturate(140%); -webkit-backdrop-filter: blur(15px) saturate(140%); }
+.forecast-station::after { content: ''; position: absolute; inset: 0; pointer-events: none; border-radius: inherit; background: radial-gradient(circle at 88% 0%, #ffffff6b, transparent 28%); }
 .forecast-station h3 { margin: 0 0 12px; font-size: .95rem; }
 .forecast-days { display: grid; grid-template-columns: repeat(9, minmax(92px, 1fr)); gap: 7px; overflow-x: auto; padding-bottom: 4px; }
-.forecast-day { min-width: 92px; padding: 10px; border: 1px solid #d9e0dc; border-radius: 8px; background: #fff; }
+.forecast-day { position: relative; z-index: 1; min-width: 92px; padding: 10px; border: 1px solid #ffffffdb; border-radius: 11px; background: linear-gradient(150deg, #ffffffd1, #f4f8f3a3); box-shadow: 0 7px 16px #234b3b16, inset 0 1px #fff, inset 0 -1px #d9e7df75; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); transition: transform .18s ease, box-shadow .18s ease; }
+.forecast-day:hover { transform: translateY(-2px); box-shadow: 0 11px 22px #234b3b20, inset 0 1px #fff; }
 .forecast-day time, .forecast-day span { display: block; color: #63716c; font-size: .72rem; }
 .forecast-day strong { display: block; margin: 7px 0 2px; font-family: Georgia, serif; font-size: 1.45rem; }
 .events { min-height: 38px; margin-top: 8px; }
 .event { display: block; width: max-content; margin: 3px 0; padding: 2px 5px; border-radius: 4px; font-size: .62rem; }
 .event.heat { color: #94361f; background: #fde5dc; }
 .event.tropical { color: #64458a; background: #eee5f7; }
-footer { color: #72807a; text-align: center; font-size: .85rem; padding-top: 22px; }
-@media (max-width: 520px) { main { padding-top: 36px; } .years { grid-template-columns: 1fr; } section { padding: 20px; } .chart { height: 280px; } }
+footer { color: #29453b; text-align: center; font-size: .85rem; padding: 22px 10px; text-shadow: 0 1px 8px #fff; }
+@media (max-width: 760px) { h1, .intro { white-space: normal; } h1 { font-size: clamp(2.5rem, 10vw, 4rem); } }
+@media (max-width: 520px) { main { padding-top: 36px; } .years { grid-template-columns: 1fr 1fr; } section { padding: 20px; } .chart { height: 280px; } }
