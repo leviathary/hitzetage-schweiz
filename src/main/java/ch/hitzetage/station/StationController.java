@@ -1,0 +1,63 @@
+package ch.hitzetage.station;
+
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.validation.annotation.Validated;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/stations")
+@Validated
+public class StationController {
+    private final StationDataSource dataSource;
+    private final MeteoSwissForecastService forecastService;
+
+    public StationController(StationDataSource dataSource, MeteoSwissForecastService forecastService) {
+        this.dataSource = dataSource;
+        this.forecastService = forecastService;
+    }
+
+    @GetMapping
+    public List<Station> stations() {
+        return dataSource.findStations();
+    }
+
+    @GetMapping("/{stationId}/forecast")
+    public MeteoSwissForecastService.ForecastResponse forecast(@PathVariable String stationId) {
+        return forecastService.forecast(findStation(stationId));
+    }
+
+    @GetMapping("/{stationId}/annual-values")
+    public AnnualValuesResponse annualValues(
+            @PathVariable String stationId,
+            @RequestParam(defaultValue = "2022") @Min(1864) int fromYear,
+            @RequestParam(defaultValue = "2024") @Min(1864) @Max(2100) int toYear) {
+        if (fromYear > toYear) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "fromYear darf nicht grösser als toYear sein");
+        }
+        Station station = findStation(stationId);
+        return new AnnualValuesResponse(station, 30.0, "meteoswiss", dataSource.findAnnualValues(station.id(), fromYear, toYear));
+    }
+
+    private Station findStation(String stationId) {
+        return dataSource.findStations().stream()
+                .filter(item -> item.id().equalsIgnoreCase(stationId))
+                .findFirst()
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Station nicht gefunden"));
+    }
+
+    public record AnnualValuesResponse(
+            Station station,
+            double heatDayThresholdCelsius,
+            String dataStatus,
+            List<AnnualHeatValue> values) {
+    }
+}

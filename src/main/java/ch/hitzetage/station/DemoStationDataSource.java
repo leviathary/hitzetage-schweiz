@@ -1,0 +1,36 @@
+package ch.hitzetage.station;
+
+import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Profile;
+
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+@Component
+@Profile("demo")
+class DemoStationDataSource implements StationDataSource {
+    private static final List<Station> STATIONS = List.of(
+            new Station("ZRH", "Zürich / Fluntern", "ZH", 556),
+            new Station("GVE", "Genève / Cointrin", "GE", 411),
+            new Station("BAS", "Basel / Binningen", "BL", 316)
+    );
+
+    private static final Map<String, List<AnnualHeatValue>> VALUES = Map.of(
+            "ZRH", List.of(new AnnualHeatValue(2022, 21, 3, 36.2, -8.1), new AnnualHeatValue(2023, 26, 5, 36.5, -7.4), new AnnualHeatValue(2024, 14, 2, 34.9, -6.9)),
+            "GVE", List.of(new AnnualHeatValue(2022, 29, 8, 38.3, -5.2), new AnnualHeatValue(2023, 32, 11, 39.3, -4.8), new AnnualHeatValue(2024, 20, 6, 36.7, -5.5)),
+            "BAS", List.of(new AnnualHeatValue(2022, 31, 9, 37.0, -6.0), new AnnualHeatValue(2023, 36, 12, 37.6, -5.7), new AnnualHeatValue(2024, 23, 7, 35.7, -6.2))
+    );
+
+    @Override
+    public List<Station> findStations() {
+        return STATIONS;
+    }
+
+    @Override
+    public List<AnnualHeatValue> findAnnualValues(String stationId, int fromYear, int toYear) {
+        return VALUES.getOrDefault(stationId.toUpperCase(Locale.ROOT), List.of()).stream()
+                .filter(value -> value.year() >= fromYear && value.year() <= toYear)
+                .toList();
+    }
+}
