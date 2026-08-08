@@ -19,6 +19,12 @@ Object.assign(translations.it, { topYears: 'Le 5 annate principali dal 1990' });
 Object.assign(translations.rm, { topYears: 'Ils 5 onns principals dapi 1990' });
 Object.assign(translations.en, { topYears: 'Top 5 years since 1990' });
 Object.assign(translations.zh, { topYears: '1990年以来排名前5的年份' });
+Object.assign(translations.de, { analyze: 'Station auswerten', selectOne: 'Bitte mindestens eine Station auswählen.' });
+Object.assign(translations.fr, { analyze: 'Analyser la station', selectOne: 'Veuillez sélectionner au moins une station.' });
+Object.assign(translations.it, { analyze: 'Analizza la stazione', selectOne: 'Seleziona almeno una stazione.' });
+Object.assign(translations.rm, { analyze: 'Evaluar la staziun', selectOne: 'Tscherna almain ina staziun.' });
+Object.assign(translations.en, { analyze: 'Analyse station', selectOne: 'Please select at least one station.' });
+Object.assign(translations.zh, { analyze: '分析气象站', selectOne: '请至少选择一个气象站。' });
 let currentLanguage = 'de';
 const tr = key => translations[currentLanguage][key] || translations.de[key] || key;
 const locale = () => ({de:'de-CH',fr:'fr-CH',it:'it-CH',rm:'rm-CH',en:'en-GB',zh:'zh-CN'}[currentLanguage]);
@@ -55,6 +61,7 @@ function addStation(selectedId = '', removable = true) {
 function updateStationCount() {
   const count = selectors.querySelectorAll('.station-row').length;
   stationCount.textContent = currentLanguage === 'zh' ? `${count} ${tr('stations')}` : `${count} ${count === 1 ? tr('station') : tr('stations')}`;
+  document.querySelector('#compare').textContent = count === 1 ? tr('analyze') : tr('compare');
   document.querySelector('#add-station').disabled = count >= colors.length;
 }
 
@@ -202,7 +209,7 @@ function renderComparison(data, forecasts, from, to) {
       const measuredShare = total ? count / total * 100 : 0;
       const forecastShare = total ? predicted / total * 100 : 0;
       return `<div class="bar-stack" style="height:${total / maximum * 100}%;--bar-color:${colors[index]}" title="${item.station.name}: ${details}">
-        <span>${total ? (predicted ? `${count}+${predicted}` : count) : ''}</span>
+        <span>${total || ''}</span>
         ${predicted ? `<div class="bar-forecast" style="height:${forecastShare}%"></div>` : ''}
         <div class="bar-measured" style="height:${measuredShare}%"></div>
       </div>`;
@@ -221,7 +228,7 @@ function renderComparison(data, forecasts, from, to) {
 
 async function compare() {
   const ids = selectedStationIds(); const from = Number(document.querySelector('#fromYear').value); const to = Number(document.querySelector('#toYear').value);
-  if (ids.length < 2) { status.textContent = tr('selectTwo'); return; }
+  if (ids.length < 1) { status.textContent = tr('selectOne'); return; }
   if (new Set(ids).size !== ids.length) { status.textContent = tr('uniqueStations'); return; }
   if (from > to || to - from > 50) { status.textContent = tr('invalidPeriod'); return; }
   status.textContent = `${ids.length} ${tr('loading')}`; document.querySelector('#compare').disabled = true;
