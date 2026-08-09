@@ -8,6 +8,8 @@ Die öffentlich zugängliche Anwendung ist unter **[hitzetage.ch](https://hitzet
 
 Die anonyme Reichweitenmessung erfolgt über eine selbst gehostete Umami-Instanz. Sie verwendet keine Cookies und ist auf die Produktionsdomains `hitzetage.ch` und `www.hitzetage.ch` begrenzt.
 
+Für Suchmaschinen stellt die Anwendung eine kanonische URL, strukturierte `WebApplication`-Daten, eine `robots.txt` und eine XML-Sitemap unter <https://hitzetage.ch/sitemap.xml> bereit.
+
 - **Hitzetag:** Tagesmaximum mindestens 30 °C
 - **Tropennacht:** Tagesminimum mindestens 20 °C
 - **Backend:** Java 21 und Spring Boot
