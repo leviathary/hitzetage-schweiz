@@ -6,6 +6,8 @@ Webanwendung zum Vergleichen von Hitzetagen und Tropennächten an MeteoSwiss-Mes
 
 Die öffentlich zugängliche Anwendung ist unter **[hitzetage.ch](https://hitzetage.ch)** erreichbar.
 
+Die anonyme Reichweitenmessung erfolgt über eine selbst gehostete Umami-Instanz. Sie verwendet keine Cookies und ist auf die Produktionsdomains `hitzetage.ch` und `www.hitzetage.ch` begrenzt.
+
 - **Hitzetag:** Tagesmaximum mindestens 30 °C
 - **Tropennacht:** Tagesminimum mindestens 20 °C
 - **Backend:** Java 21 und Spring Boot

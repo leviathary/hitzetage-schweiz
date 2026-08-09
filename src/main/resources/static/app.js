@@ -31,6 +31,12 @@ Object.assign(translations.it, { mapToggle:'Scegli sulla mappa', mapSearch:'Cerc
 Object.assign(translations.rm, { mapToggle:'Tscherner sin la charta', mapSearch:'Tschertgar staziun', mapSearchPlaceholder:'Num u chantun', mapHint:'Clicca sin in punct per agiuntar la staziun a l’evaluaziun.', altitude:'Autezza', altitudeUnit:'m s.m.', alreadySelected:'Gia tschernì', addedFromMap:'Agiuntà a l’evaluaziun', mapFull:'I pon vegnir tschernidas maximalmain sis staziuns.' });
 Object.assign(translations.en, { mapToggle:'Choose on map', mapSearch:'Search station', mapSearchPlaceholder:'Name or canton', mapHint:'Select a point to add that station to the analysis.', altitude:'Elevation', altitudeUnit:'m a.s.l.', alreadySelected:'Already selected', addedFromMap:'Added to analysis', mapFull:'A maximum of six stations can be selected.' });
 Object.assign(translations.zh, { mapToggle:'在地图上选择', mapSearch:'搜索气象站', mapSearchPlaceholder:'名称或州', mapHint:'点击站点，将其添加到分析中。', altitude:'海拔', altitudeUnit:'米', alreadySelected:'已选择', addedFromMap:'已添加到分析', mapFull:'最多可以选择六个气象站。' });
+Object.assign(translations.de, { privacy:'Datenschutz' });
+Object.assign(translations.fr, { privacy:'Protection des données' });
+Object.assign(translations.it, { privacy:'Protezione dei dati' });
+Object.assign(translations.rm, { privacy:'Protecziun da datas' });
+Object.assign(translations.en, { privacy:'Privacy' });
+Object.assign(translations.zh, { privacy:'隐私保护' });
 let currentLanguage = 'de';
 const tr = key => translations[currentLanguage][key] || translations.de[key] || key;
 const locale = () => ({de:'de-CH',fr:'fr-CH',it:'it-CH',rm:'rm-CH',en:'en-GB',zh:'zh-CN'}[currentLanguage]);
