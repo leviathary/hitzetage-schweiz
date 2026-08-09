@@ -2,6 +2,10 @@
 
 Webanwendung zum Vergleichen von Hitzetagen und Tropennächten an MeteoSwiss-Messstationen. Historische Jahreswerte, langjährige Vergleiche und die aktuelle Neun-Tage-Prognose werden in einer gemeinsamen Oberfläche dargestellt.
 
+## Live-Anwendung
+
+Die öffentlich zugängliche Anwendung ist unter **[hitzetage.ch](https://hitzetage.ch)** erreichbar.
+
 - **Hitzetag:** Tagesmaximum mindestens 30 °C
 - **Tropennacht:** Tagesminimum mindestens 20 °C
 - **Backend:** Java 21 und Spring Boot
