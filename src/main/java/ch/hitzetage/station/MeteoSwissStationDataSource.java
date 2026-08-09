@@ -10,6 +10,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -47,14 +48,7 @@ class MeteoSwissStationDataSource implements StationDataSource {
 
     @Override
     public List<AnnualHeatValue> findAnnualValues(String stationId, int fromYear, int toYear) {
-        String id = stationId.toLowerCase(Locale.ROOT);
-        List<Map<String, String>> rows = new ArrayList<>();
-        rows.addAll(parseCsv(downloadCached(URI.create(BASE_URL + "/" + id + "/ogd-smn_" + id + "_d_historical.csv"))));
-
-        int currentYear = java.time.Year.now().getValue();
-        if (toYear >= currentYear) {
-            rows.addAll(parseCsv(downloadCached(URI.create(BASE_URL + "/" + id + "/ogd-smn_" + id + "_d_recent.csv"))));
-        }
+        List<Map<String, String>> rows = dailyRows(stationId, toYear);
 
         Map<Integer, YearAccumulator> years = new LinkedHashMap<>();
         for (Map<String, String> row : rows) {
@@ -79,6 +73,33 @@ class MeteoSwissStationDataSource implements StationDataSource {
                         entry.getValue().minimumValue(),
                         entry.getValue().warmestNightValue()))
                 .toList();
+    }
+
+    @Override
+    public List<DailyHeatDay> findHeatDays(String stationId, int year) {
+        Map<LocalDate, DailyHeatDay> days = new LinkedHashMap<>();
+        for (Map<String, String> row : dailyRows(stationId, year)) {
+            LocalDate date = parseDate(value(row, "reference_timestamp", "date"));
+            Double maximum = parseNumber(value(row, "tre200dx"));
+            if (date == null || date.getYear() != year || maximum == null || maximum < 30.0) {
+                continue;
+            }
+            Double minimum = parseNumber(value(row, "tre200dn"));
+            days.put(date, new DailyHeatDay(date, maximum, minimum));
+        }
+        return days.values().stream()
+                .sorted(Comparator.comparing(DailyHeatDay::date))
+                .toList();
+    }
+
+    private List<Map<String, String>> dailyRows(String stationId, int toYear) {
+        String id = stationId.toLowerCase(Locale.ROOT);
+        List<Map<String, String>> rows = new ArrayList<>();
+        rows.addAll(parseCsv(downloadCached(URI.create(BASE_URL + "/" + id + "/ogd-smn_" + id + "_d_historical.csv"))));
+        if (toYear >= java.time.Year.now().getValue()) {
+            rows.addAll(parseCsv(downloadCached(URI.create(BASE_URL + "/" + id + "/ogd-smn_" + id + "_d_recent.csv"))));
+        }
+        return rows;
     }
 
     private Station toStation(Map<String, String> row) {
@@ -179,10 +200,17 @@ class MeteoSwissStationDataSource implements StationDataSource {
     }
 
     private static Integer parseYear(String value) {
+        LocalDate date = parseDate(value);
+        return date == null ? null : date.getYear();
+    }
+
+    private static LocalDate parseDate(String value) {
         if (value == null || value.length() < 4) return null;
         try {
-            if (Character.isDigit(value.charAt(0)) && value.charAt(4) == '-') return Integer.parseInt(value.substring(0, 4));
-            return LocalDateTime.parse(value, TIMESTAMP).getYear();
+            if (value.length() >= 10 && Character.isDigit(value.charAt(0)) && value.charAt(4) == '-') {
+                return LocalDate.parse(value.substring(0, 10));
+            }
+            return LocalDateTime.parse(value, TIMESTAMP).toLocalDate();
         } catch (DateTimeParseException | NumberFormatException exception) {
             return null;
         }

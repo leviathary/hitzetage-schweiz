@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Profile;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.time.LocalDate;
 
 @Component
 @Profile("demo")
@@ -32,5 +33,16 @@ class DemoStationDataSource implements StationDataSource {
         return VALUES.getOrDefault(stationId.toUpperCase(Locale.ROOT), List.of()).stream()
                 .filter(value -> value.year() >= fromYear && value.year() <= toYear)
                 .toList();
+    }
+
+    @Override
+    public List<DailyHeatDay> findHeatDays(String stationId, int year) {
+        if (VALUES.getOrDefault(stationId.toUpperCase(Locale.ROOT), List.of()).stream().noneMatch(value -> value.year() == year)) {
+            return List.of();
+        }
+        return List.of(
+                new DailyHeatDay(LocalDate.of(year, 6, 18), 30.4, 18.2),
+                new DailyHeatDay(LocalDate.of(year, 7, 12), 33.7, 20.1),
+                new DailyHeatDay(LocalDate.of(year, 8, 23), 31.8, 19.4));
     }
 }

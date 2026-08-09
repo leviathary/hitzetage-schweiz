@@ -47,6 +47,14 @@ public class StationController {
         return new AnnualValuesResponse(station, 30.0, "meteoswiss", dataSource.findAnnualValues(station.id(), fromYear, toYear));
     }
 
+    @GetMapping("/{stationId}/heat-days")
+    public HeatDaysResponse heatDays(
+            @PathVariable String stationId,
+            @RequestParam @Min(1864) @Max(2100) int year) {
+        Station station = findStation(stationId);
+        return new HeatDaysResponse(station, year, 30.0, "meteoswiss", dataSource.findHeatDays(station.id(), year));
+    }
+
     private Station findStation(String stationId) {
         return dataSource.findStations().stream()
                 .filter(item -> item.id().equalsIgnoreCase(stationId))
@@ -59,5 +67,13 @@ public class StationController {
             double heatDayThresholdCelsius,
             String dataStatus,
             List<AnnualHeatValue> values) {
+    }
+
+    public record HeatDaysResponse(
+            Station station,
+            int year,
+            double heatDayThresholdCelsius,
+            String dataStatus,
+            List<DailyHeatDay> values) {
     }
 }

@@ -71,8 +71,14 @@
   <section aria-labelledby="result-title">
     <div class="section-heading"><h2 id="result-title">Hitzetage pro Jahr</h2><span class="badge" data-i18n="source">Quelle: MeteoSwiss</span></div>
     <div id="legend" class="legend" aria-label="Legende"></div>
+    <p class="chart-interaction-hint" data-i18n="heatDaysHint">Jahre im Diagramm anklicken, um sie auf der Zeitachse zu vergleichen.</p>
     <div id="chart" class="chart-empty"><p>Wähle mindestens zwei Stationen und einen Zeitraum.</p></div>
     <div id="results" class="results"></div>
+    <div class="heat-days-heading">
+      <div><h2 data-i18n="heatDaysDetailTitle">Hitzetage im Detail</h2><p data-i18n="heatDaysDetailIntro">Alle gemessenen Tage mit mindestens 30 °C Tagesmaximum</p></div>
+      <select id="heat-day-year" hidden aria-hidden="true" tabindex="-1"></select>
+    </div>
+    <div id="heat-days-detail" class="heat-days-detail"></div>
     <div class="climate-context-heading"><div><h2 data-i18n="contextTitle">Einordnung des aktuellen Jahres</h2><p data-i18n="contextIntro">Vergleich mit langjährigen Mittelwerten</p></div><span id="context-year" class="badge"></span></div>
     <div id="climate-context" class="climate-context"></div>
     <h3 id="top-years-title" class="top-years-title"></h3>

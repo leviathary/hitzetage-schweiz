@@ -48,6 +48,18 @@ class StationControllerTest {
     }
 
     @Test
+    void returnsHeatDaysForSelectedYear() throws Exception {
+        mockMvc.perform(get("/api/stations/ZRH/heat-days").param("year", "2024"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.station.id").value("ZRH"))
+                .andExpect(jsonPath("$.year").value(2024))
+                .andExpect(jsonPath("$.heatDayThresholdCelsius").value(30.0))
+                .andExpect(jsonPath("$.values", hasSize(3)))
+                .andExpect(jsonPath("$.values[0].date").value("2024-06-18"))
+                .andExpect(jsonPath("$.values[0].maximumTemperatureCelsius").isNumber());
+    }
+
+    @Test
     void returnsNotFoundForUnknownStation() throws Exception {
         mockMvc.perform(get("/api/stations/XXX/annual-values"))
                 .andExpect(status().isNotFound());

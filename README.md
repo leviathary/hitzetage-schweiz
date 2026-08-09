@@ -113,6 +113,8 @@ mvn test
 - Stationshöhe in Auswahl und Karteninformation anzeigen
 - Hitzetage und Tropennächte pro Jahr darstellen
 - gemessene und prognostizierte Ereignisse im aktuellen Jahr unterscheiden
+- einzelne Hitzetage als temperaturabhängige Zeitachsen darstellen
+- mehrere Jahre per Klick im Jahresdiagramm auf der Zeitachse vergleichen
 - ausgewählte Stationen miteinander vergleichen
 - aktuelles Jahr mit dem Mittel der letzten 20 Jahre und der Norm 1991–2020 einordnen
 - Rang und Top-5-Jahre seit 1990 anzeigen
@@ -163,6 +165,7 @@ Die interaktive Stationskarte verwendet die lokal eingebundene Open-Source-Bibli
 | `GET /api/stations` | verfügbare Messstationen |
 | `GET /api/stations/{id}/annual-values?fromYear=2022&toYear=2024` | Jahreswerte einer Station |
 | `GET /api/stations/{id}/forecast` | lokale Neun-Tage-Prognose |
+| `GET /api/stations/{id}/heat-days?year=2024` | einzelne gemessene Hitzetage eines Jahres |
 
 Beispiel:
 

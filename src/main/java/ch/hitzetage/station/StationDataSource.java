@@ -7,5 +7,7 @@ public interface StationDataSource {
     List<Station> findStations();
 
     List<AnnualHeatValue> findAnnualValues(String stationId, int fromYear, int toYear);
+
+    List<DailyHeatDay> findHeatDays(String stationId, int year);
 }
 
