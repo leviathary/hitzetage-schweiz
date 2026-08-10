@@ -66,6 +66,7 @@ let stationMap;
 let stationMarkerLayer;
 let selectedHeatDayYears = [];
 let latestForecasts = [];
+let latestView = null;
 const currentYear = new Date().getFullYear();
 document.querySelector('#fromYear').value = currentYear - 10;
 document.querySelector('#toYear').value = currentYear;
@@ -276,6 +277,7 @@ async function loadHeatDayDetails(ids = selectedStationIds()) {
   container.innerHTML = `<p class="heat-days-empty">${tr('heatDaysLoading')}</p>`;
   try {
     const groups = await Promise.all(selectedHeatDayYears.map(async year => ({ year, items: await Promise.all(ids.map(id => fetchHeatDays(id, year))) })));
+    if (latestView) latestView.heatDays = groups;
     renderHeatDays(groups);
   } catch (error) {
     container.innerHTML = `<p class="heat-days-empty">${error.message}</p>`;
@@ -416,6 +418,18 @@ function renderComparison(data, forecasts, from, to) {
   }).join('');
 }
 
+function renderLatestView() {
+  if (!latestView) return;
+  const { data, forecasts, contexts, heatDays, from, to, stationCount: count } = latestView;
+  latestForecasts = forecasts;
+  renderComparison(data, forecasts, from, to);
+  renderHeatDays(heatDays);
+  renderClimateContext(contexts, forecasts);
+  renderForecast(forecasts);
+  const metric = metricInfo(document.querySelector('#metric').value);
+  status.textContent = `${count} ${tr('stations')} · ${from}–${to} · ${metric.threshold}`;
+}
+
 async function compare() {
   const ids = selectedStationIds(); const from = Number(document.querySelector('#fromYear').value); const to = Number(document.querySelector('#toYear').value);
   if (ids.length < 1) { status.textContent = tr('selectOne'); return; }
@@ -430,9 +444,8 @@ async function compare() {
       Promise.all(ids.map(id => fetchStation(id, 1990, currentYear))),
       Promise.all(selectedHeatDayYears.map(async year => ({ year, items: await Promise.all(ids.map(id => fetchHeatDays(id, year))) })))
     ]);
-    latestForecasts = forecasts;
-    renderComparison(data, forecasts, from, to); renderHeatDays(heatDays); renderClimateContext(contexts, forecasts); renderForecast(forecasts);
-    const metric = metricInfo(document.querySelector('#metric').value); status.textContent = `${ids.length} ${tr('stations')} · ${from}–${to} · ${metric.threshold}`;
+    latestView = { data, forecasts, contexts, heatDays, from, to, stationCount: ids.length };
+    renderLatestView();
   }
   catch (error) { status.textContent = error.message; chart.className = 'chart-empty'; chart.innerHTML = `<p>${tr('noResults')}</p>`; }
   finally { document.querySelector('#compare').disabled = false; }
@@ -464,7 +477,11 @@ chart.addEventListener('keydown', event => {
     openHeatDayYear(Number(group.dataset.year));
   }
 });
-document.querySelector('#language').addEventListener('change', event => { currentLanguage = event.target.value; applyLanguage(); if (stations.length) compare(); });
+document.querySelector('#language').addEventListener('change', event => {
+  currentLanguage = event.target.value;
+  applyLanguage();
+  renderLatestView();
+});
 document.querySelector('#climate-details-toggle').addEventListener('click', event => {
   const button = event.currentTarget;
   const open = button.getAttribute('aria-expanded') === 'true';
