@@ -71,6 +71,18 @@ public class StationController {
         return new HeatDaysResponse(station, year, 0.0, "meteoswiss", dataSource.findIceDays(station.id(), year));
     }
 
+    @GetMapping("/{stationId}/summer-days")
+    public HeatDaysResponse summerDays(@PathVariable String stationId, @RequestParam @Min(1864) @Max(2100) int year) {
+        Station station = findStation(stationId);
+        return new HeatDaysResponse(station, year, 25.0, "meteoswiss", dataSource.findSummerDays(station.id(), year));
+    }
+
+    @GetMapping("/{stationId}/very-hot-days")
+    public HeatDaysResponse veryHotDays(@PathVariable String stationId, @RequestParam @Min(1864) @Max(2100) int year) {
+        Station station = findStation(stationId);
+        return new HeatDaysResponse(station, year, 35.0, "meteoswiss", dataSource.findVeryHotDays(station.id(), year));
+    }
+
     private Station findStation(String stationId) {
         return dataSource.findStations().stream()
                 .filter(item -> item.id().equalsIgnoreCase(stationId))

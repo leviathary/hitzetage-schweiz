@@ -1,10 +1,17 @@
 const selectors = document.querySelector('#station-selectors');
 const status = document.querySelector('#status');
 const chart = document.querySelector('#chart');
+const detailYearChart = document.querySelector('#detail-year-chart');
+const detailYearLegend = document.querySelector('#detail-year-legend');
 const results = document.querySelector('#results');
 const legend = document.querySelector('#legend');
 const stationCount = document.querySelector('#station-count');
-const colors = ['#c85532', '#1e6a55', '#e0a52f', '#5268a5', '#8a5a91', '#4a8ea5'];
+const warmColors = ['#c85532', '#a33f2b', '#e09b2d', '#d56a3e', '#983b36', '#bd7043'];
+const coldColors = ['#2878b5', '#155b91', '#4c98c9', '#315f9a', '#56a7b5', '#344f7d'];
+const colors = [...warmColors];
+function applyMetricColors(metricKey) {
+  colors.splice(0, colors.length, ...(metricKey === 'frostDays' || metricKey === 'iceDays' ? coldColors : warmColors));
+}
 const translations = {
   de: { language:'Sprache', eyebrow:'MeteoSwiss-Messstationen', title:'Hitzetage in der Schweiz', intro:'Vergleiche Messstationen und entdecke, wie häufig die Tageshöchsttemperatur 30 °C erreicht hat.', selectionTitle:'Stationen und Zeitraum', station:'Messstation', stations:'Stationen', addStation:'+ Station hinzufügen', removeStation:'Station entfernen', from:'Von', to:'Bis', metric:'Kennzahl', compare:'Stationen vergleichen', source:'Quelle: MeteoSwiss', forecastTitle:'Prognose für die nächsten neun Tage', forecastLoading:'Prognose wird mit dem Vergleich geladen.', footer:'Quelle: MeteoSwiss Open Data · Hitzetag: Maximum ≥ 30 °C · Tropennacht: Minimum ≥ 20 °C', heatDays:'Hitzetage', tropicalNights:'Tropennächte', heatOption:'Hitzetage (Maximum ≥ 30 °C)', tropicalOption:'Tropennächte (Minimum ≥ 20 °C)', heatThreshold:'Tagesmaximum ≥ 30 °C', tropicalThreshold:'Tagesminimum ≥ 20 °C', highest:'Höchstwert', lowest:'Tiefster Tageswert', perYear:'pro Jahr', forecastHatched:'Prognose (schraffiert)', measured:'gemessen', predicted:'prognostiziert', noData:'Keine Daten', forecastRun:'Prognoselauf', heatDay:'Hitzetag', tropicalNight:'Tropennacht', noForecast:'Für diese Station ist keine Punktprognose verfügbar.', selectTwo:'Bitte mindestens zwei Stationen auswählen.', uniqueStations:'Bitte jede Station nur einmal auswählen.', invalidPeriod:'Bitte einen Zeitraum von höchstens 50 Jahren auswählen.', loading:'Stationen werden geladen …', noResults:'Keine Ergebnisse.', currentForecast:'im aktuellen Prognoselauf', contextTitle:'Einordnung des aktuellen Jahres', contextIntro:'Vergleich mit langjährigen Mittelwerten', provisional:'vorläufig', last20:'Letzte 20 Jahre', annualAverage:'Ø pro Jahr', normal:'Norm 1991–2020', rankSince:'Rang seit 1990', withForecast:'mit Prognose', measuredForecast:'gemessen + Prognose', moreIndicators:'Weitere Klimaindikatoren', indicator:'Indikator', definition:'Definition', trend:'Trend', perDecade:'pro Jahrzehnt', summerDays:'Sommertage', veryHotDays:'Sehr heisse Tage', longestHeatWave:'Längste Hitzewelle', warmestNight:'Wärmste Nacht', days:'Tage' },
   fr: { language:'Langue', eyebrow:'Stations MeteoSwiss', title:'Journées de chaleur en Suisse', intro:'Comparez les stations et découvrez combien de fois la température maximale a atteint 30 °C.', selectionTitle:'Stations et période', station:'Station de mesure', stations:'stations', addStation:'+ Ajouter une station', removeStation:'Supprimer la station', from:'De', to:'À', metric:'Indicateur', compare:'Comparer les stations', source:'Source : MeteoSwiss', forecastTitle:'Prévisions pour les neuf prochains jours', forecastLoading:'Les prévisions sont chargées avec la comparaison.', footer:'Source : MeteoSwiss Open Data · Journée de chaleur : maximum ≥ 30 °C · Nuit tropicale : minimum ≥ 20 °C', heatDays:'Journées de chaleur', tropicalNights:'Nuits tropicales', heatOption:'Journées de chaleur (maximum ≥ 30 °C)', tropicalOption:'Nuits tropicales (minimum ≥ 20 °C)', heatThreshold:'Maximum journalier ≥ 30 °C', tropicalThreshold:'Minimum journalier ≥ 20 °C', highest:'Maximum', lowest:'Minimum journalier le plus bas', perYear:'par an', forecastHatched:'Prévision (hachurée)', measured:'mesuré', predicted:'prévu', noData:'Aucune donnée', forecastRun:'Prévision du', heatDay:'Journée chaude', tropicalNight:'Nuit tropicale', noForecast:'Aucune prévision ponctuelle disponible pour cette station.', selectTwo:'Veuillez sélectionner au moins deux stations.', uniqueStations:'Veuillez sélectionner chaque station une seule fois.', invalidPeriod:'Veuillez choisir une période de 50 ans au maximum.', loading:'Chargement des stations…', noResults:'Aucun résultat.', currentForecast:'dans la prévision actuelle', contextTitle:"Classement de l'année en cours", contextIntro:'Comparaison avec les moyennes à long terme', provisional:'provisoire', last20:'20 dernières années', annualAverage:'moyenne annuelle', normal:'Normale 1991–2020', rankSince:'Rang depuis 1990', withForecast:'avec prévision', measuredForecast:'mesuré + prévision', moreIndicators:'Autres indicateurs climatiques', indicator:'Indicateur', definition:'Définition', trend:'Tendance', perDecade:'par décennie', summerDays:"Journées d'été", veryHotDays:'Journées très chaudes', longestHeatWave:'Plus longue vague de chaleur', warmestNight:'Nuit la plus chaude', days:'jours' },
@@ -103,11 +110,53 @@ Object.assign(translations.it, { feedback:'Feedback', feedbackTitle:'Invia un fe
 Object.assign(translations.rm, { feedback:'Resun', feedbackTitle:'Dar in resun', feedbackIntro:'Tge plascha, tge manca u tge na funcziuna anc betg?', feedbackMessage:'Tia communicaziun', feedbackEmail:'E-mail (facultativ, sche ti vuls ina resposta)', feedbackSend:'Trametter il resun', feedbackSending:'Vegn tramess…', feedbackThanks:'Grazia! Tes resun è vegnì memorisà.', feedbackError:'Il resun n’ha betg pudì vegnir tramess. Emprova pli tard anc ina giada.', feedbackTooFast:'Spetga per plaschair in mument avant che trametter in ulteriur resun.', cancel:'Interrumper', close:'Serrar' });
 Object.assign(translations.en, { feedback:'Feedback', feedbackTitle:'Give feedback', feedbackIntro:'What do you like, what is missing, or what is not working yet?', feedbackMessage:'Your message', feedbackEmail:'Email (optional, if you would like a reply)', feedbackSend:'Send feedback', feedbackSending:'Sending…', feedbackThanks:'Thank you! Your feedback has been saved.', feedbackError:'Your feedback could not be sent. Please try again later.', feedbackTooFast:'Please wait a moment before sending more feedback.', cancel:'Cancel', close:'Close' });
 Object.assign(translations.zh, { feedback:'反馈', feedbackTitle:'提供反馈', feedbackIntro:'你喜欢什么、缺少什么，或者哪些功能尚未正常工作？', feedbackMessage:'你的留言', feedbackEmail:'电子邮箱（可选，如需回复）', feedbackSend:'发送反馈', feedbackSending:'正在发送…', feedbackThanks:'谢谢！你的反馈已保存。', feedbackError:'无法发送反馈，请稍后重试。', feedbackTooFast:'请稍候再发送其他反馈。', cancel:'取消', close:'关闭' });
+Object.assign(translations.de, { intro:'Vergleiche Messstationen und entdecke, wie häufig Hitze-, Frost- und Eistage sowie Tropennächte auftreten.', navOverview:'Übersicht', navYears:'Jahresvergleich', navDetails:'Detailtage', navForecast:'Prognose', definitionsToggle:'Definitionen und Datenquelle', overviewEyebrow:'Auf einen Blick', overviewTitle:'Zusammenfassung', overviewLoading:'Die Zusammenfassung wird mit dem Vergleich geladen.', overviewChartTitle:'Vorschau Jahresvergleich', openYears:'Jahresvergleich öffnen', openDetails:'Detailtage ansehen', changeSelection:'Auswahl ändern', currentYearShort:'Aktuelles Jahr', periodAverage:'Langjähriger Vergleich', nextDaysShort:'Nächste 9 Tage (Prognose)' });
+Object.assign(translations.fr, { intro:'Comparez les stations et découvrez la fréquence des journées de chaleur, de gel et sans dégel ainsi que des nuits tropicales.', navOverview:'Aperçu', navYears:'Comparaison annuelle', navDetails:'Jours en détail', navForecast:'Prévisions', definitionsToggle:'Définitions et source des données', overviewEyebrow:'En un coup d’œil', overviewTitle:'Résumé', overviewLoading:'Le résumé est chargé avec la comparaison.', overviewChartTitle:'Aperçu de la comparaison annuelle', openYears:'Ouvrir la comparaison annuelle', openDetails:'Voir les jours en détail', changeSelection:'Modifier la sélection', currentYearShort:'Année en cours', periodAverage:'Comparaison à long terme', nextDaysShort:'9 prochains jours (prévisions)' });
+Object.assign(translations.it, { intro:'Confronta le stazioni e scopri la frequenza di giornate di caldo, gelo e ghiaccio e delle notti tropicali.', navOverview:'Panoramica', navYears:'Confronto annuale', navDetails:'Giorni in dettaglio', navForecast:'Previsioni', definitionsToggle:'Definizioni e fonte dei dati', overviewEyebrow:'A colpo d’occhio', overviewTitle:'Riepilogo', overviewLoading:'Il riepilogo viene caricato con il confronto.', overviewChartTitle:'Anteprima del confronto annuale', openYears:'Apri confronto annuale', openDetails:'Vedi giorni in dettaglio', changeSelection:'Modifica selezione', currentYearShort:'Anno corrente', periodAverage:'Confronto a lungo termine', nextDaysShort:'Prossimi 9 giorni (previsioni)' });
+Object.assign(translations.rm, { intro:'Cumpareglia staziuns e scuvra quant savens che dis da chalira, schelira e glatsch sco era notgs tropicas cumparan.', navOverview:'Survista', navYears:'Cumparegliaziun annuala', navDetails:'Dis en detagl', navForecast:'Prognosa', definitionsToggle:'Definiziuns e funtauna da datas', overviewEyebrow:'En survista', overviewTitle:'Resumaziun', overviewLoading:'La resumaziun vegn chargiada cun la cumparegliaziun.', overviewChartTitle:'Prevista da la cumparegliaziun annuala', openYears:'Avrir la cumparegliaziun annuala', openDetails:'Vesair ils dis en detagl', changeSelection:'Midar la selecziun', currentYearShort:'Onn actual', periodAverage:'Cumparegliaziun a lunga durada', nextDaysShort:'Proxims 9 dis (prognosa)' });
+Object.assign(translations.en, { intro:'Compare stations and discover how often heat, frost and ice days as well as tropical nights occur.', navOverview:'Overview', navYears:'Year comparison', navDetails:'Detail days', navForecast:'Forecast', definitionsToggle:'Definitions and data source', overviewEyebrow:'At a glance', overviewTitle:'Summary', overviewLoading:'The summary is loaded with the comparison.', overviewChartTitle:'Year comparison preview', openYears:'Open year comparison', openDetails:'View detail days', changeSelection:'Change selection', currentYearShort:'Current year', periodAverage:'Long-term comparison', nextDaysShort:'Next 9 days (forecast)' });
+Object.assign(translations.zh, { intro:'比较不同气象站，了解高温日、霜冻日、冰冻日和热带夜出现的频率。', navOverview:'概览', navYears:'年度比较', navDetails:'日期详情', navForecast:'天气预报', definitionsToggle:'定义和数据来源', overviewEyebrow:'一览', overviewTitle:'摘要', overviewLoading:'摘要将与比较结果一起加载。', overviewChartTitle:'年度比较预览', openYears:'打开年度比较', openDetails:'查看日期详情', changeSelection:'更改选择', currentYearShort:'本年度', periodAverage:'长期比较', nextDaysShort:'未来9天（预报）' });
+Object.assign(translations.de, { detailYearSelectionTitle:'Jahre für den Vergleich auswählen' });
+Object.assign(translations.fr, { detailYearSelectionTitle:'Choisir les années à comparer' });
+Object.assign(translations.it, { detailYearSelectionTitle:'Seleziona gli anni da confrontare' });
+Object.assign(translations.rm, { detailYearSelectionTitle:'Tscherner ils onns per la cumparegliaziun' });
+Object.assign(translations.en, { detailYearSelectionTitle:'Select years to compare' });
+Object.assign(translations.zh, { detailYearSelectionTitle:'选择要比较的年份' });
+Object.assign(translations.de, { summerOption:'Sommertage (Maximum ≥ 25 °C)', veryHotOption:'Sehr heisse Tage (Maximum ≥ 35 °C)', summerThreshold:'Tagesmaximum ≥ 25 °C', veryHotThreshold:'Tagesmaximum ≥ 35 °C', summerDaysDetailTitle:'Sommertage im Detail', summerDaysDetailIntro:'Alle gemessenen Tage mit einer Höchsttemperatur von mindestens 25 °C', veryHotDaysDetailTitle:'Sehr heisse Tage im Detail', veryHotDaysDetailIntro:'Alle gemessenen Tage mit einer Höchsttemperatur von mindestens 35 °C', heatwaveHighlight:'Längste Hitzewelle im gewählten Zeitraum' });
+Object.assign(translations.fr, { summerOption:'Journées d’été (maximum ≥ 25 °C)', veryHotOption:'Journées très chaudes (maximum ≥ 35 °C)', summerThreshold:'Maximum journalier ≥ 25 °C', veryHotThreshold:'Maximum journalier ≥ 35 °C', summerDaysDetailTitle:'Journées d’été en détail', summerDaysDetailIntro:'Tous les jours mesurés avec une température maximale d’au moins 25 °C', veryHotDaysDetailTitle:'Journées très chaudes en détail', veryHotDaysDetailIntro:'Tous les jours mesurés avec une température maximale d’au moins 35 °C', heatwaveHighlight:'Plus longue vague de chaleur de la période sélectionnée' });
+Object.assign(translations.it, { summerOption:'Giornate estive (massima ≥ 25 °C)', veryHotOption:'Giornate molto calde (massima ≥ 35 °C)', summerThreshold:'Massima giornaliera ≥ 25 °C', veryHotThreshold:'Massima giornaliera ≥ 35 °C', summerDaysDetailTitle:'Giornate estive in dettaglio', summerDaysDetailIntro:'Tutti i giorni misurati con una massima di almeno 25 °C', veryHotDaysDetailTitle:'Giornate molto calde in dettaglio', veryHotDaysDetailIntro:'Tutti i giorni misurati con una massima di almeno 35 °C', heatwaveHighlight:'Ondata di caldo più lunga nel periodo selezionato' });
+Object.assign(translations.rm, { summerOption:'Dis da stad (maximum ≥ 25 °C)', veryHotOption:'Dis fitg chauds (maximum ≥ 35 °C)', summerThreshold:'Maximum dal di ≥ 25 °C', veryHotThreshold:'Maximum dal di ≥ 35 °C', summerDaysDetailTitle:'Dis da stad en detagl', summerDaysDetailIntro:'Tut ils dis mesirads cun ina temperatura maximala dad almain 25 °C', veryHotDaysDetailTitle:'Dis fitg chauds en detagl', veryHotDaysDetailIntro:'Tut ils dis mesirads cun ina temperatura maximala dad almain 35 °C', heatwaveHighlight:'Perioda da chalira la pli lunga en la perioda tschernida' });
+Object.assign(translations.en, { summerOption:'Summer days (maximum ≥ 25 °C)', veryHotOption:'Very hot days (maximum ≥ 35 °C)', summerThreshold:'Daily maximum ≥ 25 °C', veryHotThreshold:'Daily maximum ≥ 35 °C', summerDaysDetailTitle:'Summer days in detail', summerDaysDetailIntro:'All measured days with a maximum temperature of at least 25 °C', veryHotDaysDetailTitle:'Very hot days in detail', veryHotDaysDetailIntro:'All measured days with a maximum temperature of at least 35 °C', heatwaveHighlight:'Longest heatwave in the selected period' });
+Object.assign(translations.zh, { summerOption:'夏日（最高温 ≥ 25 °C）', veryHotOption:'极热日（最高温 ≥ 35 °C）', summerThreshold:'每日最高温 ≥ 25 °C', veryHotThreshold:'每日最高温 ≥ 35 °C', summerDaysDetailTitle:'夏日详情', summerDaysDetailIntro:'所有最高气温达到或超过 25 °C 的实测日期', veryHotDaysDetailTitle:'极热日详情', veryHotDaysDetailIntro:'所有最高气温达到或超过 35 °C 的实测日期', heatwaveHighlight:'所选时段内最长热浪' });
+Object.assign(translations.de, { intro:'Vergleiche Messstationen und entdecke Temperaturereignisse, Entwicklungen und Wetterrekorde in der Schweiz.', summerDefinitionTitle:'Was ist ein Sommertag?', summerDefinitionText:'Ein Tag, an dem die gemessene Höchsttemperatur mindestens 25 °C erreicht.', veryHotDefinitionTitle:'Was ist ein sehr heisser Tag?', veryHotDefinitionText:'Ein Tag, an dem die gemessene Höchsttemperatur mindestens 35 °C erreicht.', heatwaveDefinitionTitle:'Was bedeutet längste Hitzewelle?', heatwaveDefinitionText:'Die längste Folge aufeinanderfolgender Tage mit einer Höchsttemperatur von mindestens 30 °C.' });
+Object.assign(translations.fr, { intro:'Comparez les stations et découvrez les événements thermiques, les évolutions et les records météorologiques en Suisse.', summerDefinitionTitle:'Qu’est-ce qu’une journée d’été ?', summerDefinitionText:'Une journée durant laquelle la température maximale mesurée atteint au moins 25 °C.', veryHotDefinitionTitle:'Qu’est-ce qu’une journée très chaude ?', veryHotDefinitionText:'Une journée durant laquelle la température maximale mesurée atteint au moins 35 °C.', heatwaveDefinitionTitle:'Que signifie la plus longue vague de chaleur ?', heatwaveDefinitionText:'La plus longue série de jours consécutifs avec une température maximale d’au moins 30 °C.' });
+Object.assign(translations.it, { intro:'Confronta le stazioni e scopri eventi termici, tendenze e record meteorologici in Svizzera.', summerDefinitionTitle:'Che cos’è una giornata estiva?', summerDefinitionText:'Un giorno in cui la temperatura massima misurata raggiunge almeno 25 °C.', veryHotDefinitionTitle:'Che cos’è una giornata molto calda?', veryHotDefinitionText:'Un giorno in cui la temperatura massima misurata raggiunge almeno 35 °C.', heatwaveDefinitionTitle:'Cosa significa ondata di caldo più lunga?', heatwaveDefinitionText:'La più lunga sequenza di giorni consecutivi con una temperatura massima di almeno 30 °C.' });
+Object.assign(translations.rm, { intro:'Cumpareglia staziuns e scuvra eveniments da temperatura, svilups e records meteorologics en Svizra.', summerDefinitionTitle:'Tge è in di da stad?', summerDefinitionText:'In di cun ina temperatura maximala mesirada dad almain 25 °C.', veryHotDefinitionTitle:'Tge è in di fitg chaud?', veryHotDefinitionText:'In di cun ina temperatura maximala mesirada dad almain 35 °C.', heatwaveDefinitionTitle:'Tge munta la perioda da chalira la pli lunga?', heatwaveDefinitionText:'La pli lunga successiun da dis consecutivs cun ina temperatura maximala dad almain 30 °C.' });
+Object.assign(translations.en, { intro:'Compare stations and discover temperature events, trends and weather records across Switzerland.', summerDefinitionTitle:'What is a summer day?', summerDefinitionText:'A day on which the measured maximum temperature reaches at least 25 °C.', veryHotDefinitionTitle:'What is a very hot day?', veryHotDefinitionText:'A day on which the measured maximum temperature reaches at least 35 °C.', heatwaveDefinitionTitle:'What does longest heatwave mean?', heatwaveDefinitionText:'The longest run of consecutive days with a maximum temperature of at least 30 °C.' });
+Object.assign(translations.zh, { intro:'比较不同气象站，探索瑞士各地的温度事件、变化趋势和天气纪录。', summerDefinitionTitle:'什么是夏日？', summerDefinitionText:'实测每日最高气温达到或超过 25 °C 的一天。', veryHotDefinitionTitle:'什么是极热日？', veryHotDefinitionText:'实测每日最高气温达到或超过 35 °C 的一天。', heatwaveDefinitionTitle:'最长热浪是什么意思？', heatwaveDefinitionText:'每日最高气温达到或超过 30 °C 的最长连续天数。' });
+Object.assign(translations.de, { longestFrostPeriod:'Längste Frostperiode', frostPeriodHighlight:'Längste Frostperiode im gewählten Zeitraum', frostPeriodDefinitionTitle:'Was bedeutet längste Frostperiode?', frostPeriodDefinitionText:'Die längste Folge aufeinanderfolgender Tage, an denen die Tiefsttemperatur unter 0 °C fällt.' });
+Object.assign(translations.fr, { longestFrostPeriod:'Plus longue période de gel', frostPeriodHighlight:'Plus longue période de gel de la période sélectionnée', frostPeriodDefinitionTitle:'Que signifie la plus longue période de gel ?', frostPeriodDefinitionText:'La plus longue série de jours consécutifs durant lesquels la température minimale descend sous 0 °C.' });
+Object.assign(translations.it, { longestFrostPeriod:'Periodo di gelo più lungo', frostPeriodHighlight:'Periodo di gelo più lungo nel periodo selezionato', frostPeriodDefinitionTitle:'Cosa significa periodo di gelo più lungo?', frostPeriodDefinitionText:'La più lunga sequenza di giorni consecutivi in cui la temperatura minima scende sotto 0 °C.' });
+Object.assign(translations.rm, { longestFrostPeriod:'Perioda da schelira la pli lunga', frostPeriodHighlight:'Perioda da schelira la pli lunga en la perioda tschernida', frostPeriodDefinitionTitle:'Tge munta la perioda da schelira la pli lunga?', frostPeriodDefinitionText:'La pli lunga successiun da dis consecutivs durant ils quals la temperatura minimala croda sut 0 °C.' });
+Object.assign(translations.en, { longestFrostPeriod:'Longest frost period', frostPeriodHighlight:'Longest frost period in the selected period', frostPeriodDefinitionTitle:'What does longest frost period mean?', frostPeriodDefinitionText:'The longest run of consecutive days on which the minimum temperature falls below 0 °C.' });
+Object.assign(translations.zh, { longestFrostPeriod:'最长霜冻期', frostPeriodHighlight:'所选时段内最长霜冻期', frostPeriodDefinitionTitle:'最长霜冻期是什么意思？', frostPeriodDefinitionText:'每日最低气温低于 0 °C 的最长连续天数。' });
+Object.assign(translations.de, { warmestDay:'Wärmster Tag', coldestDay:'Kältester Tag' });
+Object.assign(translations.fr, { warmestDay:'Journée la plus chaude', coldestDay:'Journée la plus froide' });
+Object.assign(translations.it, { warmestDay:'Giorno più caldo', coldestDay:'Giorno più freddo' });
+Object.assign(translations.rm, { warmestDay:'Di il pli chaud', coldestDay:'Di il pli fraid' });
+Object.assign(translations.en, { warmestDay:'Warmest day', coldestDay:'Coldest day' });
+Object.assign(translations.zh, { warmestDay:'最热日', coldestDay:'最冷日' });
 let currentLanguage = 'de';
+const validViews = ['overview', 'years', 'details', 'forecast'];
+let currentView = validViews.includes(new URLSearchParams(location.search).get('view')) ? new URLSearchParams(location.search).get('view') : 'overview';
 const tr = key => translations[currentLanguage][key] || translations.de[key] || key;
 const locale = () => ({de:'de-CH',fr:'fr-CH',it:'it-CH',rm:'rm-CH',en:'en-GB',zh:'zh-CN'}[currentLanguage]);
 const metricInfo = key => key === 'heatDays'
   ? { label: tr('heatDays'), threshold: tr('heatThreshold'), extremeLabel: tr('highest'), extremeKey: 'maximumTemperatureCelsius' }
+  : key === 'summerDays'
+    ? { label: tr('summerDays'), threshold: tr('summerThreshold'), extremeLabel: tr('highest'), extremeKey: 'maximumTemperatureCelsius' }
+  : key === 'veryHotDays'
+    ? { label: tr('veryHotDays'), threshold: tr('veryHotThreshold'), extremeLabel: tr('highest'), extremeKey: 'maximumTemperatureCelsius' }
   : key === 'frostDays'
     ? { label: tr('frostDays'), threshold: tr('frostThreshold'), extremeLabel: tr('lowest'), extremeKey: 'minimumTemperatureCelsius' }
     : key === 'iceDays'
@@ -127,6 +176,8 @@ function applyLanguage() {
   document.documentElement.lang = currentLanguage;
   document.querySelectorAll('[data-i18n]').forEach(element => { element.textContent = tr(element.dataset.i18n); });
   document.querySelector('#metric option[value="heatDays"]').textContent = tr('heatOption');
+  document.querySelector('#metric option[value="summerDays"]').textContent = tr('summerOption');
+  document.querySelector('#metric option[value="veryHotDays"]').textContent = tr('veryHotOption');
   document.querySelector('#metric option[value="tropicalNights"]').textContent = tr('tropicalOption');
   document.querySelector('#metric option[value="frostDays"]').textContent = tr('frostOption');
   document.querySelector('#metric option[value="iceDays"]').textContent = tr('iceOption');
@@ -135,6 +186,27 @@ function applyLanguage() {
   document.querySelector('#feedback-close').setAttribute('aria-label', tr('close'));
   refreshSelectedStationLabels();
   updateStationCount();
+  updateViewChrome();
+}
+
+function updateViewChrome() {
+  document.querySelectorAll('[data-view-link]').forEach(link => {
+    const active = link.dataset.viewLink === currentView;
+    link.classList.toggle('active', active);
+    if (link.closest('.app-navigation')) link.setAttribute('aria-current', active ? 'page' : 'false');
+  });
+  const title = document.querySelector('#current-view-title');
+  if (title) title.textContent = tr({ years:'navYears', details:'navDetails', forecast:'navForecast' }[currentView] || 'navOverview');
+}
+
+function setView(view, updateHistory = true) {
+  currentView = validViews.includes(view) ? view : 'overview';
+  document.querySelectorAll('.view-panel[data-view]').forEach(panel => { panel.hidden = panel.dataset.view !== currentView; });
+  document.querySelectorAll('[data-detail-view]').forEach(panel => { panel.hidden = currentView === 'overview'; });
+  document.body.classList.toggle('detail-active', currentView !== 'overview');
+  updateViewChrome();
+  if (updateHistory) history.pushState({ view: currentView }, '', currentView === 'overview' ? location.pathname : `${location.pathname}?view=${currentView}`);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function stationLabel(station) {
@@ -214,7 +286,6 @@ function addStation(selectedId = '', removable = true) {
 function updateStationCount() {
   const count = selectors.querySelectorAll('.station-row').length;
   stationCount.textContent = currentLanguage === 'zh' ? `${count} ${tr('stations')}` : `${count} ${count === 1 ? tr('station') : tr('stations')}`;
-  document.querySelector('#compare').textContent = count === 1 ? tr('analyze') : tr('compare');
   document.querySelector('#station-add-search').disabled = count >= colors.length;
   populateStationSearch();
   if (stations.length) renderMap();
@@ -320,7 +391,7 @@ async function fetchForecast(id) {
 
 async function fetchDetailDays(id, year) {
   const metricKey = document.querySelector('#metric').value;
-  const route = metricKey === 'frostDays' ? 'frost-days' : metricKey === 'iceDays' ? 'ice-days' : 'heat-days';
+  const route = metricKey === 'frostDays' ? 'frost-days' : metricKey === 'iceDays' ? 'ice-days' : metricKey === 'summerDays' ? 'summer-days' : metricKey === 'veryHotDays' ? 'very-hot-days' : 'heat-days';
   const response = await fetch(`/api/stations/${encodeURIComponent(id)}/${route}?year=${year}`);
   const data = await response.json();
   if (!response.ok) throw new Error(data.message || `${metricInfo(metricKey).label} für ${id} konnten nicht geladen werden.`);
@@ -341,16 +412,17 @@ function renderHeatDays(yearGroups) {
   const detailMetricKey = document.querySelector('#metric').value;
   const frost = detailMetricKey === 'frostDays';
   const ice = detailMetricKey === 'iceDays';
-  const detailMetric = metricInfo(frost ? 'frostDays' : ice ? 'iceDays' : 'heatDays');
-  document.querySelector('[data-i18n="heatDaysDetailTitle"]').textContent = tr(frost ? 'frostDaysDetailTitle' : ice ? 'iceDaysDetailTitle' : 'heatDaysDetailTitle');
-  document.querySelector('[data-i18n="heatDaysDetailIntro"]').textContent = tr(frost ? 'frostDaysDetailIntro' : ice ? 'iceDaysDetailIntro' : 'heatDaysDetailIntro');
+  const detailMetric = metricInfo(detailMetricKey);
+  const detailPrefix = detailMetricKey === 'frostDays' ? 'frostDays' : detailMetricKey === 'iceDays' ? 'iceDays' : detailMetricKey === 'summerDays' ? 'summerDays' : detailMetricKey === 'veryHotDays' ? 'veryHotDays' : 'heatDays';
+  document.querySelector('[data-i18n="heatDaysDetailTitle"]').textContent = tr(`${detailPrefix}DetailTitle`);
+  document.querySelector('[data-i18n="heatDaysDetailIntro"]').textContent = tr(`${detailPrefix}DetailIntro`);
   const formatter = new Intl.NumberFormat(locale(), { minimumFractionDigits: 1, maximumFractionDigits: 1 });
   const timelineValues = (item, year) => {
     const measured = item.values.map(day => ({ ...day, forecast:false }));
     if (year !== currentYear) return measured;
     const measuredDates = new Set(measured.map(day => day.date));
     const forecast = latestForecasts.find(entry => entry.station.id === item.station.id)?.values
-      .filter(day => (frost ? day.minimumTemperatureCelsius < 0 : ice ? day.maximumTemperatureCelsius < 0 : day.predictedHeatDay) && day.date.startsWith(String(year)) && !measuredDates.has(day.date))
+      .filter(day => forecastMatchesMetric(day, detailMetricKey) && day.date.startsWith(String(year)) && !measuredDates.has(day.date))
       .map(day => ({ ...day, forecast:true })) || [];
     return [...measured, ...forecast].sort((a, b) => a.date.localeCompare(b.date));
   };
@@ -395,7 +467,7 @@ function renderHeatDays(yearGroups) {
 }
 
 function openHeatDayYear(year) {
-  if (!['heatDays', 'frostDays', 'iceDays'].includes(document.querySelector('#metric').value)) return;
+  if (!['heatDays', 'summerDays', 'veryHotDays', 'frostDays', 'iceDays'].includes(document.querySelector('#metric').value)) return;
   const select = document.querySelector('#heat-day-year');
   if (![...select.options].some(option => Number(option.value) === year)) return;
   if (selectedHeatDayYears.includes(year)) {
@@ -404,7 +476,7 @@ function openHeatDayYear(year) {
     selectedHeatDayYears = [...selectedHeatDayYears, year].sort((a, b) => a - b);
   }
   select.value = String(year);
-  document.querySelectorAll('.year-group').forEach(group => {
+  detailYearChart.querySelectorAll('.year-group').forEach(group => {
     const selected = selectedHeatDayYears.includes(Number(group.dataset.year));
     group.classList.toggle('selected', selected);
     group.setAttribute('aria-pressed', String(selected));
@@ -467,7 +539,7 @@ function removeDetailYear(year) {
   if (selectedHeatDayYears.length <= 1 || !selectedHeatDayYears.includes(year)) return;
   selectedHeatDayYears = selectedHeatDayYears.filter(selectedYear => selectedYear !== year);
   document.querySelector('#heat-day-year').value = String(selectedHeatDayYears.at(-1));
-  document.querySelectorAll('.year-group').forEach(group => {
+  detailYearChart.querySelectorAll('.year-group').forEach(group => {
     const selected = selectedHeatDayYears.includes(Number(group.dataset.year));
     group.classList.toggle('selected', selected);
     group.setAttribute('aria-pressed', String(selected));
@@ -477,6 +549,8 @@ function removeDetailYear(year) {
 
 function forecastMatchesMetric(day, metricKey) {
   if (metricKey === 'heatDays') return day.predictedHeatDay;
+  if (metricKey === 'summerDays') return day.maximumTemperatureCelsius >= 25;
+  if (metricKey === 'veryHotDays') return day.maximumTemperatureCelsius >= 35;
   if (metricKey === 'frostDays') return day.minimumTemperatureCelsius < 0;
   if (metricKey === 'iceDays') return day.maximumTemperatureCelsius < 0;
   return day.predictedTropicalNight;
@@ -530,6 +604,7 @@ function renderClimateContext(contexts, forecasts) {
     [tr('summerDays'), item => item.values.find(value => value.year === currentYear)?.summerDays ?? '–', 'Maximum ≥ 25 °C'],
     [tr('veryHotDays'), item => item.values.find(value => value.year === currentYear)?.veryHotDays ?? '–', 'Maximum ≥ 35 °C'],
     [tr('longestHeatWave'), item => { const value = item.values.find(entry => entry.year === currentYear)?.longestHeatWaveDays; return value == null ? '–' : `${value} ${tr('days')}`; }, 'Maximum ≥ 30 °C'],
+    [tr('longestFrostPeriod'), item => { const value = item.values.find(entry => entry.year === currentYear)?.longestFrostPeriodDays; return value == null ? '–' : `${value} ${tr('days')}`; }, 'Minimum < 0 °C'],
     [tr('warmestNight'), item => { const value = item.values.find(entry => entry.year === currentYear)?.warmestNightCelsius; return value == null ? '–' : `${formatter.format(value)} °C`; }, tr('tropicalThreshold')]
   ];
   document.querySelector('#climate-details').innerHTML = `<table class="climate-table"><thead><tr><th>${tr('indicator')}</th>${stationHeaders}<th>${tr('definition')}</th></tr></thead><tbody>${detailRows.map(row => `<tr><td>${row[0]}</td>${contexts.map(item => `<td>${row[1](item)}</td>`).join('')}<td>${row[2]}</td></tr>`).join('')}</tbody></table>`;
@@ -567,13 +642,82 @@ function renderComparison(data, forecasts, from, to) {
     const selected = selectedHeatDayYears.includes(year);
     return `<div class="year-group ${selected ? 'selected' : ''}" data-year="${year}" role="button" tabindex="0" aria-pressed="${selected}" aria-label="${year}: ${tr('heatDaysHint')}" title="${tr('heatDaysHint')}"><div class="bars">${bars}</div><span class="year-label">${year}</span></div>`;
   }).join('')}</div>`;
+  detailYearLegend.innerHTML = legend.innerHTML;
+  detailYearChart.className = 'chart';
+  detailYearChart.setAttribute('aria-label', chart.getAttribute('aria-label'));
+  detailYearChart.innerHTML = chart.innerHTML;
+  chart.querySelectorAll('.year-group').forEach(group => {
+    group.classList.remove('selected');
+    group.classList.add('readonly');
+    group.removeAttribute('data-year');
+    group.removeAttribute('role');
+    group.removeAttribute('tabindex');
+    group.removeAttribute('aria-pressed');
+    group.removeAttribute('aria-label');
+    group.removeAttribute('title');
+  });
   results.innerHTML = data.map((item, index) => {
     const total = item.values.reduce((sum, value) => sum + value[metricKey], 0);
     const predicted = forecastCounts.get(item.station.id) || 0;
+    const coldMetric = metricKey === 'frostDays' || metricKey === 'iceDays';
     const extreme = item.values.reduce((best, value) => !best
-      || (metricKey === 'heatDays' ? value[metric.extremeKey] > best[metric.extremeKey] : value[metric.extremeKey] < best[metric.extremeKey]) ? value : best, null);
+      || (coldMetric ? value[metric.extremeKey] < best[metric.extremeKey] : value[metric.extremeKey] > best[metric.extremeKey]) ? value : best, null);
     return `<article class="summary" style="--station-color:${colors[index]}"><span>${item.station.name}</span><strong>${total}${predicted ? `<em> + ${predicted}</em>` : ''}</strong><small>${metric.label} ${tr('measured')}${predicted ? ` · ${predicted} ${tr('currentForecast')}` : ''}${extreme ? ` · ${metric.extremeLabel} ${extreme[metric.extremeKey].toFixed(1)} °C (${extreme.year})` : ''}</small></article>`;
   }).join('');
+  const heatwaveHighlight = document.querySelector('#heatwave-highlight');
+  const warmRecord = ['heatDays', 'summerDays', 'veryHotDays'].includes(metricKey);
+  const coldRecord = ['frostDays', 'iceDays'].includes(metricKey);
+  const recordKey = coldRecord ? 'longestFrostPeriodDays' : 'longestHeatWaveDays';
+  heatwaveHighlight.hidden = !warmRecord && !coldRecord;
+  if (warmRecord || coldRecord) {
+    heatwaveHighlight.innerHTML = `<h3>${tr(coldRecord ? 'frostPeriodHighlight' : 'heatwaveHighlight')}</h3><div>${data.map((item, index) => {
+      const record = item.values.reduce((best, value) => !best || value[recordKey] > best[recordKey] ? value : best, null);
+      return `<article style="--station-color:${colors[index]}"><span>${item.station.name}</span><strong>${record?.[recordKey] || 0} <small>${tr('days')}</small></strong><em>${record?.year || '–'}</em></article>`;
+    }).join('')}</div>`;
+  }
+}
+
+function renderOverview(data, forecasts, from, to) {
+  const metricKey = document.querySelector('#metric').value;
+  const metric = metricInfo(metricKey);
+  const warmRecord = ['heatDays', 'summerDays', 'veryHotDays'].includes(metricKey);
+  const coldRecord = ['frostDays', 'iceDays'].includes(metricKey);
+  const recordKey = coldRecord ? 'longestFrostPeriodDays' : 'longestHeatWaveDays';
+  const recordLabel = tr(coldRecord ? 'longestFrostPeriod' : 'longestHeatWave');
+  const extremeKey = coldRecord ? 'minimumTemperatureCelsius' : 'maximumTemperatureCelsius';
+  const extremeLabel = tr(coldRecord ? 'coldestDay' : 'warmestDay');
+  const formatter = new Intl.NumberFormat(locale(), { minimumFractionDigits: 0, maximumFractionDigits: 1 });
+  const forecastCounts = new Map(forecasts.map(item => [item.station.id,
+    item.values.filter(day => day.date.startsWith(String(currentYear)) && forecastMatchesMetric(day, metricKey)).length
+  ]));
+  const rows = data.map(item => {
+    const values = item.values.map(value => value[metricKey]);
+    const currentValue = item.values.find(value => value.year === currentYear);
+    return {
+      name: item.station.name,
+      current: currentValue?.[metricKey] ?? 0,
+      average: values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : 0,
+      forecast: forecastCounts.get(item.station.id) || 0,
+      record: warmRecord || coldRecord ? currentValue : null,
+      extreme: warmRecord || coldRecord ? currentValue?.[extremeKey] : null
+    };
+  });
+  const card = (title, key) => `<article><h3>${title}</h3>${rows.map((row, index) => `<div class="overview-value" style="--station-color:${colors[index]}"><span>${row.name}</span><strong>${formatter.format(row[key])}</strong><small>${metric.label}</small>${key === 'current' && row.record ? `<strong class="overview-record-value">${row.record[recordKey]}</strong><small class="overview-record overview-record-series">${recordLabel} (${tr('days')})</small><strong class="overview-record-value">${formatter.format(row.extreme)}°</strong><small class="overview-record">${extremeLabel} (°C)</small>` : ''}</div>`).join('')}</article>`;
+  document.querySelector('#overview-summary').innerHTML = card(`${tr('currentYearShort')} (${currentYear})`, 'current')
+    + card(`${tr('periodAverage')} (${from}–${to})`, 'average')
+    + card(tr('nextDaysShort'), 'forecast');
+  const years = Array.from({ length: to - from + 1 }, (_, index) => from + index);
+  const maximum = Math.max(1, ...data.flatMap(item => item.values.map(value => value[metricKey] || 0)));
+  document.querySelector('#overview-chart-period').textContent = `${from}–${to}`;
+  document.querySelector('#overview-chart-legend').innerHTML = data.map((item, index) => `<span><i style="background:${colors[index]}"></i>${item.station.name}</span>`).join('');
+  document.querySelector('#overview-chart-preview').innerHTML = years.map(year => {
+    const bars = data.map((item, index) => {
+      const value = item.values.find(entry => entry.year === year)?.[metricKey] || 0;
+      return `<span class="overview-mini-bar" style="height:${Math.max(2, value / maximum * 100)}%;background:${colors[index]}" title="${item.station.name}: ${value}"></span>`;
+    }).join('');
+    return `<div class="overview-mini-year"><div>${bars}</div><small>${year}</small></div>`;
+  }).join('');
+  document.querySelector('#view-filter-summary').innerHTML = `<span>${data.map(item => item.station.name).join(' · ')}</span><span>${from}–${to}</span><span>${metric.label}</span>`;
 }
 
 function renderLatestView() {
@@ -584,16 +728,18 @@ function renderLatestView() {
   renderHeatDays(heatDays);
   renderClimateContext(contexts, forecasts);
   renderForecast(forecasts);
+  renderOverview(data, forecasts, from, to);
   const metric = metricInfo(document.querySelector('#metric').value);
   status.textContent = `${count} ${tr('stations')} · ${from}–${to} · ${metric.threshold}`;
 }
 
 async function compare() {
   const ids = selectedStationIds(); const from = Number(document.querySelector('#fromYear').value); const to = Number(document.querySelector('#toYear').value);
+  applyMetricColors(document.querySelector('#metric').value);
   if (ids.length < 1) { status.textContent = tr('selectOne'); return; }
   if (new Set(ids).size !== ids.length) { status.textContent = tr('uniqueStations'); return; }
   if (from > to || to - from > 50) { status.textContent = tr('invalidPeriod'); return; }
-  status.textContent = `${ids.length} ${tr('loading')}`; document.querySelector('#compare').disabled = true;
+  status.textContent = `${ids.length} ${tr('loading')}`;
   try {
     populateHeatDayYears(from, to);
     const [data, forecasts, contexts, heatDays] = await Promise.all([
@@ -606,7 +752,6 @@ async function compare() {
     renderLatestView();
   }
   catch (error) { status.textContent = error.message; chart.className = 'chart-empty'; chart.innerHTML = `<p>${tr('noResults')}</p>`; }
-  finally { document.querySelector('#compare').disabled = false; }
 }
 
 function addStationFromSearch(stationId) {
@@ -665,18 +810,19 @@ document.querySelector('#map-toggle').addEventListener('click', event => {
     setTimeout(() => stationMap.invalidateSize(), 0);
   }
 });
-document.querySelector('#compare').addEventListener('click', compare);
 document.querySelector('#metric').addEventListener('change', compare);
+document.querySelector('#fromYear').addEventListener('change', compare);
+document.querySelector('#toYear').addEventListener('change', compare);
 document.querySelector('#heat-day-year').addEventListener('change', event => { selectedHeatDayYears = [Number(event.target.value)]; loadHeatDayDetails(); });
 document.querySelector('#heat-days-detail').addEventListener('click', event => {
   const button = event.target.closest('.remove-detail-year');
   if (button) removeDetailYear(Number(button.dataset.year));
 });
-chart.addEventListener('click', event => {
+detailYearChart.addEventListener('click', event => {
   const group = event.target.closest('.year-group');
   if (group) openHeatDayYear(Number(group.dataset.year));
 });
-chart.addEventListener('keydown', event => {
+detailYearChart.addEventListener('keydown', event => {
   const group = event.target.closest('.year-group');
   if (group && (event.key === 'Enter' || event.key === ' ')) {
     event.preventDefault();
@@ -693,6 +839,16 @@ document.querySelector('#climate-details-toggle').addEventListener('click', even
   const open = button.getAttribute('aria-expanded') === 'true';
   button.setAttribute('aria-expanded', String(!open));
   document.querySelector('#climate-details').classList.toggle('open', !open);
+});
+document.addEventListener('click', event => {
+  const link = event.target.closest('[data-view-link]');
+  if (!link) return;
+  event.preventDefault();
+  setView(link.dataset.viewLink);
+});
+window.addEventListener('popstate', () => {
+  const requested = new URLSearchParams(location.search).get('view') || 'overview';
+  setView(requested, false);
 });
 const feedbackDialog = document.querySelector('#feedback-dialog');
 const closeFeedback = () => feedbackDialog.close();
@@ -734,5 +890,6 @@ document.querySelector('#feedback-form').addEventListener('submit', async event 
   }
 });
 applyLanguage();
+setView(currentView, false);
 syncMapLayout();
 loadStations();

@@ -13,5 +13,9 @@ public interface StationDataSource {
     List<DailyHeatDay> findFrostDays(String stationId, int year);
 
     List<DailyHeatDay> findIceDays(String stationId, int year);
+
+    List<DailyHeatDay> findSummerDays(String stationId, int year);
+
+    List<DailyHeatDay> findVeryHotDays(String stationId, int year);
 }
 

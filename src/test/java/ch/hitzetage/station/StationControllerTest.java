@@ -58,6 +58,7 @@ class StationControllerTest {
                 .andExpect(jsonPath("$.values[0].summerDays").isNumber())
                 .andExpect(jsonPath("$.values[0].veryHotDays").isNumber())
                 .andExpect(jsonPath("$.values[0].longestHeatWaveDays").isNumber())
+                .andExpect(jsonPath("$.values[0].longestFrostPeriodDays").isNumber())
                 .andExpect(jsonPath("$.values[0].warmestNightCelsius").isNumber());
     }
 
@@ -99,6 +100,22 @@ class StationControllerTest {
                 .andExpect(jsonPath("$.values", hasSize(2)))
                 .andExpect(jsonPath("$.values[0].date").value("2024-01-19"))
                 .andExpect(jsonPath("$.values[0].maximumTemperatureCelsius").value(-1.2));
+    }
+
+    @Test
+    void returnsSummerDaysForSelectedYear() throws Exception {
+        mockMvc.perform(get("/api/stations/ZRH/summer-days").param("year", "2024"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.heatDayThresholdCelsius").value(25.0))
+                .andExpect(jsonPath("$.values", hasSize(3)));
+    }
+
+    @Test
+    void returnsVeryHotDaysForSelectedYear() throws Exception {
+        mockMvc.perform(get("/api/stations/ZRH/very-hot-days").param("year", "2024"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.heatDayThresholdCelsius").value(35.0))
+                .andExpect(jsonPath("$.values", hasSize(0)));
     }
 
     @Test

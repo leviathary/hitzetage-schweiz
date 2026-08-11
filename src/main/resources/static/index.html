@@ -44,17 +44,30 @@
 <body><main>
   <div class="language-switcher"><label class="visually-hidden" for="language" data-i18n="language">Sprache</label><span class="language-globe" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c2.3 2.5 3.5 5.5 3.5 9s-1.2 6.5-3.5 9c-2.3-2.5-3.5-5.5-3.5-9S9.7 5.5 12 3z"></path></svg></span><select id="language"><option value="de">DE Deutsch</option><option value="fr">FR Français</option><option value="it">IT Italiano</option><option value="rm">RM Rumantsch</option><option value="en">EN English</option><option value="zh">ZH 中文</option></select></div>
   <header><p class="eyebrow" data-i18n="eyebrow">MeteoSwiss-Messstationen</p><h1 data-i18n="title">Hitzetage in der Schweiz</h1><p class="intro" data-i18n="intro">Vergleiche Messstationen und entdecke, wie häufig die Tageshöchsttemperatur 30&nbsp;°C erreicht hat.</p></header>
-  <section class="explainer" aria-labelledby="explainer-title">
+  <nav class="app-navigation" aria-label="Hauptnavigation">
+    <a href="?view=overview" data-view-link="overview" data-i18n="navOverview">Übersicht</a>
+    <a href="?view=years" data-view-link="years" data-i18n="navYears">Jahresvergleich</a>
+    <a href="?view=details" data-view-link="details" data-i18n="navDetails">Detailtage</a>
+    <a href="?view=forecast" data-view-link="forecast" data-i18n="navForecast">Prognose</a>
+  </nav>
+  <details class="explainer view-panel" data-view="overview">
+    <summary><span data-i18n="definitionsToggle">Definitionen und Datenquelle</span><span aria-hidden="true">⌄</span></summary>
+    <div class="explainer-content" aria-labelledby="explainer-title">
     <div class="explainer-heading"><div><p class="eyebrow" data-i18n="explainerEyebrow">Die Zahlen richtig einordnen</p><h2 id="explainer-title" data-i18n="explainerTitle">Was zeigt diese Anwendung?</h2></div></div>
     <div class="explainer-grid">
       <article><h3 data-i18n="heatDefinitionTitle">Was ist ein Hitzetag?</h3><p data-i18n="heatDefinitionText">Ein Tag, an dem die gemessene Höchsttemperatur mindestens 30 °C erreicht.</p></article>
       <article><h3 data-i18n="tropicalDefinitionTitle">Was ist eine Tropennacht?</h3><p data-i18n="tropicalDefinitionText">Eine Nacht, in der die Temperatur nicht unter 20 °C fällt, ausgewertet über das Tagesminimum.</p></article>
       <article><h3 data-i18n="frostDefinitionTitle">Was ist ein Frosttag?</h3><p data-i18n="frostDefinitionText">Ein Tag, an dem die gemessene Tiefsttemperatur unter 0 °C fällt.</p></article>
       <article><h3 data-i18n="iceDefinitionTitle">Was ist ein Eistag?</h3><p data-i18n="iceDefinitionText">Ein Tag, an dem auch die gemessene Höchsttemperatur unter 0 °C bleibt.</p></article>
+      <article><h3 data-i18n="summerDefinitionTitle">Was ist ein Sommertag?</h3><p data-i18n="summerDefinitionText">Ein Tag, an dem die gemessene Höchsttemperatur mindestens 25 °C erreicht.</p></article>
+      <article><h3 data-i18n="veryHotDefinitionTitle">Was ist ein sehr heisser Tag?</h3><p data-i18n="veryHotDefinitionText">Ein Tag, an dem die gemessene Höchsttemperatur mindestens 35 °C erreicht.</p></article>
+      <article class="explainer-wide"><h3 data-i18n="heatwaveDefinitionTitle">Was bedeutet längste Hitzewelle?</h3><p data-i18n="heatwaveDefinitionText">Die längste Folge aufeinanderfolgender Tage mit einer Höchsttemperatur von mindestens 30 °C.</p></article>
+      <article class="explainer-wide"><h3 data-i18n="frostPeriodDefinitionTitle">Was bedeutet längste Frostperiode?</h3><p data-i18n="frostPeriodDefinitionText">Die längste Folge aufeinanderfolgender Tage, an denen die Tiefsttemperatur unter 0 °C fällt.</p></article>
       <article><h3 data-i18n="dataDefinitionTitle">Woher stammen die Daten?</h3><p data-i18n="dataDefinitionText">Historische Messwerte und Stationsangaben stammen aus dem offiziellen Open-Data-Angebot von MeteoSwiss; Prognosen werden gesondert gekennzeichnet.</p></article>
     </div>
-  </section>
-  <section class="controls" aria-labelledby="selection-title">
+    </div>
+  </details>
+  <section class="controls view-panel" data-view="overview" aria-labelledby="selection-title">
     <div class="section-heading"><h2 id="selection-title" data-i18n="selectionTitle">Stationen und Zeitraum</h2><span id="station-count" class="badge">2 Stationen</span></div>
     <p class="controls-intro" data-i18n="explainerLead">Wähle eine oder mehrere MeteoSwiss-Messstationen und vergleiche Temperaturereignisse über Jahre und Regionen.</p>
     <div class="controls-layout">
@@ -67,8 +80,8 @@
         <div id="station-selectors" class="station-selectors" aria-label="Ausgewählte Messstationen"></div>
         <button id="map-toggle" class="map-toggle secondary-button" type="button" aria-expanded="false" aria-controls="map-panel"><span data-i18n="mapToggle">Station auf Karte wählen</span><span aria-hidden="true">⌄</span></button>
         <div class="years"><label><span data-i18n="from">Von</span><input id="fromYear" type="number" min="1864"></label><label><span data-i18n="to">Bis</span><input id="toYear" type="number" min="1864"></label></div>
-        <label class="metric-label"><span data-i18n="metric">Kennzahl</span><select id="metric"><option value="heatDays">Hitzetage (Maximum ≥ 30 °C)</option><option value="tropicalNights">Tropennächte (Minimum ≥ 20 °C)</option><option value="frostDays">Frosttage (Minimum &lt; 0 °C)</option><option value="iceDays">Eistage (Maximum &lt; 0 °C)</option></select></label>
-        <button id="compare" type="button" data-i18n="compare">Stationen vergleichen</button><p id="status" role="status"></p>
+        <label class="metric-label"><span data-i18n="metric">Kennzahl</span><select id="metric"><option value="heatDays">Hitzetage (Maximum ≥ 30 °C)</option><option value="summerDays">Sommertage (Maximum ≥ 25 °C)</option><option value="veryHotDays">Sehr heisse Tage (Maximum ≥ 35 °C)</option><option value="tropicalNights">Tropennächte (Minimum ≥ 20 °C)</option><option value="frostDays">Frosttage (Minimum &lt; 0 °C)</option><option value="iceDays">Eistage (Maximum &lt; 0 °C)</option></select></label>
+        <p id="status" class="visually-hidden" role="status" aria-live="polite"></p>
       </div>
       <div id="map-panel" class="map-panel" hidden>
         <div id="station-map" class="station-map" role="region" aria-label="Karte der MeteoSwiss-Messstationen">
@@ -77,24 +90,43 @@
       </div>
     </div>
   </section>
-  <section aria-labelledby="result-title">
-    <div class="section-heading"><h2 id="result-title">Hitzetage pro Jahr</h2><span class="badge" data-i18n="source">Quelle: MeteoSwiss</span></div>
+  <section class="overview-dashboard view-panel" data-view="overview" aria-labelledby="overview-title">
+    <h2 id="overview-title" class="visually-hidden" data-i18n="overviewEyebrow">Auf einen Blick</h2>
+    <div id="overview-summary" class="overview-summary"><p data-i18n="overviewLoading">Die Zusammenfassung wird mit dem Vergleich geladen.</p></div>
+    <div class="overview-chart-card"><h3><span data-i18n="overviewChartTitle">Vorschau Jahresvergleich</span> <small id="overview-chart-period"></small></h3><div id="overview-chart-legend" class="overview-chart-legend"></div><div id="overview-chart-preview" class="overview-chart-preview"></div></div>
+    <div class="overview-actions"><a class="button-link" href="?view=years" data-view-link="years" data-i18n="openYears">Jahresvergleich öffnen</a><a class="secondary-link" href="?view=details" data-view-link="details" data-i18n="openDetails">Detailtage ansehen</a></div>
+  </section>
+  <div class="detail-view-header view-panel" data-detail-view>
+    <div><p class="breadcrumb"><a href="?view=overview" data-view-link="overview" data-i18n="navOverview">Übersicht</a><span aria-hidden="true"> / </span><strong id="current-view-title"></strong></p><div id="view-filter-summary" class="view-filter-summary"></div></div>
+  </div>
+  <section class="view-panel" data-view="years" aria-labelledby="result-title">
+    <div class="section-heading"><h2 id="result-title">Hitzetage pro Jahr</h2></div>
     <div id="legend" class="legend" aria-label="Legende"></div>
-    <p class="chart-interaction-hint" data-i18n="heatDaysHint">Jahre im Diagramm anklicken, um sie auf der Zeitachse zu vergleichen.</p>
     <div id="chart" class="chart-empty"><p>Wähle mindestens zwei Stationen und einen Zeitraum.</p></div>
     <div id="results" class="results"></div>
-    <div class="heat-days-heading">
-      <div><h2 data-i18n="heatDaysDetailTitle">Hitzetage im Detail</h2><p data-i18n="heatDaysDetailIntro">Alle gemessenen Tage mit mindestens 30 °C Tagesmaximum</p></div>
-      <select id="heat-day-year" hidden aria-hidden="true" tabindex="-1"></select>
-    </div>
-    <div id="heat-days-detail" class="heat-days-detail"></div>
+    <div id="heatwave-highlight" class="heatwave-highlight" hidden></div>
     <div class="climate-context-heading"><div><h2 data-i18n="contextTitle">Einordnung des aktuellen Jahres</h2><p data-i18n="contextIntro">Vergleich mit langjährigen Mittelwerten</p></div><span id="context-year" class="badge"></span></div>
     <div id="climate-context" class="climate-context"></div>
     <h3 id="top-years-title" class="top-years-title"></h3>
     <div id="top-years" class="top-years"></div>
     <button id="climate-details-toggle" class="climate-details-toggle" type="button" aria-expanded="false" aria-controls="climate-details"><span data-i18n="moreIndicators">Weitere Klimaindikatoren</span><span aria-hidden="true">⌄</span></button>
     <div id="climate-details" class="climate-details"></div>
-    <div class="forecast-heading"><h2 data-i18n="forecastTitle">Prognose für die nächsten neun Tage</h2><span id="forecast-updated"></span></div>
+  </section>
+  <section class="view-panel" data-view="details" aria-labelledby="detail-view-title">
+    <div class="detail-year-selection">
+      <h2 data-i18n="detailYearSelectionTitle">Jahre für den Vergleich auswählen</h2>
+      <div id="detail-year-legend" class="legend" aria-label="Legende"></div>
+      <p class="chart-interaction-hint" data-i18n="heatDaysHint">Jahre im Diagramm anklicken, um sie auf der Zeitachse zu vergleichen.</p>
+      <div id="detail-year-chart" class="chart-empty"><p>Die Jahresübersicht wird geladen.</p></div>
+    </div>
+    <div class="heat-days-heading">
+      <div><h2 id="detail-view-title" data-i18n="heatDaysDetailTitle">Hitzetage im Detail</h2><p data-i18n="heatDaysDetailIntro">Alle gemessenen Tage mit mindestens 30 °C Tagesmaximum</p></div>
+      <select id="heat-day-year" hidden aria-hidden="true" tabindex="-1"></select>
+    </div>
+    <div id="heat-days-detail" class="heat-days-detail"></div>
+  </section>
+  <section class="view-panel" data-view="forecast" aria-labelledby="forecast-view-title">
+    <div class="forecast-heading"><h2 id="forecast-view-title" data-i18n="forecastTitle">Prognose für die nächsten neun Tage</h2><span id="forecast-updated"></span></div>
     <div id="forecast" class="forecast"><p data-i18n="forecastLoading">Prognose wird mit dem Vergleich geladen.</p></div>
   </section>
   <dialog id="feedback-dialog" class="feedback-dialog" aria-labelledby="feedback-title">
@@ -111,5 +143,5 @@
       <div id="feedback-success" class="feedback-success" role="status" hidden><p data-i18n="feedbackThanks">Vielen Dank! Dein Feedback wurde gespeichert.</p></div>
     </form>
   </dialog>
-  <footer><span data-i18n="footer">Quelle: MeteoSwiss Open Data</span><span aria-hidden="true"> · </span><button id="feedback-open" class="footer-link" type="button" data-i18n="feedback">Feedback</button><span aria-hidden="true"> · </span><a href="/privacy.html" data-i18n="privacy">Datenschutz</a><span aria-hidden="true"> · </span><span>Version 0.5.1</span></footer>
+  <footer><span data-i18n="footer">Quelle: MeteoSwiss Open Data</span><span aria-hidden="true"> · </span><button id="feedback-open" class="footer-link" type="button" data-i18n="feedback">Feedback</button><span aria-hidden="true"> · </span><a href="/privacy.html" data-i18n="privacy">Datenschutz</a><span aria-hidden="true"> · </span><span>Version 0.6.0</span></footer>
 </main><script src="/vendor/leaflet/leaflet.js" defer></script><script src="/app.js" defer></script></body></html>

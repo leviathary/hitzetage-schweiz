@@ -18,9 +18,9 @@ class DemoStationDataSource implements StationDataSource {
     );
 
     private static final Map<String, List<AnnualHeatValue>> VALUES = Map.of(
-            "ZRH", List.of(new AnnualHeatValue(2022, 21, 3, 34, 4, 58, 4, 6, 36.2, -3.1, -8.1, 22.1), new AnnualHeatValue(2023, 26, 5, 29, 3, 64, 5, 8, 36.5, -2.4, -7.4, 22.8), new AnnualHeatValue(2024, 14, 2, 31, 2, 49, 0, 4, 34.9, -1.2, -6.9, 21.4)),
-            "GVE", List.of(new AnnualHeatValue(2022, 29, 8, 18, 2, 70, 8, 9, 38.3, -1.8, -5.2, 23.2), new AnnualHeatValue(2023, 32, 11, 15, 1, 74, 10, 10, 39.3, -0.8, -4.8, 24.0), new AnnualHeatValue(2024, 20, 6, 20, 2, 61, 3, 6, 36.7, -1.4, -5.5, 22.7)),
-            "BAS", List.of(new AnnualHeatValue(2022, 31, 9, 24, 3, 72, 7, 9, 37.0, -2.2, -6.0, 23.4), new AnnualHeatValue(2023, 36, 12, 21, 2, 79, 9, 11, 37.6, -1.1, -5.7, 24.1), new AnnualHeatValue(2024, 23, 7, 26, 3, 65, 3, 7, 35.7, -1.7, -6.2, 22.9))
+            "ZRH", List.of(new AnnualHeatValue(2022, 21, 3, 34, 4, 58, 4, 6, 9, 36.2, -3.1, -8.1, 22.1), new AnnualHeatValue(2023, 26, 5, 29, 3, 64, 5, 8, 7, 36.5, -2.4, -7.4, 22.8), new AnnualHeatValue(2024, 14, 2, 31, 2, 49, 0, 4, 8, 34.9, -1.2, -6.9, 21.4)),
+            "GVE", List.of(new AnnualHeatValue(2022, 29, 8, 18, 2, 70, 8, 9, 5, 38.3, -1.8, -5.2, 23.2), new AnnualHeatValue(2023, 32, 11, 15, 1, 74, 10, 10, 4, 39.3, -0.8, -4.8, 24.0), new AnnualHeatValue(2024, 20, 6, 20, 2, 61, 3, 6, 6, 36.7, -1.4, -5.5, 22.7)),
+            "BAS", List.of(new AnnualHeatValue(2022, 31, 9, 24, 3, 72, 7, 9, 6, 37.0, -2.2, -6.0, 23.4), new AnnualHeatValue(2023, 36, 12, 21, 2, 79, 9, 11, 5, 37.6, -1.1, -5.7, 24.1), new AnnualHeatValue(2024, 23, 7, 26, 3, 65, 3, 7, 7, 35.7, -1.7, -6.2, 22.9))
     );
 
     @Override
@@ -61,5 +61,15 @@ class DemoStationDataSource implements StationDataSource {
         return List.of(
                 new DailyHeatDay(LocalDate.of(year, 1, 19), -1.2, -5.4),
                 new DailyHeatDay(LocalDate.of(year, 12, 4), -0.7, -3.8));
+    }
+
+    @Override
+    public List<DailyHeatDay> findSummerDays(String stationId, int year) {
+        return findHeatDays(stationId, year);
+    }
+
+    @Override
+    public List<DailyHeatDay> findVeryHotDays(String stationId, int year) {
+        return findHeatDays(stationId, year).stream().filter(day -> day.maximumTemperatureCelsius() >= 35.0).toList();
     }
 }
