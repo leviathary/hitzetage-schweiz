@@ -95,6 +95,16 @@ class MeteoSwissStationDataSource implements StationDataSource {
     }
 
     @Override
+    public List<DailyHeatDay> findTropicalNights(String stationId, int year) {
+        Map<LocalDate, DailyHeatDay> days = new LinkedHashMap<>();
+        for (DailyObservation row : dailyRows(stationId, year)) {
+            if (row.date().getYear() != year || row.minimum() == null || row.minimum() < 20.0) continue;
+            days.put(row.date(), new DailyHeatDay(row.date(), row.maximum() == null ? row.minimum() : row.maximum(), row.minimum()));
+        }
+        return days.values().stream().sorted(Comparator.comparing(DailyHeatDay::date)).toList();
+    }
+
+    @Override
     public List<DailyHeatDay> findFrostDays(String stationId, int year) {
         Map<LocalDate, DailyHeatDay> days = new LinkedHashMap<>();
         for (DailyObservation row : dailyRows(stationId, year)) {

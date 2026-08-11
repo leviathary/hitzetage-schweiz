@@ -146,8 +146,15 @@ Object.assign(translations.it, { warmestDay:'Giorno più caldo', coldestDay:'Gio
 Object.assign(translations.rm, { warmestDay:'Di il pli chaud', coldestDay:'Di il pli fraid' });
 Object.assign(translations.en, { warmestDay:'Warmest day', coldestDay:'Coldest day' });
 Object.assign(translations.zh, { warmestDay:'最热日', coldestDay:'最冷日' });
+Object.assign(translations.de, { tropicalNightsDetailTitle:'Tropennächte im Detail', tropicalNightsDetailIntro:'Alle gemessenen Nächte mit einer Tiefsttemperatur von mindestens 20 °C' });
+Object.assign(translations.fr, { tropicalNightsDetailTitle:'Nuits tropicales en détail', tropicalNightsDetailIntro:'Toutes les nuits mesurées avec une température minimale d’au moins 20 °C' });
+Object.assign(translations.it, { tropicalNightsDetailTitle:'Notti tropicali in dettaglio', tropicalNightsDetailIntro:'Tutte le notti misurate con una temperatura minima di almeno 20 °C' });
+Object.assign(translations.rm, { tropicalNightsDetailTitle:'Notgs tropicas en detagl', tropicalNightsDetailIntro:'Tut las notgs mesiradas cun ina temperatura minimala dad almain 20 °C' });
+Object.assign(translations.en, { tropicalNightsDetailTitle:'Tropical nights in detail', tropicalNightsDetailIntro:'All measured nights with a minimum temperature of at least 20 °C' });
+Object.assign(translations.zh, { tropicalNightsDetailTitle:'热带夜详情', tropicalNightsDetailIntro:'所有最低气温达到或超过 20 °C 的实测夜晚' });
 let currentLanguage = 'de';
 const validViews = ['overview', 'years', 'details', 'forecast'];
+const validMetrics = ['heatDays', 'summerDays', 'veryHotDays', 'tropicalNights', 'frostDays', 'iceDays'];
 let currentView = validViews.includes(new URLSearchParams(location.search).get('view')) ? new URLSearchParams(location.search).get('view') : 'overview';
 const tr = key => translations[currentLanguage][key] || translations.de[key] || key;
 const locale = () => ({de:'de-CH',fr:'fr-CH',it:'it-CH',rm:'rm-CH',en:'en-GB',zh:'zh-CN'}[currentLanguage]);
@@ -175,12 +182,14 @@ document.querySelector('#toYear').value = currentYear;
 function applyLanguage() {
   document.documentElement.lang = currentLanguage;
   document.querySelectorAll('[data-i18n]').forEach(element => { element.textContent = tr(element.dataset.i18n); });
-  document.querySelector('#metric option[value="heatDays"]').textContent = tr('heatOption');
-  document.querySelector('#metric option[value="summerDays"]').textContent = tr('summerOption');
-  document.querySelector('#metric option[value="veryHotDays"]').textContent = tr('veryHotOption');
-  document.querySelector('#metric option[value="tropicalNights"]').textContent = tr('tropicalOption');
-  document.querySelector('#metric option[value="frostDays"]').textContent = tr('frostOption');
-  document.querySelector('#metric option[value="iceDays"]').textContent = tr('iceOption');
+  document.querySelectorAll('[data-metric-select]').forEach(select => {
+    select.querySelector('option[value="heatDays"]').textContent = tr('heatOption');
+    select.querySelector('option[value="summerDays"]').textContent = tr('summerOption');
+    select.querySelector('option[value="veryHotDays"]').textContent = tr('veryHotOption');
+    select.querySelector('option[value="tropicalNights"]').textContent = tr('tropicalOption');
+    select.querySelector('option[value="frostDays"]').textContent = tr('frostOption');
+    select.querySelector('option[value="iceDays"]').textContent = tr('iceOption');
+  });
   document.querySelectorAll('.remove-station').forEach(button => button.setAttribute('aria-label', tr('removeStation')));
   document.querySelector('#station-add-search').placeholder = tr('stationSearchPlaceholder');
   document.querySelector('#feedback-close').setAttribute('aria-label', tr('close'));
@@ -205,8 +214,35 @@ function setView(view, updateHistory = true) {
   document.querySelectorAll('[data-detail-view]').forEach(panel => { panel.hidden = currentView === 'overview'; });
   document.body.classList.toggle('detail-active', currentView !== 'overview');
   updateViewChrome();
+  if (latestView) renderViewFilterSummary(latestView.data, latestView.from, latestView.to);
   if (updateHistory) history.pushState({ view: currentView }, '', currentView === 'overview' ? location.pathname : `${location.pathname}?view=${currentView}`);
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function metricOptionsMarkup(selectedMetric) {
+  return [...document.querySelector('#metric').options]
+    .map(option => `<option value="${option.value}"${option.value === selectedMetric ? ' selected' : ''}>${option.textContent}</option>`)
+    .join('');
+}
+
+function renderViewFilterSummary(data, from, to) {
+  const metricKey = document.querySelector('#metric').value;
+  const interactiveMetric = ['years', 'details'].includes(currentView);
+  const metricSummary = interactiveMetric
+    ? `<label class="view-metric-control"><span class="visually-hidden">${tr('metric')}</span><select class="view-metric-select" data-metric-select aria-label="${tr('metric')}">${metricOptionsMarkup(metricKey)}</select></label>`
+    : `<span>${metricInfo(metricKey).label}</span>`;
+  const stationSummary = `<span>${data.map(item => item.station.name).join(' · ')}</span>`;
+  const periodSummary = `<span>${from}–${to}</span>`;
+  document.querySelector('#view-filter-summary').innerHTML = interactiveMetric
+    ? `${metricSummary}${stationSummary}${periodSummary}`
+    : `${stationSummary}${periodSummary}${metricSummary}`;
+}
+
+function changeMetric(metricKey) {
+  if (!validMetrics.includes(metricKey)) return;
+  document.querySelectorAll('[data-metric-select]').forEach(select => { select.value = metricKey; });
+  try { localStorage.setItem('hitzetage.metric', metricKey); } catch (error) { /* Storage may be unavailable. */ }
+  compare();
 }
 
 function stationLabel(station) {
@@ -391,7 +427,7 @@ async function fetchForecast(id) {
 
 async function fetchDetailDays(id, year) {
   const metricKey = document.querySelector('#metric').value;
-  const route = metricKey === 'frostDays' ? 'frost-days' : metricKey === 'iceDays' ? 'ice-days' : metricKey === 'summerDays' ? 'summer-days' : metricKey === 'veryHotDays' ? 'very-hot-days' : 'heat-days';
+  const route = metricKey === 'frostDays' ? 'frost-days' : metricKey === 'iceDays' ? 'ice-days' : metricKey === 'summerDays' ? 'summer-days' : metricKey === 'veryHotDays' ? 'very-hot-days' : metricKey === 'tropicalNights' ? 'tropical-nights' : 'heat-days';
   const response = await fetch(`/api/stations/${encodeURIComponent(id)}/${route}?year=${year}`);
   const data = await response.json();
   if (!response.ok) throw new Error(data.message || `${metricInfo(metricKey).label} für ${id} konnten nicht geladen werden.`);
@@ -412,8 +448,9 @@ function renderHeatDays(yearGroups) {
   const detailMetricKey = document.querySelector('#metric').value;
   const frost = detailMetricKey === 'frostDays';
   const ice = detailMetricKey === 'iceDays';
+  const tropical = detailMetricKey === 'tropicalNights';
   const detailMetric = metricInfo(detailMetricKey);
-  const detailPrefix = detailMetricKey === 'frostDays' ? 'frostDays' : detailMetricKey === 'iceDays' ? 'iceDays' : detailMetricKey === 'summerDays' ? 'summerDays' : detailMetricKey === 'veryHotDays' ? 'veryHotDays' : 'heatDays';
+  const detailPrefix = detailMetricKey === 'frostDays' ? 'frostDays' : detailMetricKey === 'iceDays' ? 'iceDays' : detailMetricKey === 'summerDays' ? 'summerDays' : detailMetricKey === 'veryHotDays' ? 'veryHotDays' : detailMetricKey === 'tropicalNights' ? 'tropicalNights' : 'heatDays';
   document.querySelector('[data-i18n="heatDaysDetailTitle"]').textContent = tr(`${detailPrefix}DetailTitle`);
   document.querySelector('[data-i18n="heatDaysDetailIntro"]').textContent = tr(`${detailPrefix}DetailIntro`);
   const formatter = new Intl.NumberFormat(locale(), { minimumFractionDigits: 1, maximumFractionDigits: 1 });
@@ -458,8 +495,9 @@ function renderHeatDays(yearGroups) {
         const minimum = day.minimumTemperatureCelsius == null ? '–' : `${formatter.format(day.minimumTemperatureCelsius)} °C`;
         const position = (date - currentRangeStart) / 86400000 / currentRangeLength * 100;
         const label = `${date.toLocaleDateString(locale(), { weekday:'short', day:'2-digit', month:'long' })}: ${tr('maximum')} ${formatter.format(day.maximumTemperatureCelsius)} °C, ${tr('minimum')} ${minimum}${day.forecast ? ` (${tr('predicted')})` : ''}`;
-        const displayedTemperature = frost ? day.minimumTemperatureCelsius : day.maximumTemperatureCelsius;
-        const barHeight = 8 + Math.min(24, Math.abs(frost || ice ? displayedTemperature : displayedTemperature - 30) * 2.4);
+        const displayedTemperature = frost || tropical ? day.minimumTemperatureCelsius : day.maximumTemperatureCelsius;
+        const referenceTemperature = tropical ? 20 : frost || ice ? 0 : detailMetricKey === 'summerDays' ? 25 : detailMetricKey === 'veryHotDays' ? 35 : 30;
+        const barHeight = 8 + Math.min(24, Math.abs(displayedTemperature - referenceTemperature) * 2.4);
         return `<button class="heat-day-marker ${day.forecast ? 'forecast' : ''}" type="button" style="left:${position}%;--bar-height:${barHeight}px" title="${label}" aria-label="${label}"><span>${formatter.format(displayedTemperature)}°</span></button>`;
         }).join('')}<span class="timeline-arrow" aria-hidden="true"></span></div>` : `<div class="heat-days-timeline empty" style="--month-count:${monthCount}"><span class="timeline-arrow" aria-hidden="true"></span></div>`}</div>`;
       }).join('')}
@@ -467,7 +505,7 @@ function renderHeatDays(yearGroups) {
 }
 
 function openHeatDayYear(year) {
-  if (!['heatDays', 'summerDays', 'veryHotDays', 'frostDays', 'iceDays'].includes(document.querySelector('#metric').value)) return;
+  if (!validMetrics.includes(document.querySelector('#metric').value)) return;
   const select = document.querySelector('#heat-day-year');
   if (![...select.options].some(option => Number(option.value) === year)) return;
   if (selectedHeatDayYears.includes(year)) {
@@ -717,7 +755,7 @@ function renderOverview(data, forecasts, from, to) {
     }).join('');
     return `<div class="overview-mini-year"><div>${bars}</div><small>${year}</small></div>`;
   }).join('');
-  document.querySelector('#view-filter-summary').innerHTML = `<span>${data.map(item => item.station.name).join(' · ')}</span><span>${from}–${to}</span><span>${metric.label}</span>`;
+  renderViewFilterSummary(data, from, to);
 }
 
 function renderLatestView() {
@@ -810,7 +848,10 @@ document.querySelector('#map-toggle').addEventListener('click', event => {
     setTimeout(() => stationMap.invalidateSize(), 0);
   }
 });
-document.querySelector('#metric').addEventListener('change', compare);
+document.querySelector('#metric').addEventListener('change', event => changeMetric(event.target.value));
+document.querySelector('#view-filter-summary').addEventListener('change', event => {
+  if (event.target.matches('.view-metric-select')) changeMetric(event.target.value);
+});
 document.querySelector('#fromYear').addEventListener('change', compare);
 document.querySelector('#toYear').addEventListener('change', compare);
 document.querySelector('#heat-day-year').addEventListener('change', event => { selectedHeatDayYears = [Number(event.target.value)]; loadHeatDayDetails(); });
@@ -889,6 +930,10 @@ document.querySelector('#feedback-form').addEventListener('submit', async event 
     submit.textContent = tr('feedbackSend');
   }
 });
+try {
+  const storedMetric = localStorage.getItem('hitzetage.metric');
+  if (validMetrics.includes(storedMetric)) document.querySelector('#metric').value = storedMetric;
+} catch (error) { /* Storage may be unavailable. */ }
 applyLanguage();
 setView(currentView, false);
 syncMapLayout();

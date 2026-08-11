@@ -39,14 +39,15 @@ section { background: #ffffff8c; border: 1px solid #ffffffd9; border-radius: 22p
 .detail-view-header { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin: 20px 0; padding: 18px 22px; border: 1px solid #ffffffd9; border-radius: 18px; background: #ffffff9e; box-shadow: 0 16px 38px #173c2c20, inset 0 1px #fff; backdrop-filter: blur(16px); }
 .breadcrumb { margin: 0 0 10px; color: #63716c; font-size: .76rem; }
 .breadcrumb a { color: #176249; text-underline-offset: 3px; }
-.view-filter-summary { display: flex; flex-wrap: wrap; gap: 8px; }
+.view-filter-summary { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
 .view-filter-summary span { padding: 5px 9px; border-radius: 99px; background: #edf4f0b8; color: #38534a; font-size: .74rem; font-weight: 700; }
+.view-metric-control { display: flex; align-items: center; margin: 0; line-height: 1; }
+.view-metric-select { width: auto; min-width: 190px; margin: 0; padding: 5px 34px 5px 10px; border-radius: 99px; background-color: #edf4f0b8; color: #38534a; font-size: .74rem; font-weight: 700; line-height: 1.2; }
 .compact-edit-link { flex: none; }
 .overview-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-.overview-summary article { display: grid; grid-template-columns: repeat(auto-fit, minmax(105px, 1fr)); align-content: start; padding: 17px; border: 1px solid #ffffffd5; border-radius: 15px; background: linear-gradient(145deg, #ffffffb0, #edf5ef70); box-shadow: 0 10px 22px #173c2c12, inset 0 1px #fff; }
-.overview-summary h3 { grid-column: 1 / -1; margin: 0 0 17px; color: #334b43; font-size: 1rem; }
-.overview-value { min-width: 0; padding: 1px 13px; border-left: 1px solid #c9d4ce; }
-.overview-value:first-of-type { padding-left: 0; border-left: 0; }
+.overview-summary article { display: grid; grid-template-columns: repeat(auto-fit, minmax(105px, 1fr)); align-content: start; column-gap: 18px; row-gap: 22px; padding: 17px; border: 1px solid #ffffffd5; border-radius: 15px; background: linear-gradient(145deg, #ffffffb0, #edf5ef70); box-shadow: 0 10px 22px #173c2c12, inset 0 1px #fff; }
+.overview-summary h3 { grid-column: 1 / -1; margin: 0; color: #334b43; font-size: 1rem; }
+.overview-value { min-width: 0; padding: 0; }
 .overview-value span { display: block; min-height: 1.9rem; color: var(--station-color); font-size: .75rem; font-weight: 750; line-height: 1.25; overflow-wrap: anywhere; }
 .overview-value strong { display: block; margin-top: 9px; color: var(--station-color); font-size: 2.15rem; line-height: 1; letter-spacing: -.04em; }
 .overview-value small { display: block; margin-top: 7px; color: #63716c; font-size: .7rem; }
@@ -273,4 +274,4 @@ footer a { color: inherit; font-weight: 700; text-underline-offset: 3px; }
   .map-panel { width: 100%; margin-top: 0; }
   .station-map { height: 100%; min-height: 410px; }
 }
-@media (max-width: 520px) { .station-search-control, .station-add-label, .station-selectors { width: 100%; } .map-toggle { width: 100%; margin: 8px 0 0; } .station-map { height: 330px; } .years { grid-template-columns: 1fr 1fr; } .metric-label { width: 100%; } section { padding: 17px; border-radius: 17px; } .chart { height: 280px; } .heat-days-heading { align-items: stretch; flex-direction: column; margin-top: 0; } .heat-days-heading label { width: 100%; } .context-facts { grid-template-columns: 1fr; } .feedback-dialog form { padding: 19px; } }
+@media (max-width: 520px) { .station-search-control, .station-add-label, .station-selectors { width: 100%; } .map-toggle { width: 100%; margin: 8px 0 0; } .station-map { height: 330px; } .years { grid-template-columns: 1fr 1fr; } .metric-label { width: 100%; } .view-metric-control, .view-metric-select { width: 100%; } section { padding: 17px; border-radius: 17px; } .chart { height: 280px; } .heat-days-heading { align-items: stretch; flex-direction: column; margin-top: 0; } .heat-days-heading label { width: 100%; } .context-facts { grid-template-columns: 1fr; } .feedback-dialog form { padding: 19px; } }

@@ -47,6 +47,12 @@ class DemoStationDataSource implements StationDataSource {
     }
 
     @Override
+    public List<DailyHeatDay> findTropicalNights(String stationId, int year) {
+        if (VALUES.getOrDefault(stationId.toUpperCase(Locale.ROOT), List.of()).stream().noneMatch(value -> value.year() == year)) return List.of();
+        return List.of(new DailyHeatDay(LocalDate.of(year, 7, 12), 33.7, 20.1));
+    }
+
+    @Override
     public List<DailyHeatDay> findFrostDays(String stationId, int year) {
         if (VALUES.getOrDefault(stationId.toUpperCase(Locale.ROOT), List.of()).stream().noneMatch(value -> value.year() == year)) return List.of();
         return List.of(

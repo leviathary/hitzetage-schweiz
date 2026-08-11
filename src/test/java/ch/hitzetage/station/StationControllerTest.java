@@ -81,6 +81,15 @@ class StationControllerTest {
     }
 
     @Test
+    void returnsTropicalNightsForSelectedYear() throws Exception {
+        mockMvc.perform(get("/api/stations/ZRH/tropical-nights").param("year", "2024"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.heatDayThresholdCelsius").value(20.0))
+                .andExpect(jsonPath("$.values", hasSize(1)))
+                .andExpect(jsonPath("$.values[0].minimumTemperatureCelsius").value(20.1));
+    }
+
+    @Test
     void returnsFrostDaysForSelectedYear() throws Exception {
         mockMvc.perform(get("/api/stations/ZRH/frost-days").param("year", "2024"))
                 .andExpect(status().isOk())

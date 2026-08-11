@@ -55,6 +55,14 @@ public class StationController {
         return new HeatDaysResponse(station, year, 30.0, "meteoswiss", dataSource.findHeatDays(station.id(), year));
     }
 
+    @GetMapping("/{stationId}/tropical-nights")
+    public HeatDaysResponse tropicalNights(
+            @PathVariable String stationId,
+            @RequestParam @Min(1864) @Max(2100) int year) {
+        Station station = findStation(stationId);
+        return new HeatDaysResponse(station, year, 20.0, "meteoswiss", dataSource.findTropicalNights(station.id(), year));
+    }
+
     @GetMapping("/{stationId}/frost-days")
     public HeatDaysResponse frostDays(
             @PathVariable String stationId,
