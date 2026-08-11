@@ -160,6 +160,22 @@ Die interaktive Stationskarte verwendet die lokal eingebundene Open-Source-Bibli
 
 ## API
 
+### Feedback verwalten
+
+Das Feedback-Formular speichert jede Nachricht als einzelne JSON-Zeile im persistenten Docker-Volume. Die Einträge können auf dem Server gelesen werden mit:
+
+```bash
+docker compose exec app tail -n 50 /app/data/feedback.jsonl
+```
+
+Für eine Sicherung außerhalb des Containers:
+
+```bash
+docker compose exec -T app cat /app/data/feedback.jsonl > feedback-backup.jsonl
+```
+
+Die Datei bleibt bei `docker compose up`, Neubauten und Container-Neustarts erhalten. Sie wird erst entfernt, wenn das zugehörige Docker-Volume ausdrücklich gelöscht wird.
+
 | Aufruf | Beschreibung |
 |---|---|
 | `GET /api/stations` | verfügbare Messstationen |

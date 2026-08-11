@@ -7,7 +7,7 @@ RUN mvn -B package -DskipTests
 
 FROM eclipse-temurin:21-jre
 WORKDIR /app
-RUN useradd --system --uid 10001 appuser
+RUN useradd --system --uid 10001 appuser && mkdir -p /app/data && chown appuser /app/data
 COPY --from=build /app/target/hitzetage-schweiz-*.jar app.jar
 USER appuser
 EXPOSE 8080

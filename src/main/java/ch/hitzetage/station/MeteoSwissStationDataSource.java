@@ -71,6 +71,7 @@ class MeteoSwissStationDataSource implements StationDataSource {
                         entry.getValue().veryHotDays,
                         entry.getValue().longestHeatWaveDays,
                         entry.getValue().maximumValue(),
+                        entry.getValue().lowestMaximumValue(),
                         entry.getValue().minimumValue(),
                         entry.getValue().warmestNightValue()))
                 .toList();
@@ -326,6 +327,7 @@ class MeteoSwissStationDataSource implements StationDataSource {
         int longestHeatWaveDays;
         int currentHeatWaveDays;
         double maximum = -Double.MAX_VALUE;
+        double lowestMaximum = Double.MAX_VALUE;
         double minimum = Double.MAX_VALUE;
         double warmestNight = -Double.MAX_VALUE;
         boolean hasMaximum;
@@ -345,6 +347,7 @@ class MeteoSwissStationDataSource implements StationDataSource {
                     currentHeatWaveDays = 0;
                 }
                 maximum = Math.max(maximum, dailyMaximum);
+                lowestMaximum = Math.min(lowestMaximum, dailyMaximum);
             }
             if (dailyMinimum != null) {
                 hasMinimum = true;
@@ -356,6 +359,7 @@ class MeteoSwissStationDataSource implements StationDataSource {
         }
 
         double maximumValue() { return hasMaximum ? maximum : 0.0; }
+        double lowestMaximumValue() { return hasMaximum ? lowestMaximum : 0.0; }
         double minimumValue() { return hasMinimum ? minimum : 0.0; }
         double warmestNightValue() { return hasMinimum ? warmestNight : 0.0; }
     }

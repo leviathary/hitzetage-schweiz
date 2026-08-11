@@ -12,12 +12,29 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
+@SpringBootTest(properties = "feedback.storage.path=target/test-feedback/feedback.jsonl")
 @AutoConfigureMockMvc
 @ActiveProfiles("demo")
 class StationControllerTest {
     @Autowired
     MockMvc mockMvc;
+
+    @Test
+    void acceptsFeedback() throws Exception {
+        mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post("/api/feedback")
+                        .contentType("application/json")
+                        .content("{\"message\":\"Eine hilfreiche Rückmeldung\",\"email\":\"person@example.ch\",\"language\":\"de\",\"website\":\"\"}"))
+                .andExpect(status().isAccepted())
+                .andExpect(jsonPath("$.status").value("accepted"));
+    }
+
+    @Test
+    void rejectsInvalidFeedbackEmail() throws Exception {
+        mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post("/api/feedback")
+                        .contentType("application/json")
+                        .content("{\"message\":\"Rückmeldung\",\"email\":\"keine-adresse\"}"))
+                .andExpect(status().isBadRequest());
+    }
 
     @Test
     void returnsMapMetadataForStations() throws Exception {
@@ -37,6 +54,7 @@ class StationControllerTest {
                 .andExpect(jsonPath("$.values", hasSize(2)))
                 .andExpect(jsonPath("$.values[0].frostDays").isNumber())
                 .andExpect(jsonPath("$.values[0].iceDays").isNumber())
+                .andExpect(jsonPath("$.values[0].lowestMaximumTemperatureCelsius").isNumber())
                 .andExpect(jsonPath("$.values[0].summerDays").isNumber())
                 .andExpect(jsonPath("$.values[0].veryHotDays").isNumber())
                 .andExpect(jsonPath("$.values[0].longestHeatWaveDays").isNumber())

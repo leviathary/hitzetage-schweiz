@@ -10,6 +10,7 @@ public record AnnualHeatValue(
         int veryHotDays,
         int longestHeatWaveDays,
         double maximumTemperatureCelsius,
+        double lowestMaximumTemperatureCelsius,
         double minimumTemperatureCelsius,
         double warmestNightCelsius) {
 }

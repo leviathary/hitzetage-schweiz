@@ -13,6 +13,18 @@ const translations = {
   en: { language:'Language', eyebrow:'MeteoSwiss stations', title:'Heat days in Switzerland', intro:'Compare stations and discover how often the daily maximum temperature reached 30 °C.', selectionTitle:'Stations and period', station:'Weather station', stations:'stations', addStation:'+ Add station', removeStation:'Remove station', from:'From', to:'To', metric:'Metric', compare:'Compare stations', source:'Source: MeteoSwiss', forecastTitle:'Forecast for the next nine days', forecastLoading:'The forecast is loaded with the comparison.', footer:'Source: MeteoSwiss Open Data · Heat day: maximum ≥ 30 °C · Tropical night: minimum ≥ 20 °C', heatDays:'Heat days', tropicalNights:'Tropical nights', heatOption:'Heat days (maximum ≥ 30 °C)', tropicalOption:'Tropical nights (minimum ≥ 20 °C)', heatThreshold:'Daily maximum ≥ 30 °C', tropicalThreshold:'Daily minimum ≥ 20 °C', highest:'Highest value', lowest:'Lowest daily value', perYear:'per year', forecastHatched:'Forecast (hatched)', measured:'measured', predicted:'forecast', noData:'No data', forecastRun:'Forecast run', heatDay:'Heat day', tropicalNight:'Tropical night', noForecast:'No point forecast is available for this station.', selectTwo:'Please select at least two stations.', uniqueStations:'Please select each station only once.', invalidPeriod:'Please select a period of no more than 50 years.', loading:'Loading stations…', noResults:'No results.', currentForecast:'in the current forecast run', contextTitle:'Current-year context', contextIntro:'Compared with long-term averages', provisional:'provisional', last20:'Last 20 years', annualAverage:'annual average', normal:'1991–2020 normal', rankSince:'Rank since 1990', withForecast:'with forecast', measuredForecast:'measured + forecast', moreIndicators:'More climate indicators', indicator:'Indicator', definition:'Definition', trend:'Trend', perDecade:'per decade', summerDays:'Summer days', veryHotDays:'Very hot days', longestHeatWave:'Longest heatwave', warmestNight:'Warmest night', days:'days' },
   zh: { language:'语言', eyebrow:'MeteoSwiss 气象站', title:'瑞士高温日', intro:'比较不同气象站，了解每日最高气温达到 30 °C 的频率。', selectionTitle:'气象站和时间范围', station:'气象站', stations:'个气象站', addStation:'+ 添加气象站', removeStation:'删除气象站', from:'从', to:'至', metric:'指标', compare:'比较气象站', source:'来源：MeteoSwiss', forecastTitle:'未来九天预报', forecastLoading:'预报将与比较结果一起加载。', footer:'来源：MeteoSwiss Open Data · 高温日：最高温 ≥ 30 °C · 热带夜：最低温 ≥ 20 °C', heatDays:'高温日', tropicalNights:'热带夜', heatOption:'高温日（最高温 ≥ 30 °C）', tropicalOption:'热带夜（最低温 ≥ 20 °C）', heatThreshold:'每日最高温 ≥ 30 °C', tropicalThreshold:'每日最低温 ≥ 20 °C', highest:'最高值', lowest:'最低日值', perYear:'每年', forecastHatched:'预报（斜线）', measured:'已测量', predicted:'预报', noData:'无数据', forecastRun:'预报更新时间', heatDay:'高温日', tropicalNight:'热带夜', noForecast:'此气象站暂无点位预报。', selectTwo:'请至少选择两个气象站。', uniqueStations:'每个气象站只能选择一次。', invalidPeriod:'请选择不超过 50 年的时间范围。', loading:'正在加载气象站…', noResults:'无结果。', currentForecast:'当前预报中', contextTitle:'本年度情况', contextIntro:'与长期平均值比较', provisional:'暂定', last20:'过去20年', annualAverage:'年均', normal:'1991–2020年常值', rankSince:'1990年以来排名', withForecast:'含预报', measuredForecast:'实测 + 预报', moreIndicators:'更多气候指标', indicator:'指标', definition:'定义', trend:'趋势', perDecade:'每十年', summerDays:'夏日', veryHotDays:'极热日', longestHeatWave:'最长热浪', warmestNight:'最热夜晚', days:'天' }
 };
+Object.assign(translations.de, { footer:'Quelle: MeteoSwiss Open Data' });
+Object.assign(translations.fr, { footer:'Source : MeteoSwiss Open Data' });
+Object.assign(translations.it, { footer:'Fonte: MeteoSwiss Open Data' });
+Object.assign(translations.rm, { footer:'Funtauna: MeteoSwiss Open Data' });
+Object.assign(translations.en, { footer:'Source: MeteoSwiss Open Data' });
+Object.assign(translations.zh, { footer:'来源：MeteoSwiss Open Data' });
+Object.assign(translations.de, { iceExtreme:'Tiefstes Tagesmaximum' });
+Object.assign(translations.fr, { iceExtreme:'Maximum journalier le plus bas' });
+Object.assign(translations.it, { iceExtreme:'Massima giornaliera più bassa' });
+Object.assign(translations.rm, { iceExtreme:'Maximum dal di il pli bass' });
+Object.assign(translations.en, { iceExtreme:'Lowest daily maximum' });
+Object.assign(translations.zh, { iceExtreme:'最低日最高温' });
 Object.assign(translations.de, { topYears: 'Top 5 Jahre seit 1990' });
 Object.assign(translations.fr, { topYears: 'Top 5 des années depuis 1990' });
 Object.assign(translations.it, { topYears: 'Le 5 annate principali dal 1990' });
@@ -85,6 +97,12 @@ Object.assign(translations.it, { removeYear:'Rimuovi l’anno dal confronto dett
 Object.assign(translations.rm, { removeYear:'Allontanar l’onn da la cumparegliaziun detagliada' });
 Object.assign(translations.en, { removeYear:'Remove year from detailed comparison' });
 Object.assign(translations.zh, { removeYear:'从详细比较中移除该年份' });
+Object.assign(translations.de, { feedback:'Feedback', feedbackTitle:'Feedback geben', feedbackIntro:'Was gefällt dir, was fehlt oder was funktioniert noch nicht?', feedbackMessage:'Deine Nachricht', feedbackEmail:'E-Mail (optional, falls du eine Antwort möchtest)', feedbackSend:'Feedback senden', feedbackSending:'Wird gesendet …', feedbackThanks:'Vielen Dank! Dein Feedback wurde gespeichert.', feedbackError:'Das Feedback konnte nicht gesendet werden. Bitte versuche es später nochmals.', feedbackTooFast:'Bitte warte kurz, bevor du weiteres Feedback sendest.', cancel:'Abbrechen', close:'Schließen' });
+Object.assign(translations.fr, { feedback:'Commentaires', feedbackTitle:'Donner un avis', feedbackIntro:'Qu’est-ce qui vous plaît, qu’est-ce qui manque ou ne fonctionne pas encore ?', feedbackMessage:'Votre message', feedbackEmail:'E-mail (facultatif, si vous souhaitez une réponse)', feedbackSend:'Envoyer', feedbackSending:'Envoi en cours…', feedbackThanks:'Merci ! Votre avis a été enregistré.', feedbackError:'Impossible d’envoyer votre avis. Veuillez réessayer plus tard.', feedbackTooFast:'Veuillez patienter avant d’envoyer un autre avis.', cancel:'Annuler', close:'Fermer' });
+Object.assign(translations.it, { feedback:'Feedback', feedbackTitle:'Invia un feedback', feedbackIntro:'Cosa ti piace, cosa manca o cosa non funziona ancora?', feedbackMessage:'Il tuo messaggio', feedbackEmail:'E-mail (facoltativa, se desideri una risposta)', feedbackSend:'Invia feedback', feedbackSending:'Invio…', feedbackThanks:'Grazie! Il tuo feedback è stato salvato.', feedbackError:'Non è stato possibile inviare il feedback. Riprova più tardi.', feedbackTooFast:'Attendi un momento prima di inviare un altro feedback.', cancel:'Annulla', close:'Chiudi' });
+Object.assign(translations.rm, { feedback:'Resun', feedbackTitle:'Dar in resun', feedbackIntro:'Tge plascha, tge manca u tge na funcziuna anc betg?', feedbackMessage:'Tia communicaziun', feedbackEmail:'E-mail (facultativ, sche ti vuls ina resposta)', feedbackSend:'Trametter il resun', feedbackSending:'Vegn tramess…', feedbackThanks:'Grazia! Tes resun è vegnì memorisà.', feedbackError:'Il resun n’ha betg pudì vegnir tramess. Emprova pli tard anc ina giada.', feedbackTooFast:'Spetga per plaschair in mument avant che trametter in ulteriur resun.', cancel:'Interrumper', close:'Serrar' });
+Object.assign(translations.en, { feedback:'Feedback', feedbackTitle:'Give feedback', feedbackIntro:'What do you like, what is missing, or what is not working yet?', feedbackMessage:'Your message', feedbackEmail:'Email (optional, if you would like a reply)', feedbackSend:'Send feedback', feedbackSending:'Sending…', feedbackThanks:'Thank you! Your feedback has been saved.', feedbackError:'Your feedback could not be sent. Please try again later.', feedbackTooFast:'Please wait a moment before sending more feedback.', cancel:'Cancel', close:'Close' });
+Object.assign(translations.zh, { feedback:'反馈', feedbackTitle:'提供反馈', feedbackIntro:'你喜欢什么、缺少什么，或者哪些功能尚未正常工作？', feedbackMessage:'你的留言', feedbackEmail:'电子邮箱（可选，如需回复）', feedbackSend:'发送反馈', feedbackSending:'正在发送…', feedbackThanks:'谢谢！你的反馈已保存。', feedbackError:'无法发送反馈，请稍后重试。', feedbackTooFast:'请稍候再发送其他反馈。', cancel:'取消', close:'关闭' });
 let currentLanguage = 'de';
 const tr = key => translations[currentLanguage][key] || translations.de[key] || key;
 const locale = () => ({de:'de-CH',fr:'fr-CH',it:'it-CH',rm:'rm-CH',en:'en-GB',zh:'zh-CN'}[currentLanguage]);
@@ -93,7 +111,7 @@ const metricInfo = key => key === 'heatDays'
   : key === 'frostDays'
     ? { label: tr('frostDays'), threshold: tr('frostThreshold'), extremeLabel: tr('lowest'), extremeKey: 'minimumTemperatureCelsius' }
     : key === 'iceDays'
-      ? { label: tr('iceDays'), threshold: tr('iceThreshold'), extremeLabel: tr('lowest'), extremeKey: 'maximumTemperatureCelsius' }
+      ? { label: tr('iceDays'), threshold: tr('iceThreshold'), extremeLabel: tr('iceExtreme'), extremeKey: 'lowestMaximumTemperatureCelsius' }
     : { label: tr('tropicalNights'), threshold: tr('tropicalThreshold'), extremeLabel: tr('lowest'), extremeKey: 'minimumTemperatureCelsius' };
 let stations = [];
 let stationMap;
@@ -114,6 +132,7 @@ function applyLanguage() {
   document.querySelector('#metric option[value="iceDays"]').textContent = tr('iceOption');
   document.querySelectorAll('.remove-station').forEach(button => button.setAttribute('aria-label', tr('removeStation')));
   document.querySelector('#station-add-search').placeholder = tr('stationSearchPlaceholder');
+  document.querySelector('#feedback-close').setAttribute('aria-label', tr('close'));
   refreshSelectedStationLabels();
   updateStationCount();
 }
@@ -674,6 +693,45 @@ document.querySelector('#climate-details-toggle').addEventListener('click', even
   const open = button.getAttribute('aria-expanded') === 'true';
   button.setAttribute('aria-expanded', String(!open));
   document.querySelector('#climate-details').classList.toggle('open', !open);
+});
+const feedbackDialog = document.querySelector('#feedback-dialog');
+const closeFeedback = () => feedbackDialog.close();
+document.querySelector('#feedback-open').addEventListener('click', () => {
+  document.querySelector('#feedback-form').reset();
+  document.querySelector('#feedback-status').textContent = '';
+  document.querySelector('#feedback-fields').hidden = false;
+  document.querySelector('#feedback-success').hidden = true;
+  feedbackDialog.showModal();
+  document.querySelector('#feedback-message').focus();
+});
+document.querySelector('#feedback-close').addEventListener('click', closeFeedback);
+document.querySelector('#feedback-cancel').addEventListener('click', closeFeedback);
+feedbackDialog.addEventListener('click', event => {
+  if (event.target === feedbackDialog) closeFeedback();
+});
+document.querySelector('#feedback-form').addEventListener('submit', async event => {
+  event.preventDefault();
+  const submit = document.querySelector('#feedback-submit');
+  const feedbackStatus = document.querySelector('#feedback-status');
+  submit.disabled = true;
+  submit.textContent = tr('feedbackSending');
+  feedbackStatus.textContent = '';
+  try {
+    const response = await fetch('/api/feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: document.querySelector('#feedback-message').value, email: document.querySelector('#feedback-email').value, language: currentLanguage, website: document.querySelector('#feedback-website').value })
+    });
+    if (!response.ok) throw new Error(response.status === 429 ? 'too-fast' : 'failed');
+    event.target.reset();
+    document.querySelector('#feedback-fields').hidden = true;
+    document.querySelector('#feedback-success').hidden = false;
+  } catch (error) {
+    feedbackStatus.textContent = tr(error.message === 'too-fast' ? 'feedbackTooFast' : 'feedbackError');
+  } finally {
+    submit.disabled = false;
+    submit.textContent = tr('feedbackSend');
+  }
 });
 applyLanguage();
 syncMapLayout();

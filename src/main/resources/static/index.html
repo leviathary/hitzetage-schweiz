@@ -42,7 +42,7 @@
   </script>
 </head>
 <body><main>
-  <div class="language-switcher"><label for="language" data-i18n="language">Sprache</label><select id="language"><option value="de">Deutsch</option><option value="fr">Français</option><option value="it">Italiano</option><option value="rm">Rumantsch</option><option value="en">English</option><option value="zh">中文</option></select></div>
+  <div class="language-switcher"><label class="visually-hidden" for="language" data-i18n="language">Sprache</label><span class="language-globe" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c2.3 2.5 3.5 5.5 3.5 9s-1.2 6.5-3.5 9c-2.3-2.5-3.5-5.5-3.5-9S9.7 5.5 12 3z"></path></svg></span><select id="language"><option value="de">DE Deutsch</option><option value="fr">FR Français</option><option value="it">IT Italiano</option><option value="rm">RM Rumantsch</option><option value="en">EN English</option><option value="zh">ZH 中文</option></select></div>
   <header><p class="eyebrow" data-i18n="eyebrow">MeteoSwiss-Messstationen</p><h1 data-i18n="title">Hitzetage in der Schweiz</h1><p class="intro" data-i18n="intro">Vergleiche Messstationen und entdecke, wie häufig die Tageshöchsttemperatur 30&nbsp;°C erreicht hat.</p></header>
   <section class="explainer" aria-labelledby="explainer-title">
     <div class="explainer-heading"><div><p class="eyebrow" data-i18n="explainerEyebrow">Die Zahlen richtig einordnen</p><h2 id="explainer-title" data-i18n="explainerTitle">Was zeigt diese Anwendung?</h2></div></div>
@@ -97,5 +97,19 @@
     <div class="forecast-heading"><h2 data-i18n="forecastTitle">Prognose für die nächsten neun Tage</h2><span id="forecast-updated"></span></div>
     <div id="forecast" class="forecast"><p data-i18n="forecastLoading">Prognose wird mit dem Vergleich geladen.</p></div>
   </section>
-  <footer><span data-i18n="footer">Quelle: MeteoSwiss Open Data · Hitzetag: Maximum ≥ 30 °C · Tropennacht: Minimum ≥ 20 °C</span><span aria-hidden="true"> · </span><a href="/privacy.html" data-i18n="privacy">Datenschutz</a><span aria-hidden="true"> · </span><span>Version 0.5.0</span></footer>
+  <dialog id="feedback-dialog" class="feedback-dialog" aria-labelledby="feedback-title">
+    <form id="feedback-form">
+      <div class="feedback-heading"><h2 id="feedback-title" data-i18n="feedbackTitle">Feedback geben</h2><button id="feedback-close" class="dialog-close" type="button" aria-label="Schließen">×</button></div>
+      <div id="feedback-fields">
+        <p data-i18n="feedbackIntro">Was gefällt dir, was fehlt oder was funktioniert noch nicht?</p>
+        <label><span data-i18n="feedbackMessage">Deine Nachricht</span><textarea id="feedback-message" name="message" maxlength="2000" rows="6" required></textarea></label>
+        <label><span data-i18n="feedbackEmail">E-Mail (optional, falls du eine Antwort möchtest)</span><input id="feedback-email" name="email" type="email" maxlength="254" autocomplete="email"></label>
+        <label class="feedback-honeypot" aria-hidden="true">Website<input id="feedback-website" name="website" tabindex="-1" autocomplete="off"></label>
+        <div class="feedback-actions"><button type="button" class="secondary-button" id="feedback-cancel" data-i18n="cancel">Abbrechen</button><button type="submit" id="feedback-submit" data-i18n="feedbackSend">Feedback senden</button></div>
+        <p id="feedback-status" class="feedback-status" role="status"></p>
+      </div>
+      <div id="feedback-success" class="feedback-success" role="status" hidden><p data-i18n="feedbackThanks">Vielen Dank! Dein Feedback wurde gespeichert.</p></div>
+    </form>
+  </dialog>
+  <footer><span data-i18n="footer">Quelle: MeteoSwiss Open Data</span><span aria-hidden="true"> · </span><button id="feedback-open" class="footer-link" type="button" data-i18n="feedback">Feedback</button><span aria-hidden="true"> · </span><a href="/privacy.html" data-i18n="privacy">Datenschutz</a><span aria-hidden="true"> · </span><span>Version 0.5.1</span></footer>
 </main><script src="/vendor/leaflet/leaflet.js" defer></script><script src="/app.js" defer></script></body></html>
