@@ -35,6 +35,7 @@ class MeteoSwissStationDataSource implements StationDataSource {
             .followRedirects(HttpClient.Redirect.NORMAL)
             .build();
     private final Map<String, CacheEntry<String>> cache = new ConcurrentHashMap<>();
+    private final Map<String, CacheEntry<List<DailyObservation>>> dailyCache = new ConcurrentHashMap<>();
 
     @Override
     public List<Station> findStations() {
@@ -48,17 +49,15 @@ class MeteoSwissStationDataSource implements StationDataSource {
 
     @Override
     public List<AnnualHeatValue> findAnnualValues(String stationId, int fromYear, int toYear) {
-        List<Map<String, String>> rows = dailyRows(stationId, toYear);
+        List<DailyObservation> rows = dailyRows(stationId, toYear);
 
         Map<Integer, YearAccumulator> years = new LinkedHashMap<>();
-        for (Map<String, String> row : rows) {
-            Integer year = parseYear(value(row, "reference_timestamp", "date"));
-            Double maximum = parseNumber(value(row, "tre200dx"));
-            Double minimum = parseNumber(value(row, "tre200dn"));
-            if (year == null || (maximum == null && minimum == null) || year < fromYear || year > toYear) {
+        for (DailyObservation row : rows) {
+            int year = row.date().getYear();
+            if ((row.maximum() == null && row.minimum() == null) || year < fromYear || year > toYear) {
                 continue;
             }
-            years.computeIfAbsent(year, ignored -> new YearAccumulator()).add(maximum, minimum);
+            years.computeIfAbsent(year, ignored -> new YearAccumulator()).add(row.maximum(), row.minimum());
         }
         return years.entrySet().stream()
                 .sorted(Map.Entry.comparingByKey())
@@ -78,28 +77,39 @@ class MeteoSwissStationDataSource implements StationDataSource {
     @Override
     public List<DailyHeatDay> findHeatDays(String stationId, int year) {
         Map<LocalDate, DailyHeatDay> days = new LinkedHashMap<>();
-        for (Map<String, String> row : dailyRows(stationId, year)) {
-            LocalDate date = parseDate(value(row, "reference_timestamp", "date"));
-            Double maximum = parseNumber(value(row, "tre200dx"));
-            if (date == null || date.getYear() != year || maximum == null || maximum < 30.0) {
+        for (DailyObservation row : dailyRows(stationId, year)) {
+            if (row.date().getYear() != year || row.maximum() == null || row.maximum() < 30.0) {
                 continue;
             }
-            Double minimum = parseNumber(value(row, "tre200dn"));
-            days.put(date, new DailyHeatDay(date, maximum, minimum));
+            days.put(row.date(), new DailyHeatDay(row.date(), row.maximum(), row.minimum()));
         }
         return days.values().stream()
                 .sorted(Comparator.comparing(DailyHeatDay::date))
                 .toList();
     }
 
-    private List<Map<String, String>> dailyRows(String stationId, int toYear) {
+    private List<DailyObservation> dailyRows(String stationId, int toYear) {
         String id = stationId.toLowerCase(Locale.ROOT);
-        List<Map<String, String>> rows = new ArrayList<>();
-        rows.addAll(parseCsv(downloadCached(URI.create(BASE_URL + "/" + id + "/ogd-smn_" + id + "_d_historical.csv"))));
+        List<DailyObservation> rows = new ArrayList<>();
+        rows.addAll(downloadDaily(URI.create(BASE_URL + "/" + id + "/ogd-smn_" + id + "_d_historical.csv")));
         if (toYear >= java.time.Year.now().getValue()) {
-            rows.addAll(parseCsv(downloadCached(URI.create(BASE_URL + "/" + id + "/ogd-smn_" + id + "_d_recent.csv"))));
+            rows.addAll(downloadDaily(URI.create(BASE_URL + "/" + id + "/ogd-smn_" + id + "_d_recent.csv")));
         }
         return rows;
+    }
+
+    private synchronized List<DailyObservation> downloadDaily(URI uri) {
+        String key = uri.toString();
+        CacheEntry<List<DailyObservation>> cached = dailyCache.get(key);
+        if (cached != null && !cached.expired()) return cached.value;
+        try {
+            List<DailyObservation> observations = parseDailyCsv(download(uri));
+            dailyCache.put(key, new CacheEntry<>(observations, System.nanoTime()));
+            return observations;
+        } catch (MeteoSwissDataException exception) {
+            if (cached != null) return cached.value;
+            throw exception;
+        }
     }
 
     private Station toStation(Map<String, String> row) {
@@ -117,6 +127,17 @@ class MeteoSwissStationDataSource implements StationDataSource {
         if (cached != null && !cached.expired()) {
             return cached.value;
         }
+        try {
+            String body = download(uri);
+            cache.put(uri.toString(), new CacheEntry<>(body, System.nanoTime()));
+            return body;
+        } catch (MeteoSwissDataException exception) {
+            if (cached != null) return cached.value;
+            throw exception;
+        }
+    }
+
+    private String download(URI uri) {
         HttpRequest request = HttpRequest.newBuilder(uri)
                 .timeout(Duration.ofSeconds(30))
                 .header("Accept", "text/csv")
@@ -128,13 +149,8 @@ class MeteoSwissStationDataSource implements StationDataSource {
             if (response.statusCode() != 200) {
                 throw new MeteoSwissDataException("MeteoSwiss antwortete mit HTTP " + response.statusCode());
             }
-            String body = decodeCsv(response.body());
-            cache.put(uri.toString(), new CacheEntry<>(body, System.nanoTime()));
-            return body;
+            return decodeCsv(response.body());
         } catch (IOException exception) {
-            if (cached != null) {
-                return cached.value;
-            }
             throw new MeteoSwissDataException("MeteoSwiss ist momentan nicht erreichbar", exception);
         } catch (InterruptedException exception) {
             Thread.currentThread().interrupt();
@@ -165,6 +181,41 @@ class MeteoSwissStationDataSource implements StationDataSource {
             rows.add(row);
         }
         return rows;
+    }
+
+    private static List<DailyObservation> parseDailyCsv(String csv) {
+        var lines = csv.lines().filter(line -> !line.isBlank()).iterator();
+        if (!lines.hasNext()) return List.of();
+        List<String> headers = splitLine(lines.next()).stream()
+                .map(header -> header.replace("\uFEFF", "").trim().toLowerCase(Locale.ROOT))
+                .toList();
+        int dateColumn = columnIndex(headers, "reference_timestamp", "date");
+        int maximumColumn = columnIndex(headers, "tre200dx");
+        int minimumColumn = columnIndex(headers, "tre200dn");
+        List<DailyObservation> observations = new ArrayList<>();
+        while (lines.hasNext()) {
+            List<String> values = splitLine(lines.next());
+            LocalDate date = parseDate(columnValue(values, dateColumn));
+            if (date != null) {
+                observations.add(new DailyObservation(
+                        date,
+                        parseNumber(columnValue(values, maximumColumn)),
+                        parseNumber(columnValue(values, minimumColumn))));
+            }
+        }
+        return List.copyOf(observations);
+    }
+
+    private static int columnIndex(List<String> headers, String... names) {
+        for (String name : names) {
+            int index = headers.indexOf(name);
+            if (index >= 0) return index;
+        }
+        return -1;
+    }
+
+    private static String columnValue(List<String> values, int index) {
+        return index >= 0 && index < values.size() ? values.get(index).trim() : "";
     }
 
     private static List<String> splitLine(String line) {
@@ -240,6 +291,8 @@ class MeteoSwissStationDataSource implements StationDataSource {
             return System.nanoTime() - createdAtNanos > CACHE_DURATION.toNanos();
         }
     }
+
+    private record DailyObservation(LocalDate date, Double maximum, Double minimum) {}
 
     private static final class YearAccumulator {
         int heatDays;
