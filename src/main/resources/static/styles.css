@@ -2,7 +2,7 @@
 * { box-sizing: border-box; }
 body { margin: 0; min-height: 100vh; background: linear-gradient(180deg, #d9eff942 0%, #edf3e817 45%, #dfe8dc52 100%), url('/images/swiss-summer-weather.png') center top / cover fixed no-repeat; }
 body::before { content: ''; position: fixed; inset: 0; z-index: -1; background: linear-gradient(90deg, #ffffff12, transparent 65%), linear-gradient(180deg, transparent 48%, #e7eee442 100%); }
-main { width: min(1080px, calc(100% - 32px)); margin: 0 auto; padding: 64px 0 32px; }
+main { width: min(1280px, calc(100% - 32px)); margin: 0 auto; padding: 64px 0 32px; }
 .language-switcher { display: flex; justify-content: flex-end; align-items: center; gap: 9px; margin-bottom: 24px; }
 .language-switcher label { margin: 0; color: #173f34; }
 .language-switcher select { width: auto; min-width: 145px; margin: 0; padding: 8px 34px 8px 11px; background: #ffffffa8; }
@@ -11,11 +11,13 @@ header { max-width: 1040px; margin-bottom: 42px; }
 h1 { font-family: Inter, system-ui, sans-serif; font-size: clamp(2.7rem, 5.6vw, 4.6rem); line-height: 1; margin: 12px 0 20px; font-weight: 760; letter-spacing: -.045em; white-space: nowrap; text-shadow: 0 1px 18px #fff8; }
 .intro { max-width: none; font-size: 1.15rem; line-height: 1.6; color: #263d35; white-space: nowrap; text-shadow: 0 1px 12px #fff; }
 .explainer { padding: 24px 28px; }
-.explainer-heading { display: grid; grid-template-columns: minmax(260px, .8fr) minmax(320px, 1.2fr); gap: 28px; align-items: end; margin-bottom: 20px; }
+.explainer-heading { margin-bottom: 20px; }
 .explainer-heading .eyebrow { margin-bottom: 6px; }
 .explainer-heading h2, .explainer-grid h3 { margin: 0; }
 .explainer-heading > p { margin: 0; color: #38534a; line-height: 1.55; }
-.explainer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.controls-intro { max-width: 760px; margin: -11px 0 21px; color: #38534a; font-size: .91rem; line-height: 1.5; }
+.explainer-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.explainer-grid article:last-child { grid-column: 1 / -1; }
 .explainer-grid article { min-width: 0; padding: 17px 18px; border: 1px solid rgba(255,255,255,.78); border-radius: 15px; background: linear-gradient(135deg, rgba(255,255,255,.62), rgba(255,255,255,.28)); box-shadow: inset 0 1px 0 rgba(255,255,255,.92), 0 8px 20px rgba(38,75,62,.08); }
 .explainer-grid h3 { font-size: .98rem; color: #153b31; }
 .explainer-grid p { margin: 8px 0 0; color: #455d55; font-size: .91rem; line-height: 1.5; }
@@ -26,10 +28,18 @@ main > section::after { content: ''; position: absolute; inset: 1px; pointer-eve
 h2 { margin: 0 0 22px; font-size: 1.1rem; }
 label { display: block; font-size: .84rem; font-weight: 700; margin-bottom: 8px; }
 select, input { width: 100%; padding: 12px; margin-top: 7px; border: 1px solid #aebdb6; border-radius: 12px; background: #ffffffc7; box-shadow: inset 0 1px #fff, 0 5px 14px #1c40330b; font: inherit; }
-.station-selectors { display: grid; gap: 10px; width: min(100%, 540px); padding-right: 48px; }
-.station-row { position: relative; display: block; }
-.station-row label { width: 100%; }
-.remove-station { position: absolute; right: -48px; bottom: 14px; width: 36px; height: 34px; padding: 0; margin: 0; border-radius: 9px; background: #f3e7e3; color: #8b321f; box-shadow: none; font-size: 1.2rem; }
+.station-search-control, .station-add-label, .station-selectors { width: min(100%, 492px); }
+.station-search-control { position: relative; z-index: 1100; }
+.station-add-options { position: absolute; top: calc(100% - 2px); left: 0; right: 0; max-height: 280px; overflow-y: auto; padding: 6px; border: 1px solid #b7c4be; border-radius: 12px; background: #fffffff2; box-shadow: 0 14px 30px #173c2c30; backdrop-filter: blur(14px); }
+.station-add-option { display: block; width: 100%; margin: 0; padding: 10px 11px; border-radius: 8px; background: transparent; box-shadow: none; color: #14251f; text-align: left; font-size: .8rem; }
+.station-add-option:hover, .station-add-option:focus-visible { background: #e5f1eb; color: #14251f; }
+.selected-stations-heading { display: flex; justify-content: space-between; margin: 12px 0 7px; color: #38534a; font-size: .78rem; font-weight: 800; }
+.station-selectors { display: grid; gap: 7px; }
+.controls-layout { display: block; }
+.controls-form { min-width: 0; }
+.station-row { display: flex; align-items: center; gap: 8px; min-height: 42px; padding: 6px 7px 6px 13px; border: 1px solid #b7c4be; border-radius: 12px; background: #ffffffa8; box-shadow: inset 0 1px #fff, 0 5px 14px #1c40330b; }
+.selected-station-name { flex: 1; min-width: 0; font-size: .83rem; font-weight: 750; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.remove-station { flex: none; width: 30px; height: 30px; padding: 0; margin: 0; border-radius: 9px; background: #f3e7e3; color: #8b321f; box-shadow: none; font-size: 1.05rem; }
 .years { display: grid; grid-template-columns: repeat(2, minmax(130px, 190px)); gap: 14px; margin-top: 20px; }
 .metric-label { width: min(100%, 492px); margin-top: 12px; }
 button { margin-top: 18px; border: 0; border-radius: 12px; padding: 13px 18px; background: linear-gradient(135deg, #197451, #279463); color: #fff; box-shadow: 0 8px 20px #15573d30; font-weight: 750; cursor: pointer; }
@@ -41,8 +51,6 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 .map-toggle span:last-child { transition: transform .2s ease; }
 .map-toggle[aria-expanded='true'] span:last-child { transform: rotate(180deg); }
 .map-panel { width: min(100%, 760px); margin-top: 14px; }
-.map-search-label { width: min(100%, 360px); }
-.map-hint { margin: 5px 0 10px; color: #596963; font-size: .78rem; }
 .station-map { position: relative; height: 410px; overflow: hidden; border: 1px solid #ffffffdc; border-radius: 18px; background: #dce9df; box-shadow: inset 0 1px #fff, 0 12px 28px #173c2c17; }
 .station-map .leaflet-control-attribution { font-size: .65rem; }
 .station-map .leaflet-control-zoom a { color: #173f34; }
@@ -89,9 +97,11 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 .heat-days-timeline-months { position: relative; height: 18px; margin: 10px 19px 0 105px; color: #63716c; font-size: .62rem; text-transform: uppercase; }
 .heat-days-timeline-months span { position: absolute; transform: translateX(-1px); }
 .heat-days-year-row { display: grid; grid-template-columns: 95px 1fr; align-items: center; gap: 10px; }
+.heat-days-year-label { position: relative; padding-right: 24px; }
 .heat-days-year-label strong, .heat-days-year-label span { display: block; }
 .heat-days-year-label strong { font-size: .88rem; }
 .heat-days-year-label span { color: #80501c; font-size: .65rem; font-weight: 700; }
+.remove-detail-year { position: absolute; top: 1px; right: 0; width: 21px; height: 21px; padding: 0; margin: 0; border-radius: 7px; background: #f3e7e3; color: #8b321f; box-shadow: none; font-size: .9rem; line-height: 1; }
 .heat-days-timeline { position: relative; height: 48px; margin-right: 19px; border-left: 1px solid #8ba298; background: repeating-linear-gradient(to right, transparent 0, transparent calc(100% / var(--month-count) - 1px), #b9c8c140 calc(100% / var(--month-count) - 1px), #b9c8c140 calc(100% / var(--month-count))); }
 .timeline-arrow { position: absolute; top: 24px; left: 0; right: -12px; height: 2px; background: #6f877d; }
 .timeline-arrow::after { content: ''; position: absolute; right: -7px; top: -5px; border-left: 8px solid #6f877d; border-top: 6px solid transparent; border-bottom: 6px solid transparent; }
@@ -160,5 +170,18 @@ footer a { color: inherit; font-weight: 700; text-underline-offset: 3px; }
 .legal-page h2:first-child { margin-top: 0; }
 .legal-page .back-link { display: inline-block; margin-top: 28px; color: #155f4b; font-weight: 700; }
 @media (max-width: 760px) { h1, .intro { white-space: normal; } h1 { font-size: clamp(2.5rem, 10vw, 4rem); } }
-@media (max-width: 760px) { .explainer-heading, .explainer-grid { grid-template-columns: 1fr; } .explainer { padding: 21px 20px; } .explainer-heading { gap: 10px; } }
-@media (max-width: 520px) { main { padding-top: 36px; } .station-selectors { width: 100%; } .map-toggle { margin: 8px 0 0; } .station-map { height: 360px; } .years { grid-template-columns: 1fr 1fr; } .metric-label { width: calc(100% - 48px); } section { padding: 20px; } .chart { height: 280px; } .heat-days-heading { align-items: stretch; flex-direction: column; } .heat-days-heading label { width: 100%; } .context-facts { grid-template-columns: 1fr; } }
+@media (max-width: 760px) { .explainer-heading, .explainer-grid { grid-template-columns: 1fr; } .explainer-grid article:last-child { grid-column: auto; } .explainer { padding: 21px 20px; } .explainer-heading { gap: 10px; } }
+@media (min-width: 980px) {
+  .controls-layout { display: grid; grid-template-columns: minmax(370px, .8fr) minmax(520px, 1.2fr); gap: 30px; align-items: stretch; padding-bottom: 16px; }
+  .controls-form { display: flex; flex-direction: column; }
+  .controls-form .station-search-control, .controls-form .station-selectors,
+  .controls-form .years,
+  .controls-form .metric-label, .controls-form #compare { width: calc(100% - 48px); }
+  .controls-form .station-add-label { width: 100%; }
+  .controls-form .years { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .controls-form #compare { align-self: stretch; }
+  .map-toggle { display: none; }
+  .map-panel { width: 100%; margin-top: 0; }
+  .station-map { height: 100%; min-height: 480px; }
+}
+@media (max-width: 520px) { main { padding-top: 36px; } .station-search-control, .station-add-label, .station-selectors { width: 100%; } .map-toggle { margin: 8px 0 0; } .station-map { height: 360px; } .years { grid-template-columns: 1fr 1fr; } .metric-label { width: 100%; } section { padding: 20px; } .chart { height: 280px; } .heat-days-heading { align-items: stretch; flex-direction: column; } .heat-days-heading label { width: 100%; } .context-facts { grid-template-columns: 1fr; } }

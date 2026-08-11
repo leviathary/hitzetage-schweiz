@@ -35,6 +35,8 @@ class StationControllerTest {
                 .andExpect(jsonPath("$.station.id").value("ZRH"))
                 .andExpect(jsonPath("$.dataStatus").value("meteoswiss"))
                 .andExpect(jsonPath("$.values", hasSize(2)))
+                .andExpect(jsonPath("$.values[0].frostDays").isNumber())
+                .andExpect(jsonPath("$.values[0].iceDays").isNumber())
                 .andExpect(jsonPath("$.values[0].summerDays").isNumber())
                 .andExpect(jsonPath("$.values[0].veryHotDays").isNumber())
                 .andExpect(jsonPath("$.values[0].longestHeatWaveDays").isNumber())
@@ -57,6 +59,28 @@ class StationControllerTest {
                 .andExpect(jsonPath("$.values", hasSize(3)))
                 .andExpect(jsonPath("$.values[0].date").value("2024-06-18"))
                 .andExpect(jsonPath("$.values[0].maximumTemperatureCelsius").isNumber());
+    }
+
+    @Test
+    void returnsFrostDaysForSelectedYear() throws Exception {
+        mockMvc.perform(get("/api/stations/ZRH/frost-days").param("year", "2024"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.station.id").value("ZRH"))
+                .andExpect(jsonPath("$.year").value(2024))
+                .andExpect(jsonPath("$.heatDayThresholdCelsius").value(0.0))
+                .andExpect(jsonPath("$.values", hasSize(3)))
+                .andExpect(jsonPath("$.values[0].date").value("2024-01-18"))
+                .andExpect(jsonPath("$.values[0].minimumTemperatureCelsius").value(-4.2));
+    }
+
+    @Test
+    void returnsIceDaysForSelectedYear() throws Exception {
+        mockMvc.perform(get("/api/stations/ZRH/ice-days").param("year", "2024"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.station.id").value("ZRH"))
+                .andExpect(jsonPath("$.values", hasSize(2)))
+                .andExpect(jsonPath("$.values[0].date").value("2024-01-19"))
+                .andExpect(jsonPath("$.values[0].maximumTemperatureCelsius").value(-1.2));
     }
 
     @Test

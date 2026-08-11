@@ -31,6 +31,12 @@ Object.assign(translations.it, { mapToggle:'Scegli sulla mappa', mapSearch:'Cerc
 Object.assign(translations.rm, { mapToggle:'Tscherner sin la charta', mapSearch:'Tschertgar staziun', mapSearchPlaceholder:'Num u chantun', mapHint:'Clicca sin in punct per agiuntar la staziun a l’evaluaziun.', altitude:'Autezza', altitudeUnit:'m s.m.', alreadySelected:'Gia tschernì', addedFromMap:'Agiuntà a l’evaluaziun', mapFull:'I pon vegnir tschernidas maximalmain sis staziuns.' });
 Object.assign(translations.en, { mapToggle:'Choose on map', mapSearch:'Search station', mapSearchPlaceholder:'Name or canton', mapHint:'Select a point to add that station to the analysis.', altitude:'Elevation', altitudeUnit:'m a.s.l.', alreadySelected:'Already selected', addedFromMap:'Added to analysis', mapFull:'A maximum of six stations can be selected.' });
 Object.assign(translations.zh, { mapToggle:'在地图上选择', mapSearch:'搜索气象站', mapSearchPlaceholder:'名称或州', mapHint:'点击站点，将其添加到分析中。', altitude:'海拔', altitudeUnit:'米', alreadySelected:'已选择', addedFromMap:'已添加到分析', mapFull:'最多可以选择六个气象站。' });
+Object.assign(translations.de, { stationSearch:'Messstation suchen', stationSearchPlaceholder:'Name, Kanton oder Kürzel', selectedStationsTitle:'Messstationen zum Vergleich' });
+Object.assign(translations.fr, { stationSearch:'Rechercher une station', stationSearchPlaceholder:'Nom, canton ou abréviation', selectedStationsTitle:'Stations à comparer' });
+Object.assign(translations.it, { stationSearch:'Cerca stazione', stationSearchPlaceholder:'Nome, cantone o sigla', selectedStationsTitle:'Stazioni da confrontare' });
+Object.assign(translations.rm, { stationSearch:'Tschertgar staziun', stationSearchPlaceholder:'Num, chantun u scursanida', selectedStationsTitle:'Staziuns per cumparegliar' });
+Object.assign(translations.en, { stationSearch:'Search station', stationSearchPlaceholder:'Name, canton or code', selectedStationsTitle:'Stations to compare' });
+Object.assign(translations.zh, { stationSearch:'搜索气象站', stationSearchPlaceholder:'名称、州或代码', selectedStationsTitle:'待比较气象站' });
 Object.assign(translations.de, { privacy:'Datenschutz' });
 Object.assign(translations.fr, { privacy:'Protection des données' });
 Object.assign(translations.it, { privacy:'Protezione dei dati' });
@@ -43,24 +49,52 @@ Object.assign(translations.it, { explainerEyebrow:'Interpretare correttamente i 
 Object.assign(translations.rm, { explainerEyebrow:'Chapir endretg las cifras', explainerTitle:'Tge mussa questa applicaziun?', explainerLead:'Tscherna ina u pliras staziuns da MeteoSwiss e cumpareglia eveniments da chalira tenor onns e regiuns.', heatDefinitionTitle:'Tge è in di da chalira?', heatDefinitionText:'In di cun ina temperatura maximala mesirada dad almain 30 °C.', tropicalDefinitionTitle:'Tge è ina notg tropica?', tropicalDefinitionText:'Ina notg durant la quala la temperatura na croda betg sut 20 °C, evaluada cun il minimum dal di.', dataDefinitionTitle:'Danunder derivan las datas?', dataDefinitionText:'Las mesiraziuns istoricas e las indicaziuns da staziun derivan da l’offerta Open Data uffiziala da MeteoSwiss; prognosas vegnan marcadas separadamain.' });
 Object.assign(translations.en, { explainerEyebrow:'Putting the numbers in context', explainerTitle:'What does this application show?', explainerLead:'Select one or more MeteoSwiss stations and compare heat events across years and regions.', heatDefinitionTitle:'What is a heat day?', heatDefinitionText:'A day on which the measured maximum temperature reaches at least 30 °C.', tropicalDefinitionTitle:'What is a tropical night?', tropicalDefinitionText:'A night during which the temperature does not fall below 20 °C, evaluated using the daily minimum.', dataDefinitionTitle:'Where does the data come from?', dataDefinitionText:'Historical measurements and station details come from the official MeteoSwiss Open Data service; forecasts are identified separately.' });
 Object.assign(translations.zh, { explainerEyebrow:'正确理解数据', explainerTitle:'本应用展示什么？', explainerLead:'选择一个或多个 MeteoSwiss 气象站，比较不同年份和地区的高温事件。', heatDefinitionTitle:'什么是高温日？', heatDefinitionText:'实测每日最高气温达到或超过 30 °C 的一天。', tropicalDefinitionTitle:'什么是热带夜？', tropicalDefinitionText:'夜间气温不低于 20 °C，并以每日最低气温进行统计。', dataDefinitionTitle:'数据来自哪里？', dataDefinitionText:'历史观测值和站点信息来自 MeteoSwiss 官方开放数据服务；预报数据会单独标注。' });
+Object.assign(translations.de, { explainerLead:'Wähle eine oder mehrere MeteoSwiss-Messstationen und vergleiche Temperaturereignisse über Jahre und Regionen.', frostDefinitionTitle:'Was ist ein Frosttag?', frostDefinitionText:'Ein Tag, an dem die gemessene Tiefsttemperatur unter 0 °C fällt.' });
+Object.assign(translations.fr, { explainerLead:'Sélectionnez une ou plusieurs stations MeteoSwiss et comparez les événements de température selon les années et les régions.', frostDefinitionTitle:'Qu’est-ce qu’un jour de gel ?', frostDefinitionText:'Un jour durant lequel la température minimale mesurée descend sous 0 °C.' });
+Object.assign(translations.it, { explainerLead:'Seleziona una o più stazioni MeteoSwiss e confronta gli eventi di temperatura tra anni e regioni.', frostDefinitionTitle:'Che cos’è un giorno di gelo?', frostDefinitionText:'Un giorno in cui la temperatura minima misurata scende sotto 0 °C.' });
+Object.assign(translations.rm, { explainerLead:'Tscherna ina u pliras staziuns da MeteoSwiss e cumpareglia eveniments da temperatura tenor onns e regiuns.', frostDefinitionTitle:'Tge è in di da schelira?', frostDefinitionText:'In di durant il qual la temperatura minimala mesirada croda sut 0 °C.' });
+Object.assign(translations.en, { explainerLead:'Select one or more MeteoSwiss stations and compare temperature events across years and regions.', frostDefinitionTitle:'What is a frost day?', frostDefinitionText:'A day on which the measured minimum temperature falls below 0 °C.' });
+Object.assign(translations.zh, { explainerLead:'选择一个或多个 MeteoSwiss 气象站，比较不同年份和地区的温度事件。', frostDefinitionTitle:'什么是霜冻日？', frostDefinitionText:'实测每日最低气温低于 0 °C 的一天。' });
 Object.assign(translations.de, { heatDaysDetailTitle:'Hitzetage im Detail', heatDaysDetailIntro:'Alle gemessenen Tage mit mindestens 30 °C Tagesmaximum', year:'Jahr', maximum:'Maximum', minimum:'Minimum', noHeatDays:'In diesem Jahr wurden keine Hitzetage gemessen.', heatDaysLoading:'Hitzetage werden geladen …' });
 Object.assign(translations.fr, { heatDaysDetailTitle:'Journées de chaleur en détail', heatDaysDetailIntro:'Tous les jours mesurés avec un maximum journalier d’au moins 30 °C', year:'Année', maximum:'Maximum', minimum:'Minimum', noHeatDays:'Aucune journée de chaleur n’a été mesurée cette année.', heatDaysLoading:'Chargement des journées de chaleur…' });
 Object.assign(translations.it, { heatDaysDetailTitle:'Giornate di caldo in dettaglio', heatDaysDetailIntro:'Tutti i giorni misurati con una massima giornaliera di almeno 30 °C', year:'Anno', maximum:'Massima', minimum:'Minima', noHeatDays:'In questo anno non sono state misurate giornate di caldo.', heatDaysLoading:'Caricamento delle giornate di caldo…' });
 Object.assign(translations.rm, { heatDaysDetailTitle:'Dis da chalira en detagl', heatDaysDetailIntro:'Tut ils dis mesirads cun in maximum dal di dad almain 30 °C', year:'Onn', maximum:'Maximum', minimum:'Minimum', noHeatDays:'En quest onn n’èn vegnids mesirads nagins dis da chalira.', heatDaysLoading:'Ils dis da chalira vegnan chargiads…' });
 Object.assign(translations.en, { heatDaysDetailTitle:'Heat days in detail', heatDaysDetailIntro:'All measured days with a daily maximum of at least 30 °C', year:'Year', maximum:'Maximum', minimum:'Minimum', noHeatDays:'No heat days were measured in this year.', heatDaysLoading:'Loading heat days …' });
 Object.assign(translations.zh, { heatDaysDetailTitle:'高温日详情', heatDaysDetailIntro:'所有日最高气温达到或超过 30 °C 的实测日期', year:'年份', maximum:'最高气温', minimum:'最低气温', noHeatDays:'该年份未测得高温日。', heatDaysLoading:'正在加载高温日…' });
+Object.assign(translations.de, { frostDays:'Frosttage', frostOption:'Frosttage (Minimum < 0 °C)', frostThreshold:'Tagesminimum < 0 °C', frostDaysDetailTitle:'Frosttage im Detail', frostDaysDetailIntro:'Alle gemessenen Tage mit einer Tiefsttemperatur unter 0 °C', frostDaysLoading:'Frosttage werden geladen …' });
+Object.assign(translations.fr, { frostDays:'Jours de gel', frostOption:'Jours de gel (minimum < 0 °C)', frostThreshold:'Minimum journalier < 0 °C', frostDaysDetailTitle:'Jours de gel en détail', frostDaysDetailIntro:'Tous les jours mesurés avec une température minimale inférieure à 0 °C', frostDaysLoading:'Chargement des jours de gel…' });
+Object.assign(translations.it, { frostDays:'Giorni di gelo', frostOption:'Giorni di gelo (minima < 0 °C)', frostThreshold:'Minima giornaliera < 0 °C', frostDaysDetailTitle:'Giorni di gelo in dettaglio', frostDaysDetailIntro:'Tutti i giorni misurati con una temperatura minima inferiore a 0 °C', frostDaysLoading:'Caricamento dei giorni di gelo…' });
+Object.assign(translations.rm, { frostDays:'Dis da schelira', frostOption:'Dis da schelira (minimum < 0 °C)', frostThreshold:'Minimum dal di < 0 °C', frostDaysDetailTitle:'Dis da schelira en detagl', frostDaysDetailIntro:'Tut ils dis mesirads cun ina temperatura minimala sut 0 °C', frostDaysLoading:'Ils dis da schelira vegnan chargiads…' });
+Object.assign(translations.en, { frostDays:'Frost days', frostOption:'Frost days (minimum < 0 °C)', frostThreshold:'Daily minimum < 0 °C', frostDaysDetailTitle:'Frost days in detail', frostDaysDetailIntro:'All measured days with a minimum temperature below 0 °C', frostDaysLoading:'Loading frost days…' });
+Object.assign(translations.zh, { frostDays:'霜冻日', frostOption:'霜冻日（最低温 < 0 °C）', frostThreshold:'每日最低温 < 0 °C', frostDaysDetailTitle:'霜冻日详情', frostDaysDetailIntro:'所有最低气温低于 0 °C 的实测日期', frostDaysLoading:'正在加载霜冻日…' });
+Object.assign(translations.de, { iceDays:'Eistage', iceOption:'Eistage (Maximum < 0 °C)', iceThreshold:'Tagesmaximum < 0 °C', iceDaysDetailTitle:'Eistage im Detail', iceDaysDetailIntro:'Alle gemessenen Tage mit einer Höchsttemperatur unter 0 °C', iceDaysLoading:'Eistage werden geladen …', iceDefinitionTitle:'Was ist ein Eistag?', iceDefinitionText:'Ein Tag, an dem auch die gemessene Höchsttemperatur unter 0 °C bleibt.' });
+Object.assign(translations.fr, { iceDays:'Jours sans dégel', iceOption:'Jours sans dégel (maximum < 0 °C)', iceThreshold:'Maximum journalier < 0 °C', iceDaysDetailTitle:'Jours sans dégel en détail', iceDaysDetailIntro:'Tous les jours mesurés avec une température maximale inférieure à 0 °C', iceDaysLoading:'Chargement des jours sans dégel…', iceDefinitionTitle:'Qu’est-ce qu’un jour sans dégel ?', iceDefinitionText:'Un jour durant lequel même la température maximale mesurée reste sous 0 °C.' });
+Object.assign(translations.it, { iceDays:'Giorni di ghiaccio', iceOption:'Giorni di ghiaccio (massima < 0 °C)', iceThreshold:'Massima giornaliera < 0 °C', iceDaysDetailTitle:'Giorni di ghiaccio in dettaglio', iceDaysDetailIntro:'Tutti i giorni misurati con una temperatura massima inferiore a 0 °C', iceDaysLoading:'Caricamento dei giorni di ghiaccio…', iceDefinitionTitle:'Che cos’è un giorno di ghiaccio?', iceDefinitionText:'Un giorno in cui anche la temperatura massima misurata rimane sotto 0 °C.' });
+Object.assign(translations.rm, { iceDays:'Dis da glatsch', iceOption:'Dis da glatsch (maximum < 0 °C)', iceThreshold:'Maximum dal di < 0 °C', iceDaysDetailTitle:'Dis da glatsch en detagl', iceDaysDetailIntro:'Tut ils dis mesirads cun ina temperatura maximala sut 0 °C', iceDaysLoading:'Ils dis da glatsch vegnan chargiads…', iceDefinitionTitle:'Tge è in di da glatsch?', iceDefinitionText:'In di durant il qual er la temperatura maximala mesirada resta sut 0 °C.' });
+Object.assign(translations.en, { iceDays:'Ice days', iceOption:'Ice days (maximum < 0 °C)', iceThreshold:'Daily maximum < 0 °C', iceDaysDetailTitle:'Ice days in detail', iceDaysDetailIntro:'All measured days with a maximum temperature below 0 °C', iceDaysLoading:'Loading ice days…', iceDefinitionTitle:'What is an ice day?', iceDefinitionText:'A day on which even the measured maximum temperature remains below 0 °C.' });
+Object.assign(translations.zh, { iceDays:'冰冻日', iceOption:'冰冻日（最高温 < 0 °C）', iceThreshold:'每日最高温 < 0 °C', iceDaysDetailTitle:'冰冻日详情', iceDaysDetailIntro:'所有最高气温低于 0 °C 的实测日期', iceDaysLoading:'正在加载冰冻日…', iceDefinitionTitle:'什么是冰冻日？', iceDefinitionText:'实测每日最高气温仍低于 0 °C 的一天。' });
 Object.assign(translations.de, { heatDaysHint:'Jahre im Diagramm anklicken, um sie auf der Zeitachse zu vergleichen.' });
 Object.assign(translations.fr, { heatDaysHint:'Cliquez sur les annees du graphique pour les comparer sur la chronologie.' });
 Object.assign(translations.it, { heatDaysHint:'Fai clic sugli anni nel grafico per confrontarli sulla cronologia.' });
 Object.assign(translations.rm, { heatDaysHint:'Clicca sin ils onns en il diagram per cumparegliar els sin la lingia dal temp.' });
 Object.assign(translations.en, { heatDaysHint:'Click years in the chart to compare them on the timeline.' });
 Object.assign(translations.zh, { heatDaysHint:'Double-click a year in the chart to show its timeline.' });
+Object.assign(translations.de, { removeYear:'Jahr aus dem Detailvergleich entfernen' });
+Object.assign(translations.fr, { removeYear:'Retirer l’année de la comparaison détaillée' });
+Object.assign(translations.it, { removeYear:'Rimuovi l’anno dal confronto dettagliato' });
+Object.assign(translations.rm, { removeYear:'Allontanar l’onn da la cumparegliaziun detagliada' });
+Object.assign(translations.en, { removeYear:'Remove year from detailed comparison' });
+Object.assign(translations.zh, { removeYear:'从详细比较中移除该年份' });
 let currentLanguage = 'de';
 const tr = key => translations[currentLanguage][key] || translations.de[key] || key;
 const locale = () => ({de:'de-CH',fr:'fr-CH',it:'it-CH',rm:'rm-CH',en:'en-GB',zh:'zh-CN'}[currentLanguage]);
 const metricInfo = key => key === 'heatDays'
   ? { label: tr('heatDays'), threshold: tr('heatThreshold'), extremeLabel: tr('highest'), extremeKey: 'maximumTemperatureCelsius' }
-  : { label: tr('tropicalNights'), threshold: tr('tropicalThreshold'), extremeLabel: tr('lowest'), extremeKey: 'minimumTemperatureCelsius' };
+  : key === 'frostDays'
+    ? { label: tr('frostDays'), threshold: tr('frostThreshold'), extremeLabel: tr('lowest'), extremeKey: 'minimumTemperatureCelsius' }
+    : key === 'iceDays'
+      ? { label: tr('iceDays'), threshold: tr('iceThreshold'), extremeLabel: tr('lowest'), extremeKey: 'maximumTemperatureCelsius' }
+    : { label: tr('tropicalNights'), threshold: tr('tropicalThreshold'), extremeLabel: tr('lowest'), extremeKey: 'minimumTemperatureCelsius' };
 let stations = [];
 let stationMap;
 let stationMarkerLayer;
@@ -76,30 +110,94 @@ function applyLanguage() {
   document.querySelectorAll('[data-i18n]').forEach(element => { element.textContent = tr(element.dataset.i18n); });
   document.querySelector('#metric option[value="heatDays"]').textContent = tr('heatOption');
   document.querySelector('#metric option[value="tropicalNights"]').textContent = tr('tropicalOption');
-  document.querySelectorAll('.station-row label').forEach(label => { label.childNodes[0].textContent = tr('station'); });
+  document.querySelector('#metric option[value="frostDays"]').textContent = tr('frostOption');
+  document.querySelector('#metric option[value="iceDays"]').textContent = tr('iceOption');
   document.querySelectorAll('.remove-station').forEach(button => button.setAttribute('aria-label', tr('removeStation')));
-  document.querySelector('#map-search').placeholder = tr('mapSearchPlaceholder');
+  document.querySelector('#station-add-search').placeholder = tr('stationSearchPlaceholder');
+  refreshSelectedStationLabels();
   updateStationCount();
 }
 
-function stationOptions(selectedId) {
-  return stations.map(({ id, name, canton, elevationMetres }) => `<option value="${id}" ${id === selectedId ? 'selected' : ''}>${name} (${canton})${elevationMetres ? ` · ${elevationMetres} ${tr('altitudeUnit')}` : ''}</option>`).join('');
+function stationLabel(station) {
+  return `${station.name} (${station.canton})${station.elevationMetres ? ` · ${station.elevationMetres} ${tr('altitudeUnit')}` : ''}`;
+}
+
+const cantonAliases = {
+  AG:['Aargau'], AI:['Appenzell Innerrhoden'], AR:['Appenzell Ausserrhoden'], BE:['Bern','Berne'],
+  BL:['Basel-Landschaft','Baselland'], BS:['Basel-Stadt'], FR:['Freiburg','Fribourg'], GE:['Genf','Genève','Geneva'],
+  GL:['Glarus'], GR:['Graubünden','Grisons','Grigioni'], JU:['Jura'], LU:['Luzern','Lucerne'],
+  NE:['Neuenburg','Neuchâtel'], NW:['Nidwalden'], OW:['Obwalden'], SG:['St. Gallen','Saint-Gall'],
+  SH:['Schaffhausen'], SO:['Solothurn'], SZ:['Schwyz'], TG:['Thurgau'], TI:['Tessin','Ticino'],
+  UR:['Uri'], VD:['Waadt','Vaud'], VS:['Wallis','Valais'], ZG:['Zug'], ZH:['Zürich','Zurich']
+};
+
+function matchingCantonCodes(query) {
+  if (!query) return new Set();
+  return new Set(Object.entries(cantonAliases)
+    .filter(([code, aliases]) => normalized(code) === query || aliases.some(alias => normalized(alias) === query))
+    .map(([code]) => code));
+}
+
+function matchingStations(query) {
+  const selected = new Set(selectedStationIds());
+  const cantonCodes = matchingCantonCodes(query);
+  return stations.filter(station => {
+    if (selected.has(station.id)) return false;
+    if (cantonCodes.size) return cantonCodes.has(station.canton);
+    return !query || normalized(`${station.name} ${station.canton} ${station.id}`).includes(query);
+  });
+}
+
+function refreshSelectedStationLabels() {
+  selectors.querySelectorAll('.station-row').forEach(row => {
+    const station = stations.find(item => item.id === row.dataset.stationId);
+    if (station) row.querySelector('.selected-station-name').textContent = stationLabel(station);
+  });
+}
+
+function populateStationSearch() {
+  const input = document.querySelector('#station-add-search');
+  const options = document.querySelector('#station-add-options');
+  const query = normalized(input.value.trim());
+  const matches = matchingStations(query);
+  options.replaceChildren(...matches.map(station => {
+    const option = document.createElement('button');
+    option.type = 'button';
+    option.className = 'station-add-option';
+    option.setAttribute('role', 'option');
+    option.textContent = stationLabel(station);
+    option.addEventListener('click', () => addStationFromSearch(station.id));
+    return option;
+  }));
+  const open = document.activeElement === input && matches.length > 0;
+  options.hidden = !open;
+  input.setAttribute('aria-expanded', String(open));
 }
 
 function addStation(selectedId = '', removable = true) {
+  const station = stations.find(item => item.id === selectedId);
+  if (!station || selectedStationIds().includes(selectedId) || selectors.children.length >= colors.length) return;
   const row = document.createElement('div');
   row.className = 'station-row';
-  row.innerHTML = `<label>${tr('station')}<select class="station-select">${stationOptions(selectedId)}</select></label>${removable ? `<button class="remove-station" type="button" aria-label="${tr('removeStation')}">×</button>` : ''}`;
-  row.querySelector('.station-select').addEventListener('change', updateStationCount);
-  row.querySelector('.remove-station')?.addEventListener('click', () => { row.remove(); updateStationCount(); });
-  selectors.append(row); updateStationCount();
+  row.dataset.stationId = selectedId;
+  row.innerHTML = `<span class="selected-station-name"></span>${removable ? `<button class="remove-station" type="button" aria-label="${tr('removeStation')}">×</button>` : ''}`;
+  row.querySelector('.selected-station-name').textContent = stationLabel(station);
+  row.querySelector('.remove-station')?.addEventListener('click', () => {
+    row.remove();
+    updateStationCount();
+    if (latestView) compare();
+  });
+  selectors.append(row);
+  updateStationCount();
+  if (latestView) compare();
 }
 
 function updateStationCount() {
   const count = selectors.querySelectorAll('.station-row').length;
   stationCount.textContent = currentLanguage === 'zh' ? `${count} ${tr('stations')}` : `${count} ${count === 1 ? tr('station') : tr('stations')}`;
   document.querySelector('#compare').textContent = count === 1 ? tr('analyze') : tr('compare');
-  document.querySelector('#add-station').disabled = count >= colors.length;
+  document.querySelector('#station-add-search').disabled = count >= colors.length;
+  populateStationSearch();
   if (stations.length) renderMap();
 }
 
@@ -117,7 +215,7 @@ function showMapInfo(station, note = '') {
   info.append(title, details);
 }
 
-function renderMap() {
+function renderMap({ fitToQuery = false } = {}) {
   const panel = document.querySelector('#map-panel');
   if (!stationMap && panel.hidden) return;
   if (!stationMap) {
@@ -129,12 +227,15 @@ function renderMap() {
     stationMarkerLayer = L.layerGroup().addTo(stationMap);
   }
   const selectedIds = selectedStationIds();
-  const query = normalized(document.querySelector('#map-search').value.trim());
+  const query = normalized(document.querySelector('#station-add-search').value.trim());
+  const cantonCodes = matchingCantonCodes(query);
+  const visibleLocations = [];
   stationMarkerLayer.clearLayers();
   stations.filter(station => Number.isFinite(station.latitude) && Number.isFinite(station.longitude)).forEach(station => {
     const selectedIndex = selectedIds.indexOf(station.id);
     const searchText = normalized(`${station.name} ${station.canton} ${station.id}`);
-    if (query && !searchText.includes(query)) return;
+    if (query && (cantonCodes.size ? !cantonCodes.has(station.canton) : !searchText.includes(query))) return;
+    visibleLocations.push([station.latitude, station.longitude]);
     const marker = L.circleMarker([station.latitude, station.longitude], {
       radius: selectedIndex >= 0 ? 11 : 7,
       color: selectedIndex >= 0 ? '#7f2118' : '#ffffff',
@@ -153,8 +254,20 @@ function renderMap() {
     marker.addTo(stationMarkerLayer);
     if (selectedIndex >= 0) marker.bringToFront();
   });
-  if (!document.querySelector('#map-info').hasChildNodes() && stations.length) {
-    document.querySelector('#map-info').textContent = tr('mapHint');
+  const info = document.querySelector('#map-info');
+  if (fitToQuery && query) {
+    info.textContent = `${visibleLocations.length} ${tr('stations')}`;
+  } else if (fitToQuery) {
+    info.textContent = tr('mapHint');
+  } else if (!info.hasChildNodes() && stations.length) {
+    info.textContent = tr('mapHint');
+  }
+  if (fitToQuery) {
+    if (query && visibleLocations.length) {
+      stationMap.fitBounds(visibleLocations, { padding: [45, 45], maxZoom: 10 });
+    } else if (!query) {
+      stationMap.fitBounds([[45.75, 5.8], [47.85, 10.55]], { padding: [8, 8] });
+    }
   }
 }
 
@@ -164,13 +277,13 @@ async function loadStations() {
     if (!response.ok) throw new Error(tr('noResults'));
     stations = await response.json();
     const preferred = ['SMA', 'BAS'].map(id => stations.find(station => station.id === id)?.id).filter(Boolean);
-    addStation(preferred[0] || stations[0]?.id, false);
+    addStation(preferred[0] || stations[0]?.id);
     addStation(preferred[1] || stations[1]?.id);
     await compare();
   } catch (error) { status.textContent = error.message; }
 }
 
-function selectedStationIds() { return [...document.querySelectorAll('.station-select')].map(select => select.value); }
+function selectedStationIds() { return [...selectors.querySelectorAll('.station-row')].map(row => row.dataset.stationId); }
 
 async function fetchStation(id, from, to) {
   const response = await fetch(`/api/stations/${encodeURIComponent(id)}/annual-values?fromYear=${from}&toYear=${to}`);
@@ -186,10 +299,12 @@ async function fetchForecast(id) {
   return data;
 }
 
-async function fetchHeatDays(id, year) {
-  const response = await fetch(`/api/stations/${encodeURIComponent(id)}/heat-days?year=${year}`);
+async function fetchDetailDays(id, year) {
+  const metricKey = document.querySelector('#metric').value;
+  const route = metricKey === 'frostDays' ? 'frost-days' : metricKey === 'iceDays' ? 'ice-days' : 'heat-days';
+  const response = await fetch(`/api/stations/${encodeURIComponent(id)}/${route}?year=${year}`);
   const data = await response.json();
-  if (!response.ok) throw new Error(data.message || `Hitzetage für ${id} konnten nicht geladen werden.`);
+  if (!response.ok) throw new Error(data.message || `${metricInfo(metricKey).label} für ${id} konnten nicht geladen werden.`);
   return data;
 }
 
@@ -204,13 +319,19 @@ function populateHeatDayYears(from, to) {
 }
 
 function renderHeatDays(yearGroups) {
+  const detailMetricKey = document.querySelector('#metric').value;
+  const frost = detailMetricKey === 'frostDays';
+  const ice = detailMetricKey === 'iceDays';
+  const detailMetric = metricInfo(frost ? 'frostDays' : ice ? 'iceDays' : 'heatDays');
+  document.querySelector('[data-i18n="heatDaysDetailTitle"]').textContent = tr(frost ? 'frostDaysDetailTitle' : ice ? 'iceDaysDetailTitle' : 'heatDaysDetailTitle');
+  document.querySelector('[data-i18n="heatDaysDetailIntro"]').textContent = tr(frost ? 'frostDaysDetailIntro' : ice ? 'iceDaysDetailIntro' : 'heatDaysDetailIntro');
   const formatter = new Intl.NumberFormat(locale(), { minimumFractionDigits: 1, maximumFractionDigits: 1 });
   const timelineValues = (item, year) => {
     const measured = item.values.map(day => ({ ...day, forecast:false }));
     if (year !== currentYear) return measured;
     const measuredDates = new Set(measured.map(day => day.date));
     const forecast = latestForecasts.find(entry => entry.station.id === item.station.id)?.values
-      .filter(day => day.predictedHeatDay && day.date.startsWith(String(year)) && !measuredDates.has(day.date))
+      .filter(day => (frost ? day.minimumTemperatureCelsius < 0 : ice ? day.maximumTemperatureCelsius < 0 : day.predictedHeatDay) && day.date.startsWith(String(year)) && !measuredDates.has(day.date))
       .map(day => ({ ...day, forecast:true })) || [];
     return [...measured, ...forecast].sort((a, b) => a.date.localeCompare(b.date));
   };
@@ -241,20 +362,21 @@ function renderHeatDays(yearGroups) {
         const currentRangeStart = new Date(year, firstMonth, 1);
         const currentRangeEnd = new Date(year, lastMonth + 1, 1);
         const currentRangeLength = (currentRangeEnd - currentRangeStart) / 86400000;
-        return `<div class="heat-days-year-row"><div class="heat-days-year-label"><strong>${year}</strong><span>${item.values.length}${forecastCount ? ` + ${forecastCount}` : ''} ${tr('heatDays')}</span></div>${days.length ? `<div class="heat-days-timeline" style="--month-count:${monthCount}" aria-label="${item.station.name}: ${days.length} ${tr('heatDays')} ${year}">${days.map(day => {
+        return `<div class="heat-days-year-row"><div class="heat-days-year-label"><strong>${year}</strong><span>${item.values.length}${forecastCount ? ` + ${forecastCount}` : ''} ${detailMetric.label}</span>${selectedHeatDayYears.length > 1 ? `<button class="remove-detail-year" type="button" data-year="${year}" aria-label="${tr('removeYear')}: ${year}" title="${tr('removeYear')}">×</button>` : ''}</div>${days.length ? `<div class="heat-days-timeline" style="--month-count:${monthCount}" aria-label="${item.station.name}: ${days.length} ${detailMetric.label} ${year}">${days.map(day => {
         const date = new Date(`${day.date}T12:00:00`);
         const minimum = day.minimumTemperatureCelsius == null ? '–' : `${formatter.format(day.minimumTemperatureCelsius)} °C`;
         const position = (date - currentRangeStart) / 86400000 / currentRangeLength * 100;
         const label = `${date.toLocaleDateString(locale(), { weekday:'short', day:'2-digit', month:'long' })}: ${tr('maximum')} ${formatter.format(day.maximumTemperatureCelsius)} °C, ${tr('minimum')} ${minimum}${day.forecast ? ` (${tr('predicted')})` : ''}`;
-        const barHeight = 8 + Math.min(24, Math.max(0, (day.maximumTemperatureCelsius - 30) * 2.4));
-        return `<button class="heat-day-marker ${day.forecast ? 'forecast' : ''}" type="button" style="left:${position}%;--bar-height:${barHeight}px" title="${label}" aria-label="${label}"><span>${formatter.format(day.maximumTemperatureCelsius)}°</span></button>`;
+        const displayedTemperature = frost ? day.minimumTemperatureCelsius : day.maximumTemperatureCelsius;
+        const barHeight = 8 + Math.min(24, Math.abs(frost || ice ? displayedTemperature : displayedTemperature - 30) * 2.4);
+        return `<button class="heat-day-marker ${day.forecast ? 'forecast' : ''}" type="button" style="left:${position}%;--bar-height:${barHeight}px" title="${label}" aria-label="${label}"><span>${formatter.format(displayedTemperature)}°</span></button>`;
         }).join('')}<span class="timeline-arrow" aria-hidden="true"></span></div>` : `<div class="heat-days-timeline empty" style="--month-count:${monthCount}"><span class="timeline-arrow" aria-hidden="true"></span></div>`}</div>`;
       }).join('')}
     </article>`).join('');
 }
 
 function openHeatDayYear(year) {
-  if (document.querySelector('#metric').value !== 'heatDays') return;
+  if (!['heatDays', 'frostDays', 'iceDays'].includes(document.querySelector('#metric').value)) return;
   const select = document.querySelector('#heat-day-year');
   if (![...select.options].some(option => Number(option.value) === year)) return;
   if (selectedHeatDayYears.includes(year)) {
@@ -274,9 +396,10 @@ function openHeatDayYear(year) {
 async function loadHeatDayDetails(ids = selectedStationIds()) {
   const container = document.querySelector('#heat-days-detail');
   if (!ids.length || !selectedHeatDayYears.length) return;
-  container.innerHTML = `<p class="heat-days-empty">${tr('heatDaysLoading')}</p>`;
+  const metricKey = document.querySelector('#metric').value;
+  container.innerHTML = `<p class="heat-days-empty">${tr(metricKey === 'frostDays' ? 'frostDaysLoading' : metricKey === 'iceDays' ? 'iceDaysLoading' : 'heatDaysLoading')}</p>`;
   try {
-    const groups = await Promise.all(selectedHeatDayYears.map(async year => ({ year, items: await Promise.all(ids.map(id => fetchHeatDays(id, year))) })));
+    const groups = await Promise.all(selectedHeatDayYears.map(async year => ({ year, items: await Promise.all(ids.map(id => fetchDetailDays(id, year))) })));
     if (latestView) latestView.heatDays = groups;
     renderHeatDays(groups);
   } catch (error) {
@@ -321,12 +444,30 @@ function trendPerDecade(values, metricKey) {
   return denominator ? numerator / denominator * 10 : null;
 }
 
+function removeDetailYear(year) {
+  if (selectedHeatDayYears.length <= 1 || !selectedHeatDayYears.includes(year)) return;
+  selectedHeatDayYears = selectedHeatDayYears.filter(selectedYear => selectedYear !== year);
+  document.querySelector('#heat-day-year').value = String(selectedHeatDayYears.at(-1));
+  document.querySelectorAll('.year-group').forEach(group => {
+    const selected = selectedHeatDayYears.includes(Number(group.dataset.year));
+    group.classList.toggle('selected', selected);
+    group.setAttribute('aria-pressed', String(selected));
+  });
+  loadHeatDayDetails();
+}
+
+function forecastMatchesMetric(day, metricKey) {
+  if (metricKey === 'heatDays') return day.predictedHeatDay;
+  if (metricKey === 'frostDays') return day.minimumTemperatureCelsius < 0;
+  if (metricKey === 'iceDays') return day.maximumTemperatureCelsius < 0;
+  return day.predictedTropicalNight;
+}
+
 function renderClimateContext(contexts, forecasts) {
   const metricKey = document.querySelector('#metric').value;
   const metric = metricInfo(metricKey);
-  const forecastFlag = metricKey === 'heatDays' ? 'predictedHeatDay' : 'predictedTropicalNight';
   const formatter = new Intl.NumberFormat(locale(), { minimumFractionDigits: 1, maximumFractionDigits: 1 });
-  const forecastCounts = new Map(forecasts.map(item => [item.station.id, item.values.filter(day => day.date.startsWith(String(currentYear)) && day[forecastFlag]).length]));
+  const forecastCounts = new Map(forecasts.map(item => [item.station.id, item.values.filter(day => day.date.startsWith(String(currentYear)) && forecastMatchesMetric(day, metricKey)).length]));
   document.querySelector('#context-year').textContent = `${currentYear} · ${tr('provisional')}`;
   document.querySelector('#climate-context').innerHTML = contexts.map((item, index) => {
     const current = item.values.find(value => value.year === currentYear);
@@ -378,9 +519,8 @@ function renderClimateContext(contexts, forecasts) {
 function renderComparison(data, forecasts, from, to) {
   const metricKey = document.querySelector('#metric').value;
   const metric = metricInfo(metricKey);
-  const forecastFlag = metricKey === 'heatDays' ? 'predictedHeatDay' : 'predictedTropicalNight';
   const forecastCounts = new Map(forecasts.map(item => [item.station.id,
-    item.values.filter(day => day.date.startsWith(String(currentYear)) && day[forecastFlag]).length
+    item.values.filter(day => day.date.startsWith(String(currentYear)) && forecastMatchesMetric(day, metricKey)).length
   ]));
   const years = Array.from({ length: to - from + 1 }, (_, index) => from + index);
   const maximum = Math.max(1, ...data.flatMap(item => item.values.map(value =>
@@ -411,9 +551,8 @@ function renderComparison(data, forecasts, from, to) {
   results.innerHTML = data.map((item, index) => {
     const total = item.values.reduce((sum, value) => sum + value[metricKey], 0);
     const predicted = forecastCounts.get(item.station.id) || 0;
-    const extreme = metricKey === 'heatDays'
-      ? item.values.reduce((best, value) => !best || value[metric.extremeKey] > best[metric.extremeKey] ? value : best, null)
-      : null;
+    const extreme = item.values.reduce((best, value) => !best
+      || (metricKey === 'heatDays' ? value[metric.extremeKey] > best[metric.extremeKey] : value[metric.extremeKey] < best[metric.extremeKey]) ? value : best, null);
     return `<article class="summary" style="--station-color:${colors[index]}"><span>${item.station.name}</span><strong>${total}${predicted ? `<em> + ${predicted}</em>` : ''}</strong><small>${metric.label} ${tr('measured')}${predicted ? ` · ${predicted} ${tr('currentForecast')}` : ''}${extreme ? ` · ${metric.extremeLabel} ${extreme[metric.extremeKey].toFixed(1)} °C (${extreme.year})` : ''}</small></article>`;
   }).join('');
 }
@@ -442,7 +581,7 @@ async function compare() {
       Promise.all(ids.map(id => fetchStation(id, from, to))),
       Promise.all(ids.map(id => fetchForecast(id))),
       Promise.all(ids.map(id => fetchStation(id, 1990, currentYear))),
-      Promise.all(selectedHeatDayYears.map(async year => ({ year, items: await Promise.all(ids.map(id => fetchHeatDays(id, year))) })))
+      Promise.all(selectedHeatDayYears.map(async year => ({ year, items: await Promise.all(ids.map(id => fetchDetailDays(id, year))) })))
     ]);
     latestView = { data, forecasts, contexts, heatDays, from, to, stationCount: ids.length };
     renderLatestView();
@@ -451,7 +590,52 @@ async function compare() {
   finally { document.querySelector('#compare').disabled = false; }
 }
 
-document.querySelector('#add-station').addEventListener('click', () => addStation(stations[selectors.children.length]?.id));
+function addStationFromSearch(stationId) {
+  const input = document.querySelector('#station-add-search');
+  const query = normalized(input.value.trim());
+  const station = stationId
+    ? stations.find(item => item.id === stationId)
+    : matchingStations(query)[0];
+  if (!station) return;
+  input.value = '';
+  document.querySelector('#station-add-options').hidden = true;
+  input.setAttribute('aria-expanded', 'false');
+  addStation(station.id);
+  document.querySelector('#station-add-options').hidden = true;
+  input.setAttribute('aria-expanded', 'false');
+  renderMap({ fitToQuery: true });
+}
+
+document.querySelector('#station-add-search').addEventListener('input', () => {
+  populateStationSearch();
+  renderMap({ fitToQuery: true });
+});
+document.querySelector('#station-add-search').addEventListener('focus', populateStationSearch);
+document.querySelector('#station-add-search').addEventListener('blur', () => setTimeout(() => {
+  document.querySelector('#station-add-options').hidden = true;
+  document.querySelector('#station-add-search').setAttribute('aria-expanded', 'false');
+}, 150));
+document.querySelector('#station-add-search').addEventListener('keydown', event => {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    addStationFromSearch();
+  }
+});
+const desktopMapQuery = window.matchMedia('(min-width: 980px)');
+function syncMapLayout() {
+  const button = document.querySelector('#map-toggle');
+  const panel = document.querySelector('#map-panel');
+  if (desktopMapQuery.matches) {
+    button.setAttribute('aria-expanded', 'true');
+    panel.hidden = false;
+    renderMap();
+    setTimeout(() => stationMap?.invalidateSize(), 0);
+  } else {
+    button.setAttribute('aria-expanded', 'false');
+    panel.hidden = true;
+  }
+}
+desktopMapQuery.addEventListener('change', syncMapLayout);
 document.querySelector('#map-toggle').addEventListener('click', event => {
   const button = event.currentTarget;
   const open = button.getAttribute('aria-expanded') === 'true';
@@ -462,10 +646,13 @@ document.querySelector('#map-toggle').addEventListener('click', event => {
     setTimeout(() => stationMap.invalidateSize(), 0);
   }
 });
-document.querySelector('#map-search').addEventListener('input', renderMap);
 document.querySelector('#compare').addEventListener('click', compare);
 document.querySelector('#metric').addEventListener('change', compare);
 document.querySelector('#heat-day-year').addEventListener('change', event => { selectedHeatDayYears = [Number(event.target.value)]; loadHeatDayDetails(); });
+document.querySelector('#heat-days-detail').addEventListener('click', event => {
+  const button = event.target.closest('.remove-detail-year');
+  if (button) removeDetailYear(Number(button.dataset.year));
+});
 chart.addEventListener('click', event => {
   const group = event.target.closest('.year-group');
   if (group) openHeatDayYear(Number(group.dataset.year));
@@ -489,4 +676,5 @@ document.querySelector('#climate-details-toggle').addEventListener('click', even
   document.querySelector('#climate-details').classList.toggle('open', !open);
 });
 applyLanguage();
+syncMapLayout();
 loadStations();

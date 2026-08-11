@@ -45,28 +45,37 @@
   <div class="language-switcher"><label for="language" data-i18n="language">Sprache</label><select id="language"><option value="de">Deutsch</option><option value="fr">Français</option><option value="it">Italiano</option><option value="rm">Rumantsch</option><option value="en">English</option><option value="zh">中文</option></select></div>
   <header><p class="eyebrow" data-i18n="eyebrow">MeteoSwiss-Messstationen</p><h1 data-i18n="title">Hitzetage in der Schweiz</h1><p class="intro" data-i18n="intro">Vergleiche Messstationen und entdecke, wie häufig die Tageshöchsttemperatur 30&nbsp;°C erreicht hat.</p></header>
   <section class="explainer" aria-labelledby="explainer-title">
-    <div class="explainer-heading"><div><p class="eyebrow" data-i18n="explainerEyebrow">Die Zahlen richtig einordnen</p><h2 id="explainer-title" data-i18n="explainerTitle">Was zeigt diese Anwendung?</h2></div><p data-i18n="explainerLead">Wähle eine oder mehrere MeteoSwiss-Messstationen und vergleiche Hitzeereignisse über Jahre und Regionen.</p></div>
+    <div class="explainer-heading"><div><p class="eyebrow" data-i18n="explainerEyebrow">Die Zahlen richtig einordnen</p><h2 id="explainer-title" data-i18n="explainerTitle">Was zeigt diese Anwendung?</h2></div></div>
     <div class="explainer-grid">
       <article><h3 data-i18n="heatDefinitionTitle">Was ist ein Hitzetag?</h3><p data-i18n="heatDefinitionText">Ein Tag, an dem die gemessene Höchsttemperatur mindestens 30 °C erreicht.</p></article>
       <article><h3 data-i18n="tropicalDefinitionTitle">Was ist eine Tropennacht?</h3><p data-i18n="tropicalDefinitionText">Eine Nacht, in der die Temperatur nicht unter 20 °C fällt, ausgewertet über das Tagesminimum.</p></article>
+      <article><h3 data-i18n="frostDefinitionTitle">Was ist ein Frosttag?</h3><p data-i18n="frostDefinitionText">Ein Tag, an dem die gemessene Tiefsttemperatur unter 0 °C fällt.</p></article>
+      <article><h3 data-i18n="iceDefinitionTitle">Was ist ein Eistag?</h3><p data-i18n="iceDefinitionText">Ein Tag, an dem auch die gemessene Höchsttemperatur unter 0 °C bleibt.</p></article>
       <article><h3 data-i18n="dataDefinitionTitle">Woher stammen die Daten?</h3><p data-i18n="dataDefinitionText">Historische Messwerte und Stationsangaben stammen aus dem offiziellen Open-Data-Angebot von MeteoSwiss; Prognosen werden gesondert gekennzeichnet.</p></article>
     </div>
   </section>
   <section class="controls" aria-labelledby="selection-title">
     <div class="section-heading"><h2 id="selection-title" data-i18n="selectionTitle">Stationen und Zeitraum</h2><span id="station-count" class="badge">2 Stationen</span></div>
-    <div id="station-selectors" class="station-selectors" aria-label="Ausgewählte Messstationen"></div>
-    <button id="add-station" class="secondary-button" type="button" data-i18n="addStation">+ Station hinzufügen</button>
-    <button id="map-toggle" class="map-toggle secondary-button" type="button" aria-expanded="false" aria-controls="map-panel"><span data-i18n="mapToggle">Station auf Karte wählen</span><span aria-hidden="true">⌄</span></button>
-    <div id="map-panel" class="map-panel" hidden>
-      <label class="map-search-label"><span data-i18n="mapSearch">Station suchen</span><input id="map-search" type="search" autocomplete="off" placeholder="Name oder Kanton"></label>
-      <p class="map-hint" data-i18n="mapHint">Punkt anklicken, um eine Station zur Auswertung hinzuzufügen.</p>
-      <div id="station-map" class="station-map" role="region" aria-label="Karte der MeteoSwiss-Messstationen">
-        <div id="map-info" class="map-info" aria-live="polite"></div>
+    <p class="controls-intro" data-i18n="explainerLead">Wähle eine oder mehrere MeteoSwiss-Messstationen und vergleiche Temperaturereignisse über Jahre und Regionen.</p>
+    <div class="controls-layout">
+      <div class="controls-form">
+        <div class="station-search-control">
+          <label class="station-add-label"><span data-i18n="stationSearch">Messstation suchen</span><input id="station-add-search" type="search" autocomplete="off" placeholder="Station suchen …" aria-controls="station-add-options" aria-expanded="false"></label>
+          <div id="station-add-options" class="station-add-options" role="listbox" hidden></div>
+        </div>
+        <div class="selected-stations-heading"><span data-i18n="selectedStationsTitle">Messstationen zum Vergleich</span></div>
+        <div id="station-selectors" class="station-selectors" aria-label="Ausgewählte Messstationen"></div>
+        <button id="map-toggle" class="map-toggle secondary-button" type="button" aria-expanded="false" aria-controls="map-panel"><span data-i18n="mapToggle">Station auf Karte wählen</span><span aria-hidden="true">⌄</span></button>
+        <div class="years"><label><span data-i18n="from">Von</span><input id="fromYear" type="number" min="1864"></label><label><span data-i18n="to">Bis</span><input id="toYear" type="number" min="1864"></label></div>
+        <label class="metric-label"><span data-i18n="metric">Kennzahl</span><select id="metric"><option value="heatDays">Hitzetage (Maximum ≥ 30 °C)</option><option value="tropicalNights">Tropennächte (Minimum ≥ 20 °C)</option><option value="frostDays">Frosttage (Minimum &lt; 0 °C)</option><option value="iceDays">Eistage (Maximum &lt; 0 °C)</option></select></label>
+        <button id="compare" type="button" data-i18n="compare">Stationen vergleichen</button><p id="status" role="status"></p>
+      </div>
+      <div id="map-panel" class="map-panel" hidden>
+        <div id="station-map" class="station-map" role="region" aria-label="Karte der MeteoSwiss-Messstationen">
+          <div id="map-info" class="map-info" aria-live="polite"></div>
+        </div>
       </div>
     </div>
-    <div class="years"><label><span data-i18n="from">Von</span><input id="fromYear" type="number" min="1864"></label><label><span data-i18n="to">Bis</span><input id="toYear" type="number" min="1864"></label></div>
-    <label class="metric-label"><span data-i18n="metric">Kennzahl</span><select id="metric"><option value="heatDays">Hitzetage (Maximum ≥ 30 °C)</option><option value="tropicalNights">Tropennächte (Minimum ≥ 20 °C)</option></select></label>
-    <button id="compare" type="button" data-i18n="compare">Stationen vergleichen</button><p id="status" role="status"></p>
   </section>
   <section aria-labelledby="result-title">
     <div class="section-heading"><h2 id="result-title">Hitzetage pro Jahr</h2><span class="badge" data-i18n="source">Quelle: MeteoSwiss</span></div>
@@ -88,5 +97,5 @@
     <div class="forecast-heading"><h2 data-i18n="forecastTitle">Prognose für die nächsten neun Tage</h2><span id="forecast-updated"></span></div>
     <div id="forecast" class="forecast"><p data-i18n="forecastLoading">Prognose wird mit dem Vergleich geladen.</p></div>
   </section>
-  <footer><span data-i18n="footer">Quelle: MeteoSwiss Open Data · Hitzetag: Maximum ≥ 30 °C · Tropennacht: Minimum ≥ 20 °C</span><span aria-hidden="true"> · </span><a href="/privacy.html" data-i18n="privacy">Datenschutz</a></footer>
+  <footer><span data-i18n="footer">Quelle: MeteoSwiss Open Data · Hitzetag: Maximum ≥ 30 °C · Tropennacht: Minimum ≥ 20 °C</span><span aria-hidden="true"> · </span><a href="/privacy.html" data-i18n="privacy">Datenschutz</a><span aria-hidden="true"> · </span><span>Version 0.5.0</span></footer>
 </main><script src="/vendor/leaflet/leaflet.js" defer></script><script src="/app.js" defer></script></body></html>

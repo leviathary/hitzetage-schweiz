@@ -4,6 +4,8 @@ public record AnnualHeatValue(
         int year,
         int heatDays,
         int tropicalNights,
+        int frostDays,
+        int iceDays,
         int summerDays,
         int veryHotDays,
         int longestHeatWaveDays,

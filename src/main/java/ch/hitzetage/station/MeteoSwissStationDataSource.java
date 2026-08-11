@@ -65,6 +65,8 @@ class MeteoSwissStationDataSource implements StationDataSource {
                         entry.getKey(),
                         entry.getValue().heatDays,
                         entry.getValue().tropicalNights,
+                        entry.getValue().frostDays,
+                        entry.getValue().iceDays,
                         entry.getValue().summerDays,
                         entry.getValue().veryHotDays,
                         entry.getValue().longestHeatWaveDays,
@@ -86,6 +88,26 @@ class MeteoSwissStationDataSource implements StationDataSource {
         return days.values().stream()
                 .sorted(Comparator.comparing(DailyHeatDay::date))
                 .toList();
+    }
+
+    @Override
+    public List<DailyHeatDay> findFrostDays(String stationId, int year) {
+        Map<LocalDate, DailyHeatDay> days = new LinkedHashMap<>();
+        for (DailyObservation row : dailyRows(stationId, year)) {
+            if (row.date().getYear() != year || row.minimum() == null || row.minimum() >= 0.0) continue;
+            days.put(row.date(), new DailyHeatDay(row.date(), row.maximum() == null ? 0.0 : row.maximum(), row.minimum()));
+        }
+        return days.values().stream().sorted(Comparator.comparing(DailyHeatDay::date)).toList();
+    }
+
+    @Override
+    public List<DailyHeatDay> findIceDays(String stationId, int year) {
+        Map<LocalDate, DailyHeatDay> days = new LinkedHashMap<>();
+        for (DailyObservation row : dailyRows(stationId, year)) {
+            if (row.date().getYear() != year || row.maximum() == null || row.maximum() >= 0.0) continue;
+            days.put(row.date(), new DailyHeatDay(row.date(), row.maximum(), row.minimum()));
+        }
+        return days.values().stream().sorted(Comparator.comparing(DailyHeatDay::date)).toList();
     }
 
     private List<DailyObservation> dailyRows(String stationId, int toYear) {
@@ -297,6 +319,8 @@ class MeteoSwissStationDataSource implements StationDataSource {
     private static final class YearAccumulator {
         int heatDays;
         int tropicalNights;
+        int frostDays;
+        int iceDays;
         int summerDays;
         int veryHotDays;
         int longestHeatWaveDays;
@@ -312,6 +336,7 @@ class MeteoSwissStationDataSource implements StationDataSource {
                 hasMaximum = true;
                 if (dailyMaximum >= 25.0) summerDays++;
                 if (dailyMaximum >= 35.0) veryHotDays++;
+                if (dailyMaximum < 0.0) iceDays++;
                 if (dailyMaximum >= 30.0) {
                     heatDays++;
                     currentHeatWaveDays++;
@@ -324,6 +349,7 @@ class MeteoSwissStationDataSource implements StationDataSource {
             if (dailyMinimum != null) {
                 hasMinimum = true;
                 if (dailyMinimum >= 20.0) tropicalNights++;
+                if (dailyMinimum < 0.0) frostDays++;
                 minimum = Math.min(minimum, dailyMinimum);
                 warmestNight = Math.max(warmestNight, dailyMinimum);
             }
