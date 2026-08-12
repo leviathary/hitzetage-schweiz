@@ -158,18 +158,22 @@ class MeteoSwissStationDataSource implements StationDataSource {
         var driest = monthly.entrySet().stream().min(Map.Entry.comparingByValue())
                 .map(entry -> new PrecipitationSummary.MonthlyTotal(entry.getKey(), round(entry.getValue()))).orElse(null);
         int longestDry = 0, currentDry = 0;
+        Integer longestDryYear = null;
         LocalDate previous = null;
         for (var entry : values.entrySet()) {
             if (previous == null || entry.getKey().equals(previous.plusDays(1))) {
                 currentDry = entry.getValue() < 1.0 ? currentDry + 1 : 0;
             } else currentDry = entry.getValue() < 1.0 ? 1 : 0;
-            longestDry = Math.max(longestDry, currentDry);
+            if (currentDry > longestDry) {
+                longestDry = currentDry;
+                longestDryYear = entry.getKey().getYear();
+            }
             previous = entry.getKey();
         }
         return new PrecipitationSummary(
                 annual.entrySet().stream().map(e -> new PrecipitationSummary.AnnualTotal(e.getKey(), round(e.getValue()))).toList(),
                 monthly.entrySet().stream().filter(e -> e.getKey().getYear() == detailYear).map(e -> new PrecipitationSummary.MonthlyTotal(e.getKey(), round(e.getValue()))).toList(),
-                daily, strongest, driest, longestDry);
+                daily, strongest, driest, longestDry, longestDryYear);
     }
 
     private static double round(double value) { return Math.round(value * 10.0) / 10.0; }

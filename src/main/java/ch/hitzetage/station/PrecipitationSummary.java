@@ -10,7 +10,8 @@ public record PrecipitationSummary(
         List<DailyPrecipitation> daily,
         DailyPrecipitation strongestRainDay,
         MonthlyTotal driestMonth,
-        int longestDrySpellDays) {
+        int longestDrySpellDays,
+        Integer longestDrySpellYear) {
     public record AnnualTotal(int year, double millimetres) {}
     public record MonthlyTotal(YearMonth month, double millimetres) {}
 }

@@ -64,6 +64,8 @@
       <article><h3 data-i18n="veryHotDefinitionTitle">Was ist ein sehr heisser Tag?</h3><p data-i18n="veryHotDefinitionText">Ein Tag, an dem die gemessene Höchsttemperatur mindestens 35 °C erreicht.</p></article>
       <article class="explainer-wide"><h3 data-i18n="heatwaveDefinitionTitle">Was bedeutet längste Hitzewelle?</h3><p data-i18n="heatwaveDefinitionText">Die längste Folge aufeinanderfolgender Tage mit einer Höchsttemperatur von mindestens 30 °C.</p></article>
       <article class="explainer-wide"><h3 data-i18n="frostPeriodDefinitionTitle">Was bedeutet längste Frostperiode?</h3><p data-i18n="frostPeriodDefinitionText">Die längste Folge aufeinanderfolgender Tage, an denen die Tiefsttemperatur unter 0 °C fällt.</p></article>
+      <article><h3 data-i18n="precipitationDefinitionTitle">Was bedeutet Niederschlag in Millimetern?</h3><p data-i18n="precipitationDefinitionText">Ein Millimeter Niederschlag entspricht einem Liter Wasser pro Quadratmeter.</p></article>
+      <article><h3 data-i18n="drySpellDefinitionTitle">Was ist eine Trockenperiode?</h3><p data-i18n="drySpellDefinitionText">Eine Folge aufeinanderfolgender Tage mit weniger als 1 mm Niederschlag pro Tag.</p></article>
       <article><h3 data-i18n="dataDefinitionTitle">Woher stammen die Daten?</h3><p data-i18n="dataDefinitionText">Historische Messwerte und Stationsangaben stammen aus dem offiziellen Open-Data-Angebot von MeteoSwiss; Prognosen werden gesondert gekennzeichnet.</p></article>
     </div>
     </div>
@@ -128,11 +130,18 @@
   </section>
   <section class="view-panel precipitation-view" data-view="precipitation" aria-labelledby="precipitation-title">
     <div class="precipitation-heading"><div><h2 id="precipitation-title" data-i18n="precipitationTitle">Niederschlag vergleichen</h2><p data-i18n="precipitationIntro">Jahressummen vergleichen und ein Jahr bis auf einzelne Regentage untersuchen.</p></div></div>
+    <p id="precipitation-record-period" class="precipitation-record-period"></p>
     <div id="precipitation-records" class="precipitation-records"></div>
-    <div class="precipitation-chart-card"><h3 data-i18n="annualPrecipitation">Niederschlag pro Jahr</h3><div id="precipitation-annual" class="precipitation-bars"></div></div>
-    <div class="precipitation-chart-card"><div class="precipitation-month-heading"><label for="precipitation-year"><span data-i18n="monthlyPrecipitationIn">Niederschlag pro Monat im</span><select id="precipitation-year" aria-label="Detailjahr"></select></label></div><p class="chart-interaction-hint" data-i18n="precipitationHint">Monat anklicken, um die einzelnen Tage zu sehen.</p><div id="precipitation-monthly" class="precipitation-bars precipitation-months"></div></div>
-    <div class="precipitation-chart-card"><h3 id="precipitation-daily-title">Niederschlag pro Tag</h3><div id="precipitation-daily" class="precipitation-bars precipitation-days"></div></div>
+    <div class="precipitation-chart-card"><h3 data-i18n="precipitationYearSelectionTitle">Jahre für den Vergleich auswählen</h3><p class="chart-interaction-hint" data-i18n="precipitationYearSelectionHint">Jahre im Diagramm anklicken, um ihre Monatsverläufe zu vergleichen.</p><div id="precipitation-annual" class="precipitation-bars"></div></div>
+    <div class="precipitation-chart-card precipitation-compare-card">
+      <div class="precipitation-compare-heading"><div><h3 data-i18n="monthComparisonTitle">Monatsverlauf ausgewählter Jahre</h3><p data-i18n="monthComparisonIntro">Vergleiche Januar bis Dezember der oben ausgewählten Jahre pro Messstation.</p></div></div>
+      <div id="precipitation-compare-daily" class="precipitation-timelines"></div>
+    </div>
   </section>
+  <dialog id="precipitation-day-dialog" class="precipitation-day-dialog" aria-labelledby="precipitation-day-dialog-title">
+    <div class="precipitation-day-dialog-heading"><div><h2 id="precipitation-day-dialog-title"></h2><p id="precipitation-day-dialog-subtitle"></p></div><button id="precipitation-day-dialog-close" class="dialog-close" type="button" aria-label="Schließen">×</button></div>
+    <div id="precipitation-day-dialog-chart" class="precipitation-day-dialog-chart"></div>
+  </dialog>
   <section class="view-panel" data-view="forecast" aria-labelledby="forecast-view-title">
     <div class="forecast-heading"><h2 id="forecast-view-title" data-i18n="forecastTitle">Prognose für die nächsten neun Tage</h2><span id="forecast-updated"></span></div>
     <div id="forecast" class="forecast"><p data-i18n="forecastLoading">Prognose wird mit dem Vergleich geladen.</p></div>
@@ -151,5 +160,5 @@
       <div id="feedback-success" class="feedback-success" role="status" hidden><p data-i18n="feedbackThanks">Vielen Dank! Dein Feedback wurde gespeichert.</p></div>
     </form>
   </dialog>
-  <footer><span data-i18n="footer">Quelle: MeteoSwiss Open Data</span><span aria-hidden="true"> · </span><button id="feedback-open" class="footer-link" type="button" data-i18n="feedback">Feedback</button><span aria-hidden="true"> · </span><a href="/privacy.html" data-i18n="privacy">Datenschutz</a><span aria-hidden="true"> · </span><span>Version 0.6.2</span></footer>
+  <footer><span data-i18n="footer">Quelle: MeteoSwiss Open Data</span><span aria-hidden="true"> · </span><button id="feedback-open" class="footer-link" type="button" data-i18n="feedback">Feedback</button><span aria-hidden="true"> · </span><a href="/privacy.html" data-i18n="privacy">Datenschutz</a><span aria-hidden="true"> · </span><span>Version 0.7.0</span></footer>
 </main><script src="/vendor/leaflet/leaflet.js" defer></script><script src="/app.js" defer></script></body></html>

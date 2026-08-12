@@ -13,7 +13,7 @@
 
     <groupId>ch.hitzetage</groupId>
     <artifactId>hitzetage-schweiz</artifactId>
-    <version>0.6.2</version>
+    <version>0.7.0</version>
     <name>Hitzetage Schweiz</name>
     <description>Auswertung von Hitzetagen an MeteoSwiss-Messstationen</description>
 

@@ -90,6 +90,6 @@ class DemoStationDataSource implements StationDataSource {
                 .mapToObj(day -> new DailyPrecipitation(LocalDate.of(detailYear, 7, day), day % 5 == 0 ? 18 + day : day % 3 == 0 ? 3.4 : 0)).toList();
         return new PrecipitationSummary(annual, monthly, daily,
                 daily.stream().max(java.util.Comparator.comparingDouble(DailyPrecipitation::millimetres)).orElse(null),
-                monthly.stream().min(java.util.Comparator.comparingDouble(PrecipitationSummary.MonthlyTotal::millimetres)).orElse(null), 8);
+                monthly.stream().min(java.util.Comparator.comparingDouble(PrecipitationSummary.MonthlyTotal::millimetres)).orElse(null), 8, detailYear);
     }
 }

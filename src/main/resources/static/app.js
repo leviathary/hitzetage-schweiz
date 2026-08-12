@@ -170,6 +170,54 @@ Object.assign(translations.it, { monthlyPrecipitationIn:'Precipitazioni per mese
 Object.assign(translations.rm, { monthlyPrecipitationIn:'Precipitaziun per mais durant' });
 Object.assign(translations.en, { monthlyPrecipitationIn:'Rainfall by month in' });
 Object.assign(translations.zh, { monthlyPrecipitationIn:'月降水量，年份' });
+Object.assign(translations.de, { monthComparisonTitle:'Monate verschiedener Jahre vergleichen', monthComparisonIntro:'Vergleiche denselben Monat in zwei Jahren pro Messstation.', month:'Monat', comparisonYearA:'Jahr 1', comparisonYearB:'Jahr 2', monthTotal:'Monatssumme', rainyDays:'Regentage ab 1 mm', wettestDay:'Stärkster Regentag', dailyComparison:'Tagesvergleich' });
+Object.assign(translations.fr, { monthComparisonTitle:'Comparer un mois entre différentes années', monthComparisonIntro:'Comparez le même mois de deux années pour chaque station.', month:'Mois', comparisonYearA:'Année 1', comparisonYearB:'Année 2', monthTotal:'Total mensuel', rainyDays:'Jours avec au moins 1 mm', wettestDay:'Jour le plus pluvieux', dailyComparison:'Comparaison quotidienne' });
+Object.assign(translations.it, { monthComparisonTitle:'Confronta un mese tra anni diversi', monthComparisonIntro:'Confronta lo stesso mese di due anni per ogni stazione.', month:'Mese', comparisonYearA:'Anno 1', comparisonYearB:'Anno 2', monthTotal:'Totale mensile', rainyDays:'Giorni con almeno 1 mm', wettestDay:'Giorno più piovoso', dailyComparison:'Confronto giornaliero' });
+Object.assign(translations.rm, { monthComparisonTitle:'Cumparegliar in mais tranter differents onns', monthComparisonIntro:'Cumpareglia il medem mais da dus onns per staziun.', month:'Mais', comparisonYearA:'Onn 1', comparisonYearB:'Onn 2', monthTotal:'Summa dal mais', rainyDays:'Dis cun almain 1 mm', wettestDay:'Di cun la pli blera plievgia', dailyComparison:'Cumparegliaziun quotidiana' });
+Object.assign(translations.en, { monthComparisonTitle:'Compare a month across years', monthComparisonIntro:'Compare the same month in two years for each station.', month:'Month', comparisonYearA:'Year 1', comparisonYearB:'Year 2', monthTotal:'Monthly total', rainyDays:'Days with at least 1 mm', wettestDay:'Wettest day', dailyComparison:'Daily comparison' });
+Object.assign(translations.zh, { monthComparisonTitle:'比较不同年份的同一月份', monthComparisonIntro:'按气象站比较两个年份的同一月份。', month:'月份', comparisonYearA:'年份1', comparisonYearB:'年份2', monthTotal:'月总量', rainyDays:'降水至少1毫米的天数', wettestDay:'最大降水日', dailyComparison:'每日比较' });
+Object.assign(translations.de, { rainyDaysShort:'Regentage' });
+Object.assign(translations.fr, { rainyDaysShort:'jours de pluie' });
+Object.assign(translations.it, { rainyDaysShort:'giorni di pioggia' });
+Object.assign(translations.rm, { rainyDaysShort:'dis da plievgia' });
+Object.assign(translations.en, { rainyDaysShort:'rainy days' });
+Object.assign(translations.zh, { rainyDaysShort:'降水日' });
+Object.assign(translations.de, { monthComparisonTitle:'Monatsverlauf verschiedener Jahre vergleichen', monthComparisonIntro:'Vergleiche Januar bis Dezember zweier Jahre pro Messstation.', annualTotal:'Jahressumme', wettestMonth:'Nassester Monat', monthsAbove100:'Monate ab 100 mm', monthlyCourse:'Monatsverlauf Januar bis Dezember' });
+Object.assign(translations.fr, { monthComparisonTitle:'Comparer les mois de différentes années', monthComparisonIntro:'Comparez les mois de janvier à décembre de deux années pour chaque station.', annualTotal:'Total annuel', wettestMonth:'Mois le plus humide', monthsAbove100:'Mois avec au moins 100 mm', monthlyCourse:'Évolution mensuelle de janvier à décembre' });
+Object.assign(translations.it, { monthComparisonTitle:'Confronta i mesi di anni diversi', monthComparisonIntro:'Confronta da gennaio a dicembre di due anni per ogni stazione.', annualTotal:'Totale annuo', wettestMonth:'Mese più piovoso', monthsAbove100:'Mesi con almeno 100 mm', monthlyCourse:'Andamento mensile da gennaio a dicembre' });
+Object.assign(translations.rm, { monthComparisonTitle:'Cumparegliar ils mais da differents onns', monthComparisonIntro:'Cumpareglia schaner fin december da dus onns per staziun.', annualTotal:'Summa annuala', wettestMonth:'Mais il pli bletsch', monthsAbove100:'Mais cun almain 100 mm', monthlyCourse:'Andament mensil da schaner fin december' });
+Object.assign(translations.en, { monthComparisonTitle:'Compare monthly patterns across years', monthComparisonIntro:'Compare January to December in two years for each station.', annualTotal:'Annual total', wettestMonth:'Wettest month', monthsAbove100:'Months with at least 100 mm', monthlyCourse:'Monthly pattern from January to December' });
+Object.assign(translations.zh, { monthComparisonTitle:'比较不同年份的月度变化', monthComparisonIntro:'按气象站比较两个年份从一月至十二月的降水。', annualTotal:'年总量', wettestMonth:'最湿月份', monthsAbove100:'至少100毫米的月份', monthlyCourse:'一月至十二月的月度变化' });
+Object.assign(translations.de, { precipitationYearSelectionTitle:'Jahre für den Vergleich auswählen', precipitationYearSelectionHint:'Jahre im Diagramm anklicken, um ihre Monatsverläufe zu vergleichen.', monthComparisonTitle:'Monatsverlauf ausgewählter Jahre', monthComparisonIntro:'Vergleiche Januar bis Dezember der oben ausgewählten Jahre pro Messstation.' });
+Object.assign(translations.fr, { precipitationYearSelectionTitle:'Choisir les années à comparer', precipitationYearSelectionHint:'Cliquez sur les années du graphique pour comparer leurs profils mensuels.', monthComparisonTitle:'Évolution mensuelle des années sélectionnées', monthComparisonIntro:'Comparez de janvier à décembre les années sélectionnées ci-dessus pour chaque station.' });
+Object.assign(translations.it, { precipitationYearSelectionTitle:'Seleziona gli anni da confrontare', precipitationYearSelectionHint:'Seleziona gli anni nel grafico per confrontarne gli andamenti mensili.', monthComparisonTitle:'Andamento mensile degli anni selezionati', monthComparisonIntro:'Confronta da gennaio a dicembre gli anni selezionati sopra per ogni stazione.' });
+Object.assign(translations.rm, { precipitationYearSelectionTitle:'Tscherner ils onns per la cumparegliaziun', precipitationYearSelectionHint:'Tscherna ils onns en il diagram per cumparegliar lur andaments mensils.', monthComparisonTitle:'Andament mensil dals onns tschernids', monthComparisonIntro:'Cumpareglia schaner fin december dals onns tschernids survart per staziun.' });
+Object.assign(translations.en, { precipitationYearSelectionTitle:'Select years to compare', precipitationYearSelectionHint:'Select years in the chart to compare their monthly patterns.', monthComparisonTitle:'Monthly pattern of selected years', monthComparisonIntro:'Compare January to December for the years selected above at each station.' });
+Object.assign(translations.zh, { precipitationYearSelectionTitle:'选择要比较的年份', precipitationYearSelectionHint:'点击图表中的年份以比较其月度变化。', monthComparisonTitle:'所选年份的月度变化', monthComparisonIntro:'按气象站比较上方所选年份从一月至十二月的降水。' });
+Object.assign(translations.de, { precipitationRecordsPeriod:'Rekorde im gewählten Zeitraum' });
+Object.assign(translations.fr, { precipitationRecordsPeriod:'Records sur la période sélectionnée' });
+Object.assign(translations.it, { precipitationRecordsPeriod:'Record nel periodo selezionato' });
+Object.assign(translations.rm, { precipitationRecordsPeriod:'Records durant la perioda tschernida' });
+Object.assign(translations.en, { precipitationRecordsPeriod:'Records in the selected period' });
+Object.assign(translations.zh, { precipitationRecordsPeriod:'所选时段内的纪录' });
+Object.assign(translations.de, { precipitationIntro:'Vergleiche Jahresmengen und Monatsverläufe ausgewählter Jahre zwischen mehreren Messstationen.', longestDrySpell:'Längste Trockenperiode' });
+Object.assign(translations.fr, { precipitationIntro:'Comparez les totaux annuels et les profils mensuels des années sélectionnées entre plusieurs stations.', longestDrySpell:'Plus longue période sèche' });
+Object.assign(translations.it, { precipitationIntro:'Confronta i totali annui e gli andamenti mensili degli anni selezionati tra più stazioni.', longestDrySpell:'Periodo secco più lungo' });
+Object.assign(translations.rm, { precipitationIntro:'Cumpareglia summas annualas ed andaments mensils dals onns tschernids tranter pliras staziuns.', longestDrySpell:'Perioda sitga la pli lunga' });
+Object.assign(translations.en, { precipitationIntro:'Compare annual totals and monthly patterns for selected years across several stations.', longestDrySpell:'Longest dry spell' });
+Object.assign(translations.zh, { precipitationIntro:'比较多个气象站所选年份的年降水总量和月度变化。', longestDrySpell:'最长干旱期' });
+Object.assign(translations.de, { dailyRainfall:'Tagesniederschlag', clickMonthForDays:'Monat anklicken, um die einzelnen Tage zu sehen.' });
+Object.assign(translations.fr, { dailyRainfall:'Précipitations quotidiennes', clickMonthForDays:'Cliquez sur un mois pour afficher les différents jours.' });
+Object.assign(translations.it, { dailyRainfall:'Precipitazioni giornaliere', clickMonthForDays:'Seleziona un mese per vedere i singoli giorni.' });
+Object.assign(translations.rm, { dailyRainfall:'Precipitaziun quotidiana', clickMonthForDays:'Tscherna in mais per vesair ils singuls dis.' });
+Object.assign(translations.en, { dailyRainfall:'Daily rainfall', clickMonthForDays:'Select a month to inspect its daily values.' });
+Object.assign(translations.zh, { dailyRainfall:'每日降水量', clickMonthForDays:'点击月份查看每日数据。' });
+Object.assign(translations.de, { precipitationDefinitionTitle:'Was bedeutet Niederschlag in Millimetern?', precipitationDefinitionText:'Ein Millimeter Niederschlag entspricht einem Liter Wasser pro Quadratmeter.', drySpellDefinitionTitle:'Was ist eine Trockenperiode?', drySpellDefinitionText:'Eine Folge aufeinanderfolgender Tage mit weniger als 1 mm Niederschlag pro Tag.' });
+Object.assign(translations.fr, { precipitationDefinitionTitle:'Que signifie un millimètre de précipitations ?', precipitationDefinitionText:'Un millimètre de précipitations correspond à un litre d’eau par mètre carré.', drySpellDefinitionTitle:'Qu’est-ce qu’une période sèche ?', drySpellDefinitionText:'Une suite de jours consécutifs avec moins de 1 mm de précipitations par jour.' });
+Object.assign(translations.it, { precipitationDefinitionTitle:'Cosa significa un millimetro di precipitazione?', precipitationDefinitionText:'Un millimetro di precipitazione equivale a un litro d’acqua per metro quadrato.', drySpellDefinitionTitle:'Che cos’è un periodo secco?', drySpellDefinitionText:'Una sequenza di giorni consecutivi con meno di 1 mm di precipitazioni al giorno.' });
+Object.assign(translations.rm, { precipitationDefinitionTitle:'Tge munta in millimeter precipitaziun?', precipitationDefinitionText:'In millimeter precipitaziun correspunda ad in liter aua per meter quadrat.', drySpellDefinitionTitle:'Tge è ina perioda sitga?', drySpellDefinitionText:'Ina successiun da dis consecutivs cun damain dad 1 mm precipitaziun per di.' });
+Object.assign(translations.en, { precipitationDefinitionTitle:'What does a millimetre of rainfall mean?', precipitationDefinitionText:'One millimetre of rainfall equals one litre of water per square metre.', drySpellDefinitionTitle:'What is a dry spell?', drySpellDefinitionText:'A run of consecutive days with less than 1 mm of rainfall per day.' });
+Object.assign(translations.zh, { precipitationDefinitionTitle:'毫米降水量表示什么？', precipitationDefinitionText:'一毫米降水相当于每平方米一升水。', drySpellDefinitionTitle:'什么是干旱期？', drySpellDefinitionText:'连续多天每日降水量低于1毫米。' });
 let currentLanguage = 'de';
 const validViews = ['overview', 'years', 'details', 'precipitation', 'forecast'];
 const validMetrics = ['heatDays', 'summerDays', 'veryHotDays', 'tropicalNights', 'frostDays', 'iceDays'];
@@ -444,7 +492,8 @@ async function fetchPrecipitation(id, from, to, year) {
 }
 
 let precipitationData = [];
-let precipitationMonth = new Date().getMonth() + 1;
+let precipitationComparisonData = [];
+let selectedPrecipitationYears = [];
 const rainColors = ['#2778a8', '#45a7c4', '#285f91', '#58b4a7', '#487cb5', '#166a83'];
 const rainNumber = value => new Intl.NumberFormat(locale(), { maximumFractionDigits: 1 }).format(value || 0);
 function rainBars(groups, valueFor, labelFor, className = '') {
@@ -453,32 +502,64 @@ function rainBars(groups, valueFor, labelFor, className = '') {
 }
 function renderPrecipitation() {
   if (!precipitationData.length) return;
-  const year = Number(document.querySelector('#precipitation-year').value);
   document.querySelector('#precipitation-records').innerHTML = precipitationData.map((item, index) => {
     const p = item.precipitation, strongest = p.strongestRainDay, driest = p.driestMonth;
-    return `<article style="--rain-color:${rainColors[index]}"><h3>${item.station.name}</h3><div><strong>${strongest ? rainNumber(strongest.millimetres) : '–'} <small>mm</small></strong><span>${tr('strongestRainDay')}${strongest ? ` · ${new Date(strongest.date).toLocaleDateString(locale())}` : ''}</span></div><div><strong>${driest ? rainNumber(driest.millimetres) : '–'} <small>mm</small></strong><span>${tr('driestMonth')}${driest ? ` · ${new Date(`${driest.month}-01`).toLocaleDateString(locale(), {month:'long',year:'numeric'})}` : ''}</span></div><div><strong>${p.longestDrySpellDays}</strong><span>${tr('longestDrySpell')}</span></div></article>`;
+    return `<article style="--rain-color:${rainColors[index]}"><h3>${item.station.name}</h3><div><strong>${strongest ? rainNumber(strongest.millimetres) : '–'} <small>mm</small></strong><span>${tr('strongestRainDay')}${strongest ? ` · ${new Date(strongest.date).toLocaleDateString(locale())}` : ''}</span></div><div><strong>${driest ? rainNumber(driest.millimetres) : '–'} <small>mm</small></strong><span>${tr('driestMonth')}${driest ? ` · ${new Date(`${driest.month}-01`).toLocaleDateString(locale(), {month:'long',year:'numeric'})}` : ''}</span></div><div><strong>${p.longestDrySpellDays}</strong><span>${tr('longestDrySpell')}${p.longestDrySpellYear ? ` · ${p.longestDrySpellYear}` : ''}</span></div></article>`;
   }).join('');
   const from = Number(document.querySelector('#fromYear').value), to = Number(document.querySelector('#toYear').value);
+  document.querySelector('#precipitation-record-period').textContent = `${tr('precipitationRecordsPeriod')} · ${from}–${to}`;
   const years = Array.from({length: to - from + 1}, (_, i) => from + i);
-  document.querySelector('#precipitation-annual').innerHTML = rainBars(years, (item, y) => item.precipitation.annual.find(v => v.year === y)?.millimetres || 0, y => y);
+  document.querySelector('#precipitation-annual').innerHTML = rainBars(years, (item, y) => item.precipitation.annual.find(v => v.year === y)?.millimetres || 0, y => y, 'clickable');
+  document.querySelector('#precipitation-annual').querySelectorAll('[data-rain-group]').forEach(el => el.classList.toggle('selected', selectedPrecipitationYears.includes(Number(el.dataset.rainGroup))));
+  renderPrecipitationComparison();
+}
+
+function renderPrecipitationComparison() {
+  if (!precipitationComparisonData.length) return;
+  const comparisonYears = [...selectedPrecipitationYears].sort((a,b) => a-b);
   const months = Array.from({length:12}, (_, i) => i + 1);
-  document.querySelector('#precipitation-monthly').innerHTML = rainBars(months, (item, m) => item.precipitation.monthly.find(v => Number(v.month.slice(5)) === m)?.millimetres || 0, m => new Date(year, m - 1, 1).toLocaleDateString(locale(), {month:'short'}), 'clickable');
-  document.querySelector('#precipitation-monthly').querySelectorAll('[data-rain-group]').forEach(el => el.classList.toggle('selected', Number(el.dataset.rainGroup) === precipitationMonth));
-  const daysInMonth = new Date(year, precipitationMonth, 0).getDate();
-  const days = Array.from({length:daysInMonth}, (_, i) => i + 1);
-  document.querySelector('#precipitation-daily-title').textContent = `${tr('dailyPrecipitation')} · ${new Date(year, precipitationMonth - 1, 1).toLocaleDateString(locale(), {month:'long',year:'numeric'})}`;
-  document.querySelector('#precipitation-daily').innerHTML = rainBars(days, (item, d) => item.precipitation.daily.find(v => Number(v.date.slice(5,7)) === precipitationMonth && Number(v.date.slice(8,10)) === d)?.millimetres || 0, d => d);
+  document.querySelector('#precipitation-compare-daily').innerHTML = precipitationComparisonData.map((entry, stationIndex) => {
+    const color = rainColors[stationIndex % rainColors.length];
+    const yearRows = comparisonYears.map(year => ({ year, months:entry.years[year].precipitation.monthly, total:entry.years[year].precipitation.monthly.reduce((sum,value)=>sum+value.millimetres,0) }));
+    const maximum = Math.max(1, ...yearRows.flatMap(row => row.months.map(value => value.millimetres)));
+    const monthLabels = months.map(month => `<span style="left:${(month - .5) / 12 * 100}%">${new Date(currentYear,month-1,1).toLocaleDateString(locale(),{month:'short'})}</span>`).join('');
+    return `<article class="precipitation-timeline-card" data-station-id="${entry.station.id}" style="--rain-color:${color};--rain-days:12"><h4>${entry.station.name}</h4><p class="precipitation-timeline-hint">${tr('clickMonthForDays')}</p><div class="precipitation-timeline-labels" aria-hidden="true">${monthLabels}</div>${yearRows.map(row => `<div class="precipitation-timeline-row"><div class="precipitation-timeline-year"><strong>${row.year}</strong><span>${rainNumber(row.total)} mm</span></div><div class="precipitation-timeline-track">${row.months.map(value => { const month = Number(value.month.slice(5)); return `<button class="precipitation-rain-marker precipitation-month-marker" type="button" data-rain-year="${row.year}" data-rain-month="${month}" style="left:${(month - .5) / 12 * 100}%;height:${Math.max(3, value.millimetres / maximum * 42)}px" title="${new Date(row.year,month-1,1).toLocaleDateString(locale(),{month:'long',year:'numeric'})}: ${rainNumber(value.millimetres)} mm"><i>${rainNumber(value.millimetres)}</i></button>`; }).join('')}<span class="precipitation-timeline-arrow"></span></div></div>`).join('')}</article>`;
+  }).join('');
+}
+
+function openPrecipitationDayDialog(stationId, year, month) {
+  const stationEntry = precipitationComparisonData.find(entry => entry.station.id === stationId);
+  const response = stationEntry?.years[year];
+  if (!response) return;
+  const days = response.precipitation.daily.filter(value => Number(value.date.slice(5,7)) === month);
+  const daysInMonth = new Date(year, month, 0).getDate();
+  const maximum = Math.max(1, ...days.map(value => value.millimetres));
+  const monthName = new Date(year, month - 1, 1).toLocaleDateString(locale(), { month:'long', year:'numeric' });
+  document.querySelector('#precipitation-day-dialog-title').textContent = `${tr('dailyRainfall')} · ${monthName}`;
+  document.querySelector('#precipitation-day-dialog-subtitle').textContent = stationEntry.station.name;
+  document.querySelector('#precipitation-day-dialog-chart').innerHTML = Array.from({length:daysInMonth}, (_, index) => index + 1).map(day => { const value = days.find(entry => Number(entry.date.slice(8,10)) === day)?.millimetres || 0; return `<div class="precipitation-day-dialog-bar"><span style="height:${Math.max(value ? 3 : 0, value / maximum * 100)}%" title="${day}. ${monthName}: ${rainNumber(value)} mm"><i>${value ? rainNumber(value) : ''}</i></span><small>${day}</small></div>`; }).join('');
+  document.querySelector('#precipitation-day-dialog').showModal();
+}
+
+async function loadPrecipitationComparison() {
+  const ids = selectedStationIds(), from = Number(document.querySelector('#fromYear').value), to = Number(document.querySelector('#toYear').value);
+  document.querySelector('#precipitation-compare-daily').innerHTML = `<p>${tr('loading')}</p>`;
+  precipitationComparisonData = await Promise.all(ids.map(async id => {
+    const responses = await Promise.all(selectedPrecipitationYears.map(year => fetchPrecipitation(id, from, to, year)));
+    return { station:responses[0].station, years:Object.fromEntries(selectedPrecipitationYears.map((year,index) => [year,responses[index]])) };
+  }));
+  renderPrecipitationComparison();
 }
 
 async function loadPrecipitation() {
   const ids = selectedStationIds(), from = Number(document.querySelector('#fromYear').value), to = Number(document.querySelector('#toYear').value);
-  const yearSelect = document.querySelector('#precipitation-year');
-  let year = Number(yearSelect.value) || Math.min(currentYear, to);
-  year = Math.max(from, Math.min(to, year));
-  yearSelect.innerHTML = Array.from({length:to-from+1}, (_, i) => to-i).map(y => `<option${y===year?' selected':''}>${y}</option>`).join('');
+  selectedPrecipitationYears = selectedPrecipitationYears.filter(value => value >= from && value <= to);
+  if (!selectedPrecipitationYears.length) selectedPrecipitationYears = [to];
   document.querySelector('#precipitation-records').innerHTML = `<p>${tr('loading')}</p>`;
-  precipitationData = await Promise.all(ids.map(id => fetchPrecipitation(id, from, to, year)));
+  precipitationData = await Promise.all(ids.map(id => fetchPrecipitation(id, from, to, selectedPrecipitationYears[0])));
   renderPrecipitation();
+  document.querySelector('#precipitation-annual').querySelectorAll('[data-rain-group]').forEach(el => el.classList.toggle('selected', selectedPrecipitationYears.includes(Number(el.dataset.rainGroup))));
+  await loadPrecipitationComparison();
 }
 
 async function fetchForecast(id) {
@@ -923,8 +1004,24 @@ document.querySelector('#heat-days-detail').addEventListener('click', event => {
   const button = event.target.closest('.remove-detail-year');
   if (button) removeDetailYear(Number(button.dataset.year));
 });
-document.querySelector('#precipitation-year').addEventListener('change', loadPrecipitation);
-document.querySelector('#precipitation-monthly').addEventListener('click', event => { const group = event.target.closest('[data-rain-group]'); if (group) { precipitationMonth = Number(group.dataset.rainGroup); renderPrecipitation(); } });
+document.querySelector('#precipitation-annual').addEventListener('click', async event => {
+  const group = event.target.closest('[data-rain-group]');
+  if (!group) return;
+  const year = Number(group.dataset.rainGroup);
+  if (selectedPrecipitationYears.includes(year)) {
+    if (selectedPrecipitationYears.length === 1) return;
+    selectedPrecipitationYears = selectedPrecipitationYears.filter(value => value !== year);
+  } else selectedPrecipitationYears.push(year);
+  document.querySelector('#precipitation-annual').querySelectorAll('[data-rain-group]').forEach(el => el.classList.toggle('selected', selectedPrecipitationYears.includes(Number(el.dataset.rainGroup))));
+  await loadPrecipitationComparison();
+});
+document.querySelector('#precipitation-compare-daily').addEventListener('click', event => {
+  const marker = event.target.closest('.precipitation-month-marker');
+  if (marker) openPrecipitationDayDialog(marker.closest('[data-station-id]').dataset.stationId, Number(marker.dataset.rainYear), Number(marker.dataset.rainMonth));
+});
+const precipitationDayDialog = document.querySelector('#precipitation-day-dialog');
+document.querySelector('#precipitation-day-dialog-close').addEventListener('click', () => precipitationDayDialog.close());
+precipitationDayDialog.addEventListener('click', event => { if (event.target === precipitationDayDialog) precipitationDayDialog.close(); });
 detailYearChart.addEventListener('click', event => {
   const group = event.target.closest('.year-group');
   if (group) openHeatDayYear(Number(group.dataset.year));

@@ -139,6 +139,7 @@ class StationControllerTest {
                 .andExpect(jsonPath("$.precipitation.strongestRainDay.millimetres").isNumber())
                 .andExpect(jsonPath("$.precipitation.driestMonth.millimetres").isNumber())
                 .andExpect(jsonPath("$.precipitation.longestDrySpellDays").isNumber());
+
     }
 
     @Test
