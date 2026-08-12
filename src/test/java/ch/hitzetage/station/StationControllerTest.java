@@ -128,6 +128,20 @@ class StationControllerTest {
     }
 
     @Test
+    void returnsPrecipitationBreakdown() throws Exception {
+        mockMvc.perform(get("/api/stations/ZRH/precipitation")
+                        .param("fromYear", "2022").param("toYear", "2024").param("year", "2024"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.station.id").value("ZRH"))
+                .andExpect(jsonPath("$.precipitation.annual", hasSize(3)))
+                .andExpect(jsonPath("$.precipitation.monthly", hasSize(12)))
+                .andExpect(jsonPath("$.precipitation.daily", hasSize(28)))
+                .andExpect(jsonPath("$.precipitation.strongestRainDay.millimetres").isNumber())
+                .andExpect(jsonPath("$.precipitation.driestMonth.millimetres").isNumber())
+                .andExpect(jsonPath("$.precipitation.longestDrySpellDays").isNumber());
+    }
+
+    @Test
     void returnsNotFoundForUnknownStation() throws Exception {
         mockMvc.perform(get("/api/stations/XXX/annual-values"))
                 .andExpect(status().isNotFound());

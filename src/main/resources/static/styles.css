@@ -206,6 +206,31 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 .climate-table th, .climate-table td { padding: 9px 7px; border-bottom: 1px solid #cbd4cf; text-align: left; }
 .climate-table th:not(:first-child), .climate-table td:not(:first-child) { text-align: right; }
 .climate-table th { color: #63716c; }
+.precipitation-heading { display:flex; align-items:end; justify-content:space-between; gap:18px; margin-bottom:20px; }
+.precipitation-heading h2 { margin-bottom:5px; }
+.precipitation-heading p { margin:0; color:#63716c; font-size:.82rem; }
+.precipitation-heading label { width:150px; margin:0; }
+.precipitation-month-heading { display:flex; align-items:center; min-height:44px; margin-bottom:2px; }
+.precipitation-month-heading label { display:grid; grid-template-columns:auto 108px; align-items:center; gap:10px; margin:0; color:#14251f; font-size:.94rem; font-weight:750; }
+.precipitation-month-heading select { min-height:30px; margin:0; padding:5px 32px 5px 11px; border-color:#b7c4be; border-radius:99px; background-color:#edf4f0b8; color:#38534a; box-shadow:inset 0 1px #fff; font-size:.76rem; font-weight:700; line-height:1.2; }
+.precipitation-records { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:12px; }
+.precipitation-records article { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; padding:16px; border:1px solid #ffffffd5; border-left:5px solid var(--rain-color); border-radius:15px; background:#ffffff80; }
+.precipitation-records h3 { grid-column:1/-1; margin:0; font-size:.94rem; }
+.precipitation-records strong,.precipitation-records span { display:block; }
+.precipitation-records strong { color:var(--rain-color); font-size:1.5rem; }
+.precipitation-records strong small { font-size:.7rem; }
+.precipitation-records span { margin-top:5px; color:#63716c; font-size:.68rem; line-height:1.35; }
+.precipitation-chart-card { margin-top:16px; padding:18px; border:1px solid #ffffffd5; border-radius:15px; background:#ffffff78; }
+.precipitation-chart-card h3 { margin:0 0 12px; font-size:.94rem; }
+.precipitation-bars { display:flex; align-items:stretch; gap:8px; height:240px; overflow-x:auto; padding-top:25px; border-bottom:1px solid #b9c8c1; }
+.precipitation-bar-group { display:grid; flex:1 0 54px; grid-template-rows:1fr 25px; min-width:54px; }
+.precipitation-bar-stack { display:flex; align-items:end; justify-content:center; gap:3px; min-height:0; }
+.precipitation-bar-stack > span { position:relative; width:min(18px,38%); min-height:0; border-radius:3px 3px 0 0; }
+.precipitation-bar-stack i { position:absolute; bottom:calc(100% + 3px); left:50%; transform:translateX(-50%); color:#40534c; font-size:.61rem; font-style:normal; white-space:nowrap; }
+.precipitation-bar-group > small { align-self:center; color:#63716c; font-size:.68rem; text-align:center; }
+.precipitation-bar-group.clickable { cursor:pointer; border-radius:5px 5px 0 0; }
+.precipitation-bar-group.clickable:hover,.precipitation-bar-group.selected { background:#d8edf58c; box-shadow:inset 0 -3px #2878b5; }
+.precipitation-days { height:210px; }
 .forecast-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-top: 36px; }
 .forecast-heading h2 { margin-bottom: 12px; }
 #forecast-updated { color: #72807a; font-size: .75rem; }
@@ -262,8 +287,13 @@ footer a { color: inherit; font-weight: 700; text-underline-offset: 3px; }
   .compact-edit-link { align-self: stretch; }
   .heat-days-card { overflow-x: auto; }
   .heat-days-card-heading, .heat-days-timeline-months, .heat-days-year-row { min-width: 620px; }
+  .precipitation-heading { align-items:stretch; flex-direction:column; }
+  .precipitation-heading label { width:100%; }
+  .precipitation-records article { grid-template-columns:1fr; }
+  .precipitation-records h3 { grid-column:auto; }
 }
 @media (min-width: 980px) {
+  .overview-metric-label { width: max(322px, calc(40% - 60px)); }
   .controls-layout { display: grid; grid-template-columns: minmax(370px, .8fr) minmax(520px, 1.2fr); gap: 30px; align-items: stretch; padding-bottom: 16px; }
   .controls-form { display: flex; flex-direction: column; }
   .controls-form .station-search-control, .controls-form .station-selectors,

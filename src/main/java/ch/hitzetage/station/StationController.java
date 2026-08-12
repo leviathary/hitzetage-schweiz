@@ -91,6 +91,18 @@ public class StationController {
         return new HeatDaysResponse(station, year, 35.0, "meteoswiss", dataSource.findVeryHotDays(station.id(), year));
     }
 
+    @GetMapping("/{stationId}/precipitation")
+    public PrecipitationResponse precipitation(@PathVariable String stationId,
+            @RequestParam @Min(1864) int fromYear,
+            @RequestParam @Min(1864) @Max(2100) int toYear,
+            @RequestParam @Min(1864) @Max(2100) int year) {
+        if (fromYear > toYear || year < fromYear || year > toYear) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ungültiger Niederschlagszeitraum");
+        }
+        Station station = findStation(stationId);
+        return new PrecipitationResponse(station, "meteoswiss", dataSource.findPrecipitation(station.id(), fromYear, toYear, year));
+    }
+
     private Station findStation(String stationId) {
         return dataSource.findStations().stream()
                 .filter(item -> item.id().equalsIgnoreCase(stationId))
@@ -112,4 +124,6 @@ public class StationController {
             String dataStatus,
             List<DailyHeatDay> values) {
     }
+
+    public record PrecipitationResponse(Station station, String dataStatus, PrecipitationSummary precipitation) {}
 }

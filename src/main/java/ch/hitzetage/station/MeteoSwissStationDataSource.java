@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -134,6 +135,45 @@ class MeteoSwissStationDataSource implements StationDataSource {
         return findMaximumDays(stationId, year, 35.0);
     }
 
+    @Override
+    public PrecipitationSummary findPrecipitation(String stationId, int fromYear, int toYear, int detailYear) {
+        Map<LocalDate, Double> values = new java.util.TreeMap<>();
+        for (DailyObservation row : dailyRows(stationId, Math.max(toYear, detailYear))) {
+            if (row.precipitation() != null && row.date().getYear() >= fromYear && row.date().getYear() <= toYear) {
+                values.put(row.date(), row.precipitation());
+            }
+        }
+        Map<Integer, Double> annual = new java.util.TreeMap<>();
+        Map<YearMonth, Double> monthly = new java.util.TreeMap<>();
+        values.forEach((date, amount) -> {
+            annual.merge(date.getYear(), amount, Double::sum);
+            monthly.merge(YearMonth.from(date), amount, Double::sum);
+        });
+        List<DailyPrecipitation> daily = values.entrySet().stream()
+                .filter(entry -> entry.getKey().getYear() == detailYear)
+                .map(entry -> new DailyPrecipitation(entry.getKey(), entry.getValue())).toList();
+        DailyPrecipitation strongest = values.entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .map(entry -> new DailyPrecipitation(entry.getKey(), entry.getValue())).orElse(null);
+        var driest = monthly.entrySet().stream().min(Map.Entry.comparingByValue())
+                .map(entry -> new PrecipitationSummary.MonthlyTotal(entry.getKey(), round(entry.getValue()))).orElse(null);
+        int longestDry = 0, currentDry = 0;
+        LocalDate previous = null;
+        for (var entry : values.entrySet()) {
+            if (previous == null || entry.getKey().equals(previous.plusDays(1))) {
+                currentDry = entry.getValue() < 1.0 ? currentDry + 1 : 0;
+            } else currentDry = entry.getValue() < 1.0 ? 1 : 0;
+            longestDry = Math.max(longestDry, currentDry);
+            previous = entry.getKey();
+        }
+        return new PrecipitationSummary(
+                annual.entrySet().stream().map(e -> new PrecipitationSummary.AnnualTotal(e.getKey(), round(e.getValue()))).toList(),
+                monthly.entrySet().stream().filter(e -> e.getKey().getYear() == detailYear).map(e -> new PrecipitationSummary.MonthlyTotal(e.getKey(), round(e.getValue()))).toList(),
+                daily, strongest, driest, longestDry);
+    }
+
+    private static double round(double value) { return Math.round(value * 10.0) / 10.0; }
+
     private List<DailyHeatDay> findMaximumDays(String stationId, int year, double threshold) {
         Map<LocalDate, DailyHeatDay> days = new LinkedHashMap<>();
         for (DailyObservation row : dailyRows(stationId, year)) {
@@ -247,6 +287,7 @@ class MeteoSwissStationDataSource implements StationDataSource {
         int dateColumn = columnIndex(headers, "reference_timestamp", "date");
         int maximumColumn = columnIndex(headers, "tre200dx");
         int minimumColumn = columnIndex(headers, "tre200dn");
+        int precipitationColumn = columnIndex(headers, "rre150d0");
         List<DailyObservation> observations = new ArrayList<>();
         while (lines.hasNext()) {
             List<String> values = splitLine(lines.next());
@@ -255,7 +296,8 @@ class MeteoSwissStationDataSource implements StationDataSource {
                 observations.add(new DailyObservation(
                         date,
                         parseNumber(columnValue(values, maximumColumn)),
-                        parseNumber(columnValue(values, minimumColumn))));
+                        parseNumber(columnValue(values, minimumColumn)),
+                        parseNumber(columnValue(values, precipitationColumn))));
             }
         }
         return List.copyOf(observations);
@@ -347,7 +389,7 @@ class MeteoSwissStationDataSource implements StationDataSource {
         }
     }
 
-    private record DailyObservation(LocalDate date, Double maximum, Double minimum) {}
+    private record DailyObservation(LocalDate date, Double maximum, Double minimum, Double precipitation) {}
 
     private static final class YearAccumulator {
         int heatDays;
