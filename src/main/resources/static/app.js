@@ -88,6 +88,7 @@ function setView(view, updateHistory = true) {
   if (latestView) renderViewFilterSummary(latestView.data, latestView.from, latestView.to);
   if (updateHistory) history.pushState({ view: currentView }, '', currentView === 'overview' ? location.pathname : `${location.pathname}?view=${currentView}`);
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (currentView === 'overview') refreshVisibleMap();
 }
 
 function metricOptionsMarkup(selectedMetric) {
@@ -214,7 +215,7 @@ function showMapInfo(station, note = '') {
 
 function renderMap({ fitToQuery = false } = {}) {
   const panel = document.querySelector('#map-panel');
-  if (!stationMap && panel.hidden) return;
+  if (currentView !== 'overview' || panel.hidden) return;
   if (!stationMap) {
     stationMap = L.map('station-map', { minZoom: 6, maxZoom: 14 }).fitBounds([[45.75, 5.8], [47.85, 10.55]], { padding: [8, 8] });
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -774,14 +775,25 @@ document.querySelector('#station-add-search').addEventListener('keydown', event 
   }
 });
 const desktopMapQuery = window.matchMedia('(min-width: 980px)');
+let mapResizeTimer;
+function refreshVisibleMap() {
+  const panel = document.querySelector('#map-panel');
+  if (currentView !== 'overview' || panel.hidden) return;
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    renderMap();
+    stationMap?.invalidateSize({ pan: false });
+    clearTimeout(mapResizeTimer);
+    mapResizeTimer = setTimeout(() => stationMap?.invalidateSize({ pan: false }), 150);
+  }));
+}
+
 function syncMapLayout() {
   const button = document.querySelector('#map-toggle');
   const panel = document.querySelector('#map-panel');
   if (desktopMapQuery.matches) {
     button.setAttribute('aria-expanded', 'true');
     panel.hidden = false;
-    renderMap();
-    setTimeout(() => stationMap?.invalidateSize(), 0);
+    refreshVisibleMap();
   } else {
     button.setAttribute('aria-expanded', 'false');
     panel.hidden = true;
@@ -794,8 +806,7 @@ document.querySelector('#map-toggle').addEventListener('click', event => {
   button.setAttribute('aria-expanded', String(!open));
   document.querySelector('#map-panel').hidden = open;
   if (!open) {
-    renderMap();
-    setTimeout(() => stationMap.invalidateSize(), 0);
+    refreshVisibleMap();
   }
 });
 document.querySelector('#metric').addEventListener('change', event => changeMetric(event.target.value));
