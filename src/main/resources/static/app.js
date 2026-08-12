@@ -152,6 +152,12 @@ Object.assign(translations.it, { tropicalNightsDetailTitle:'Notti tropicali in d
 Object.assign(translations.rm, { tropicalNightsDetailTitle:'Notgs tropicas en detagl', tropicalNightsDetailIntro:'Tut las notgs mesiradas cun ina temperatura minimala dad almain 20 °C' });
 Object.assign(translations.en, { tropicalNightsDetailTitle:'Tropical nights in detail', tropicalNightsDetailIntro:'All measured nights with a minimum temperature of at least 20 °C' });
 Object.assign(translations.zh, { tropicalNightsDetailTitle:'热带夜详情', tropicalNightsDetailIntro:'所有最低气温达到或超过 20 °C 的实测夜晚' });
+Object.assign(translations.de, { comparisonTitle:'Vergleiche' });
+Object.assign(translations.fr, { comparisonTitle:'Comparaisons' });
+Object.assign(translations.it, { comparisonTitle:'Confronti' });
+Object.assign(translations.rm, { comparisonTitle:'Cumparegliaziuns' });
+Object.assign(translations.en, { comparisonTitle:'Comparisons' });
+Object.assign(translations.zh, { comparisonTitle:'比较' });
 let currentLanguage = 'de';
 const validViews = ['overview', 'years', 'details', 'forecast'];
 const validMetrics = ['heatDays', 'summerDays', 'veryHotDays', 'tropicalNights', 'frostDays', 'iceDays'];

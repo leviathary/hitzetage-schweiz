@@ -80,7 +80,6 @@
         <div id="station-selectors" class="station-selectors" aria-label="Ausgewählte Messstationen"></div>
         <button id="map-toggle" class="map-toggle secondary-button" type="button" aria-expanded="false" aria-controls="map-panel"><span data-i18n="mapToggle">Station auf Karte wählen</span><span aria-hidden="true">⌄</span></button>
         <div class="years"><label><span data-i18n="from">Von</span><input id="fromYear" type="number" min="1864"></label><label><span data-i18n="to">Bis</span><input id="toYear" type="number" min="1864"></label></div>
-        <label class="metric-label"><span data-i18n="metric">Kennzahl</span><select id="metric" data-metric-select><option value="heatDays">Hitzetage (Maximum ≥ 30 °C)</option><option value="summerDays">Sommertage (Maximum ≥ 25 °C)</option><option value="veryHotDays">Sehr heisse Tage (Maximum ≥ 35 °C)</option><option value="tropicalNights">Tropennächte (Minimum ≥ 20 °C)</option><option value="frostDays">Frosttage (Minimum &lt; 0 °C)</option><option value="iceDays">Eistage (Maximum &lt; 0 °C)</option></select></label>
         <p id="status" class="visually-hidden" role="status" aria-live="polite"></p>
       </div>
       <div id="map-panel" class="map-panel" hidden>
@@ -91,7 +90,8 @@
     </div>
   </section>
   <section class="overview-dashboard view-panel" data-view="overview" aria-labelledby="overview-title">
-    <h2 id="overview-title" class="visually-hidden" data-i18n="overviewEyebrow">Auf einen Blick</h2>
+    <h2 id="overview-title" class="overview-title" data-i18n="comparisonTitle">Vergleiche</h2>
+    <label class="metric-label overview-metric-label"><span class="visually-hidden" data-i18n="metric">Kennzahl</span><select id="metric" data-metric-select><option value="heatDays">Hitzetage (Maximum ≥ 30 °C)</option><option value="summerDays">Sommertage (Maximum ≥ 25 °C)</option><option value="veryHotDays">Sehr heisse Tage (Maximum ≥ 35 °C)</option><option value="tropicalNights">Tropennächte (Minimum ≥ 20 °C)</option><option value="frostDays">Frosttage (Minimum &lt; 0 °C)</option><option value="iceDays">Eistage (Maximum &lt; 0 °C)</option></select></label>
     <div id="overview-summary" class="overview-summary"><p data-i18n="overviewLoading">Die Zusammenfassung wird mit dem Vergleich geladen.</p></div>
     <div class="overview-chart-card"><h3><span data-i18n="overviewChartTitle">Vorschau Jahresvergleich</span> <small id="overview-chart-period"></small></h3><div id="overview-chart-legend" class="overview-chart-legend"></div><div id="overview-chart-preview" class="overview-chart-preview"></div></div>
     <div class="overview-actions"><a class="button-link" href="?view=years" data-view-link="years" data-i18n="openYears">Jahresvergleich öffnen</a><a class="secondary-link" href="?view=details" data-view-link="details" data-i18n="openDetails">Detailtage ansehen</a></div>
@@ -143,5 +143,5 @@
       <div id="feedback-success" class="feedback-success" role="status" hidden><p data-i18n="feedbackThanks">Vielen Dank! Dein Feedback wurde gespeichert.</p></div>
     </form>
   </dialog>
-  <footer><span data-i18n="footer">Quelle: MeteoSwiss Open Data</span><span aria-hidden="true"> · </span><button id="feedback-open" class="footer-link" type="button" data-i18n="feedback">Feedback</button><span aria-hidden="true"> · </span><a href="/privacy.html" data-i18n="privacy">Datenschutz</a><span aria-hidden="true"> · </span><span>Version 0.6.1</span></footer>
+  <footer><span data-i18n="footer">Quelle: MeteoSwiss Open Data</span><span aria-hidden="true"> · </span><button id="feedback-open" class="footer-link" type="button" data-i18n="feedback">Feedback</button><span aria-hidden="true"> · </span><a href="/privacy.html" data-i18n="privacy">Datenschutz</a><span aria-hidden="true"> · </span><span>Version 0.6.2</span></footer>
 </main><script src="/vendor/leaflet/leaflet.js" defer></script><script src="/app.js" defer></script></body></html>

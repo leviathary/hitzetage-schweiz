@@ -45,6 +45,8 @@ section { background: #ffffff8c; border: 1px solid #ffffffd9; border-radius: 22p
 .view-metric-select { width: auto; min-width: 190px; margin: 0; padding: 5px 34px 5px 10px; border-radius: 99px; background-color: #edf4f0b8; color: #38534a; font-size: .74rem; font-weight: 700; line-height: 1.2; }
 .compact-edit-link { flex: none; }
 .overview-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.overview-title { margin: 0 0 14px; }
+.overview-metric-label { margin: 0 0 18px; }
 .overview-summary article { display: grid; grid-template-columns: repeat(auto-fit, minmax(105px, 1fr)); align-content: start; column-gap: 18px; row-gap: 22px; padding: 17px; border: 1px solid #ffffffd5; border-radius: 15px; background: linear-gradient(145deg, #ffffffb0, #edf5ef70); box-shadow: 0 10px 22px #173c2c12, inset 0 1px #fff; }
 .overview-summary h3 { grid-column: 1 / -1; margin: 0; color: #334b43; font-size: 1rem; }
 .overview-value { min-width: 0; padding: 0; }
@@ -266,7 +268,7 @@ footer a { color: inherit; font-weight: 700; text-underline-offset: 3px; }
   .controls-form { display: flex; flex-direction: column; }
   .controls-form .station-search-control, .controls-form .station-selectors,
   .controls-form .years,
-  .controls-form .metric-label, .controls-form #compare { width: calc(100% - 48px); }
+  .controls-form #compare { width: calc(100% - 48px); }
   .controls-form .station-add-label { width: 100%; }
   .controls-form .years { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .controls-form #compare { align-self: stretch; }
