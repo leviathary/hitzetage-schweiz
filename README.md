@@ -1,6 +1,6 @@
-# Hitzetage Schweiz
+# Hitzetage Schweiz und Europa
 
-Webanwendung zum Vergleichen von Hitzetagen und Tropennächten an MeteoSwiss-Messstationen. Historische Jahreswerte, langjährige Vergleiche und die aktuelle Neun-Tage-Prognose werden in einer gemeinsamen Oberfläche dargestellt.
+Webanwendung zum Vergleichen von Hitzetagen und Tropennächten an MeteoSwiss- und DWD-Messstationen. Historische Jahreswerte und langjährige Vergleiche werden länderübergreifend dargestellt; die Neun-Tage-Prognose ist derzeit für Schweizer Stationen verfügbar.
 
 ## Live-Anwendung
 
@@ -61,13 +61,13 @@ Verfügbare Einstellungen:
 | Variable | Standard | Bedeutung |
 |---|---:|---|
 | `APP_PORT` | `8080` | Port, unter dem die Webseite lokal erreichbar ist |
-| `SPRING_PROFILES_ACTIVE` | `default` | `default` für MeteoSwiss oder `demo` für Offline-Beispieldaten |
+| `SPRING_PROFILES_ACTIVE` | `default` | `default` für MeteoSwiss und DWD oder `demo` für Offline-Beispieldaten |
 
 Ist Port 8080 bereits belegt, in `.env` beispielsweise `APP_PORT=8081` setzen und danach <http://localhost:8081> öffnen.
 
 ### Offline-Demomodus
 
-Für Entwicklung ohne Zugriff auf MeteoSwiss in `.env` Folgendes setzen:
+Für Entwicklung ohne Zugriff auf MeteoSwiss und DWD in `.env` Folgendes setzen:
 
 ```dotenv
 SPRING_PROFILES_ACTIVE=demo
@@ -79,7 +79,7 @@ Danach den Container neu erstellen:
 docker compose up --build -d
 ```
 
-Der Live-Betrieb ersetzt fehlgeschlagene MeteoSwiss-Abfragen nicht unbemerkt durch Demodaten. Ist die Datenquelle beim ersten Abruf nicht erreichbar, meldet die API HTTP 503.
+Der Live-Betrieb ersetzt fehlgeschlagene Datenabrufe nicht unbemerkt durch Demodaten. Ist eine Datenquelle beim ersten Abruf nicht erreichbar, meldet die API HTTP 503.
 
 ## Aktualisieren
 
@@ -123,16 +123,16 @@ mvn test
 
 ## Stationskarte verwenden
 
-Über **„Station auf Karte wählen“** lässt sich eine zoombare OpenStreetMap-Karte öffnen. Sie zeigt die MeteoSwiss-Stationen an ihren offiziellen WGS84-Koordinaten:
+Über die zoombare OpenStreetMap-Karte lassen sich MeteoSwiss- und DWD-Stationen an ihren offiziellen WGS84-Koordinaten auswählen:
 
 - nicht ausgewählte Stationen erscheinen als schwarze Punkte
 - ausgewählte Stationen werden größer und rot hervorgehoben
 - ein Klick auf einen schwarzen Punkt fügt die Station zur Auswertung hinzu
 - der Tooltip und das Informationsfeld zeigen Name, Kanton und Stationshöhe
-- das Suchfeld filtert nach Stationsname, MeteoSwiss-Kürzel oder Kanton
+- das Suchfeld filtert nach Stationsname, Stationskürzel, Kanton, Bundesland oder Datenanbieter
 - maximal sechs Stationen können gleichzeitig ausgewählt werden
 
-Die Kartenbibliothek Leaflet wird lokal aus dem Docker-Container ausgeliefert. Zum Laden der Kartenkacheln ist eine Internetverbindung zu OpenStreetMap erforderlich; Stations- und Wetterdaten werden weiterhin ausschließlich über das Backend von MeteoSwiss bezogen.
+Die Kartenbibliothek Leaflet wird lokal aus dem Docker-Container ausgeliefert. Zum Laden der Kartenkacheln ist eine Internetverbindung zu OpenStreetMap erforderlich; Stations- und Wetterdaten werden über das Backend von MeteoSwiss und DWD bezogen.
 
 ## Screenshots
 
@@ -150,9 +150,9 @@ Die Kartenbibliothek Leaflet wird lokal aus dem Docker-Container ausgeliefert. Z
 
 ## Datenquelle
 
-Messwerte und Prognosen stammen aus dem offiziellen [MeteoSwiss-Open-Data-Angebot](https://www.meteoswiss.admin.ch/service-und-publikationen/service/open-data.html). Die Daten dürfen gemäß den [MeteoSwiss-Nutzungsbedingungen](https://opendatadocs.meteoswiss.ch/general/terms-of-use) auch bearbeitet und weiterverwendet werden; die Quelle muss genannt werden.
+Schweizer Messwerte und Prognosen stammen aus dem offiziellen [MeteoSwiss-Open-Data-Angebot](https://www.meteoswiss.admin.ch/service-und-publikationen/service/open-data.html). Deutsche Stations- und Tageswerte stammen aus dem [Open-Data-Angebot des DWD](https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/daily/kl/). Für die Weiterverwendung gelten die jeweiligen Nutzungsbedingungen und Quellenangaben.
 
-`MeteoSwissStationDataSource` lädt Stationsmetadaten sowie historische und aktuelle Tageswerte über `data.geo.admin.ch`. Die Prognose stammt aus der Sammlung `ch.meteoschweiz.ogd-local-forecasting`. Häufig benötigte Daten werden im Arbeitsspeicher zwischengespeichert, um unnötige Mehrfachabrufe zu vermeiden.
+`MeteoSwissStationDataSource` lädt Schweizer Stationsmetadaten sowie historische und aktuelle Tageswerte über `data.geo.admin.ch`. `DwdStationDataSource` liest deutsche Stationsmetadaten und Tageswerte aus dem Climate Data Center des DWD. Die Schweizer Prognose stammt aus der Sammlung `ch.meteoschweiz.ogd-local-forecasting`. Häufig benötigte Daten werden im Arbeitsspeicher zwischengespeichert, um unnötige Mehrfachabrufe zu vermeiden.
 
 Die Anwendung ist kein offizielles Angebot von MeteoSwiss. MeteoSwiss übernimmt keine Gewähr für Richtigkeit, Aktualität oder Vollständigkeit der bereitgestellten Open Data.
 
@@ -193,7 +193,7 @@ curl "http://localhost:8080/api/stations/SMA/annual-values?fromYear=2022&toYear=
 
 ```text
 src/main/java/ch/hitzetage/          Spring-Boot-Anwendung
-src/main/java/ch/hitzetage/station/  API, Modelle und MeteoSwiss-Anbindung
+src/main/java/ch/hitzetage/station/  API, Modelle sowie MeteoSwiss- und DWD-Anbindung
 src/main/resources/static/           HTML, CSS, JavaScript und Bilder
 src/test/                             API-Tests
 Dockerfile                            zweistufiges Container-Build
@@ -213,7 +213,7 @@ In `.env` einen anderen Port setzen, beispielsweise `APP_PORT=8081`, und den Con
 
 **Die erste Auswertung dauert länger**
 
-Beim ersten Abruf werden die benötigten MeteoSwiss-Dateien geladen und ausgewertet. Weitere Abrufe verwenden den Cache.
+Beim ersten Abruf werden die benötigten MeteoSwiss- und DWD-Dateien geladen und ausgewertet. Weitere Abrufe verwenden den Cache.
 
 **Änderungen sind im Browser nicht sichtbar**
 

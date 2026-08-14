@@ -2,23 +2,23 @@
 <html lang="de">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Hitzetage Schweiz · MeteoSwiss-Stationen vergleichen</title>
-  <meta name="description" content="Hitzetage und Tropennächte an MeteoSwiss-Messstationen vergleichen: historische Jahreswerte, langjährige Einordnung und Neun-Tage-Prognose.">
+  <title>Hitzetage · Wetterstationen in der Schweiz und Europa vergleichen</title>
+  <meta name="description" content="Hitzetage, Tropennächte und Niederschlag an offiziellen Wetterstationen in der Schweiz und Europa vergleichen.">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <meta name="theme-color" content="#d64f32">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="canonical" href="https://hitzetage.ch/">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="de_CH">
-  <meta property="og:site_name" content="Hitzetage Schweiz">
-  <meta property="og:title" content="Hitzetage Schweiz">
-  <meta property="og:description" content="Hitzetage und Tropennächte an MeteoSwiss-Messstationen vergleichen und mit langjährigen Werten einordnen.">
+  <meta property="og:site_name" content="Hitzetage">
+  <meta property="og:title" content="Hitzetage Schweiz und Europa">
+  <meta property="og:description" content="Hitzetage und Tropennächte an MeteoSwiss- und DWD-Messstationen vergleichen.">
   <meta property="og:url" content="https://hitzetage.ch/">
   <meta property="og:image" content="https://hitzetage.ch/images/swiss-summer-weather.png">
   <meta property="og:image:alt" content="Sommerlandschaft in der Schweiz unter blauem Himmel">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Hitzetage Schweiz">
-  <meta name="twitter:description" content="Hitzetage und Tropennächte an MeteoSwiss-Messstationen vergleichen.">
+  <meta name="twitter:title" content="Hitzetage Schweiz und Europa">
+  <meta name="twitter:description" content="Hitzetage und Tropennächte an MeteoSwiss- und DWD-Messstationen vergleichen.">
   <meta name="twitter:image" content="https://hitzetage.ch/images/swiss-summer-weather.png">
   <link rel="stylesheet" href="/vendor/leaflet/leaflet.css"><link rel="stylesheet" href="/styles.css">
   <script defer src="https://stats.hitzetage.ch/script.js" data-website-id="e1dfad3c-da87-4b07-a576-386fa5d829a2" data-domains="hitzetage.ch,www.hitzetage.ch"></script>
@@ -26,9 +26,9 @@
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Hitzetage Schweiz",
+    "name": "Hitzetage",
     "url": "https://hitzetage.ch/",
-    "description": "Webanwendung zum Vergleich von Hitzetagen und Tropennächten an MeteoSwiss-Messstationen.",
+    "description": "Webanwendung zum Vergleich von Hitzetagen und Tropennächten an Wetterstationen in der Schweiz und Europa.",
     "applicationCategory": "ReferenceApplication",
     "operatingSystem": "Any",
     "browserRequirements": "Moderner Webbrowser mit JavaScript",
@@ -44,8 +44,8 @@
   </script>
 </head>
 <body><main>
-  <div class="language-switcher"><label class="visually-hidden" for="language" data-i18n="language">Sprache</label><span class="language-globe" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c2.3 2.5 3.5 5.5 3.5 9s-1.2 6.5-3.5 9c-2.3-2.5-3.5-5.5-3.5-9S9.7 5.5 12 3z"></path></svg></span><select id="language"><option value="de">DE Deutsch</option><option value="fr">FR Français</option><option value="it">IT Italiano</option><option value="rm">RM Rumantsch</option><option value="en">EN English</option><option value="zh">ZH 中文</option></select></div>
-  <header><p class="eyebrow" data-i18n="eyebrow">MeteoSwiss-Messstationen</p><h1 data-i18n="title">Hitzetage in der Schweiz</h1><p class="intro" data-i18n="intro">Vergleiche Messstationen und entdecke, wie häufig die Tageshöchsttemperatur 30&nbsp;°C erreicht hat.</p></header>
+  <div class="language-switcher"><label class="visually-hidden" for="language" data-i18n="language">Sprache</label><span class="language-globe" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c2.3 2.5 3.5 5.5 3.5 9s-1.2 6.5-3.5 9c-2.3-2.5-3.5-5.5-3.5-9S9.7 5.5 12 3z"></path></svg></span><select id="language"><option value="de">DE Deutsch</option><option value="fr">FR Français</option><option value="it">IT Italiano</option><option value="rm">RM Rumantsch</option><option value="en">EN English</option><option value="nl">NL Nederlands</option><option value="zh">ZH 中文</option></select></div>
+  <header><p class="eyebrow" data-i18n="eyebrow">Offizielle Wetterstationen</p><h1 data-i18n="title">Hitzetage in der Schweiz und Europa</h1><p class="intro" data-i18n="intro">Vergleiche Messstationen über Landesgrenzen hinweg und entdecke Temperaturereignisse, Entwicklungen und Wetterrekorde.</p></header>
   <nav class="app-navigation" aria-label="Hauptnavigation">
     <a href="?view=overview" data-view-link="overview" data-i18n="navOverview">Übersicht</a>
     <a href="?view=years" data-view-link="years" data-i18n="navYears">Jahresvergleich</a>
@@ -74,9 +74,16 @@
   </details>
   <section class="controls view-panel" data-view="overview" aria-labelledby="selection-title">
     <div class="section-heading"><h2 id="selection-title" data-i18n="selectionTitle">Stationen und Zeitraum</h2><span id="station-count" class="badge">2 Stationen</span></div>
-    <p class="controls-intro" data-i18n="explainerLead">Wähle eine oder mehrere MeteoSwiss-Messstationen und vergleiche Temperaturereignisse über Jahre und Regionen.</p>
+    <p class="controls-intro" data-i18n="explainerLead">Wähle Wetterstationen und vergleiche Temperaturereignisse über Jahre und Regionen.</p>
     <div class="controls-layout">
       <div class="controls-form">
+        <div class="country-control">
+          <span class="country-label" data-i18n="country">Region</span>
+          <div class="country-switch" role="group" aria-label="Region auswählen">
+            <button type="button" data-country="CH" aria-pressed="true"><svg class="region-flag" viewBox="0 0 24 16" aria-hidden="true"><rect width="24" height="16" rx="2" fill="#d52b1e"/><path fill="#fff" d="M10 3h4v3h3v4h-3v3h-4v-3H7V6h3z"/></svg><span data-country-label="CH">Schweiz</span></button>
+            <button type="button" data-country="EU" aria-pressed="false"><svg class="region-flag" viewBox="0 0 24 16" aria-hidden="true"><rect width="24" height="16" rx="2" fill="#164194"/><g fill="#ffd617"><circle cx="12" cy="3" r=".7"/><circle cx="14.5" cy="3.7" r=".7"/><circle cx="16.3" cy="5.5" r=".7"/><circle cx="17" cy="8" r=".7"/><circle cx="16.3" cy="10.5" r=".7"/><circle cx="14.5" cy="12.3" r=".7"/><circle cx="12" cy="13" r=".7"/><circle cx="9.5" cy="12.3" r=".7"/><circle cx="7.7" cy="10.5" r=".7"/><circle cx="7" cy="8" r=".7"/><circle cx="7.7" cy="5.5" r=".7"/><circle cx="9.5" cy="3.7" r=".7"/></g></svg><span data-country-label="EU">Europa</span></button>
+          </div>
+        </div>
         <div class="station-search-control">
           <label class="station-add-label"><span data-i18n="stationSearch">Messstation suchen</span><input id="station-add-search" type="search" autocomplete="off" placeholder="Station suchen …" aria-controls="station-add-options" aria-expanded="false"></label>
           <div id="station-add-options" class="station-add-options" role="listbox" hidden></div>
@@ -88,7 +95,7 @@
         <p id="status" class="visually-hidden" role="status" aria-live="polite"></p>
       </div>
       <div id="map-panel" class="map-panel" hidden>
-        <div id="station-map" class="station-map" role="region" aria-label="Karte der MeteoSwiss-Messstationen">
+        <div id="station-map" class="station-map" role="region" aria-label="Karte der Wetterstationen">
           <div id="map-info" class="map-info" aria-live="polite"></div>
         </div>
       </div>
@@ -162,5 +169,5 @@
       <div id="feedback-success" class="feedback-success" role="status" hidden><p data-i18n="feedbackThanks">Vielen Dank! Dein Feedback wurde gespeichert.</p></div>
     </form>
   </dialog>
-  <footer><span data-i18n="footer">Quelle: MeteoSwiss Open Data</span><span aria-hidden="true"> · </span><button id="feedback-open" class="footer-link" type="button" data-i18n="feedback">Feedback</button><span aria-hidden="true"> · </span><a href="/privacy.html" data-i18n="privacy">Datenschutz</a><span aria-hidden="true"> · </span><span>Version 0.7.0</span></footer>
+  <footer><span data-i18n="footer">Quellen: MeteoSwiss, DWD und KNMI Open Data</span><span aria-hidden="true"> · </span><button id="feedback-open" class="footer-link" type="button" data-i18n="feedback">Feedback</button><span aria-hidden="true"> · </span><a href="/privacy.html" data-i18n="privacy">Datenschutz</a><span aria-hidden="true"> · </span><span>Version 0.8.0</span></footer>
 </main><script src="/vendor/leaflet/leaflet.js" defer></script><script src="/app.js" defer></script></body></html>

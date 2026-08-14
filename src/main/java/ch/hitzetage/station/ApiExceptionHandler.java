@@ -19,5 +19,16 @@ class ApiExceptionHandler {
                 "message", exception.getMessage()
         );
     }
-}
 
+    @ExceptionHandler(DwdDataException.class)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    Map<String, Object> dwdUnavailable(DwdDataException exception) {
+        return Map.of("message", exception.getMessage(), "status", 503);
+    }
+
+    @ExceptionHandler(KnmiDataException.class)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    Map<String, Object> knmiUnavailable(KnmiDataException exception) {
+        return Map.of("message", exception.getMessage(), "status", 503);
+    }
+}

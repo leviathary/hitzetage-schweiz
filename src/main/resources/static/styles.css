@@ -28,7 +28,16 @@ h1 { font-family: Inter, system-ui, sans-serif; font-size: clamp(2.7rem, 5.6vw, 
 .explainer-heading .eyebrow { margin-bottom: 6px; }
 .explainer-heading h2, .explainer-grid h3 { margin: 0; }
 .explainer-heading > p { margin: 0; color: #38534a; line-height: 1.55; }
-.controls-intro { max-width: 760px; margin: -11px 0 21px; color: #38534a; font-size: .91rem; line-height: 1.5; }
+.controls-intro { max-width: 760px; margin: 1px 0 18px; color: #38534a; font-size: .91rem; line-height: 1.5; }
+.country-control { margin-bottom: 22px; }
+.country-label { display:block; color:#263f34; font-size:.84rem; font-weight:700; }
+.country-switch { display:flex; width:100%; max-width:100%; gap:5px; margin:7px 0 0; padding:4px; border:1px solid #d8e0da; border-radius:12px; background:#f4f7f5; }
+.country-switch button { display:flex; flex:1; align-items:center; justify-content:center; gap:7px; min-height:38px; margin:0; padding:0 12px; border:1px solid transparent; border-radius:9px; background:transparent; color:#52615b; font:inherit; font-size:.84rem; font-weight:700; line-height:1; cursor:pointer; }
+.country-switch button > span { display:flex; align-items:center; line-height:1; }
+.region-flag { flex:none; width:24px; height:16px; border-radius:2px; box-shadow:0 0 0 1px #173c2c1f; }
+.country-switch button:hover { background:#e7eee9; }
+.country-switch button:focus-visible { outline:2px solid #5f927d; outline-offset:1px; }
+.country-switch button[aria-pressed="true"] { border-color:#a9c8ba; background:#dcebe4; color:#173d31; box-shadow:0 2px 7px #173c2c16; }
 .explainer-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
 .explainer-grid article:last-child, .explainer-grid article.explainer-wide { grid-column: 1 / -1; }
 .explainer-grid article { min-width: 0; padding: 17px 18px; border: 1px solid rgba(255,255,255,.78); border-radius: 15px; background: linear-gradient(135deg, rgba(255,255,255,.62), rgba(255,255,255,.28)); box-shadow: inset 0 1px 0 rgba(255,255,255,.92), 0 8px 20px rgba(38,75,62,.08); }
@@ -359,6 +368,7 @@ footer a { color: inherit; font-weight: 700; text-underline-offset: 3px; }
   .controls-layout { display: grid; grid-template-columns: minmax(370px, .8fr) minmax(520px, 1.2fr); gap: 30px; align-items: stretch; padding-bottom: 16px; }
   .controls-form { display: flex; flex-direction: column; }
   .controls-form .station-search-control, .controls-form .station-selectors,
+  .controls-form .country-control,
   .controls-form .years,
   .controls-form #compare { width: calc(100% - 48px); }
   .controls-form .station-add-label { width: 100%; }
@@ -368,4 +378,4 @@ footer a { color: inherit; font-weight: 700; text-underline-offset: 3px; }
   .map-panel { width: 100%; margin-top: 0; }
   .station-map { height: 100%; min-height: 410px; }
 }
-@media (max-width: 520px) { .station-search-control, .station-add-label, .station-selectors { width: 100%; } .map-toggle { width: 100%; margin: 8px 0 0; } .station-map { height: 330px; } .years { grid-template-columns: 1fr 1fr; } .metric-label { width: 100%; } .view-metric-control, .view-metric-select { width: 100%; } section { padding: 17px; border-radius: 17px; } .chart { height: 280px; } .heat-days-heading { align-items: stretch; flex-direction: column; margin-top: 0; } .heat-days-heading label { width: 100%; } .context-facts { grid-template-columns: 1fr; } .feedback-dialog form { padding: 19px; } }
+@media (max-width: 520px) { .station-search-control, .station-add-label, .station-selectors { width: 100%; } .country-switch { width:100%; } .country-switch button { flex:1; justify-content:center; padding-inline:7px; } .map-toggle { width: 100%; margin: 8px 0 0; } .station-map { height: 330px; } .years { grid-template-columns: 1fr 1fr; } .metric-label { width: 100%; } .view-metric-control, .view-metric-select { width: 100%; } section { padding: 17px; border-radius: 17px; } .chart { height: 280px; } .heat-days-heading { align-items: stretch; flex-direction: column; margin-top: 0; } .context-facts { grid-template-columns: 1fr; } .feedback-dialog form { padding: 19px; } }

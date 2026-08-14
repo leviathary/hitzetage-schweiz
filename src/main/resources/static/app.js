@@ -28,7 +28,7 @@ const validViews = ['overview', 'years', 'details', 'precipitation', 'forecast']
 const validMetrics = ['heatDays', 'summerDays', 'veryHotDays', 'tropicalNights', 'frostDays', 'iceDays'];
 let currentView = validViews.includes(new URLSearchParams(location.search).get('view')) ? new URLSearchParams(location.search).get('view') : 'overview';
 const tr = key => translations[currentLanguage]?.[key] || translations.de?.[key] || key;
-const locale = () => ({de:'de-CH',fr:'fr-CH',it:'it-CH',rm:'rm-CH',en:'en-GB',zh:'zh-CN'}[currentLanguage]);
+const locale = () => ({de:'de-CH',fr:'fr-CH',it:'it-CH',rm:'rm-CH',en:'en-GB',nl:'nl-NL',zh:'zh-CN'}[currentLanguage]);
 const metricInfo = key => key === 'heatDays'
   ? { label: tr('heatDays'), threshold: tr('heatThreshold'), extremeLabel: tr('highest'), extremeKey: 'maximumTemperatureCelsius' }
   : key === 'summerDays'
@@ -41,6 +41,8 @@ const metricInfo = key => key === 'heatDays'
       ? { label: tr('iceDays'), threshold: tr('iceThreshold'), extremeLabel: tr('iceExtreme'), extremeKey: 'lowestMaximumTemperatureCelsius' }
     : { label: tr('tropicalNights'), threshold: tr('tropicalThreshold'), extremeLabel: tr('lowest'), extremeKey: 'minimumTemperatureCelsius' };
 let stations = [];
+const selectedCountries = new Set(['CH']);
+let selectedRegion = 'CH';
 let stationMap;
 let stationMarkerLayer;
 let selectedHeatDayYears = [];
@@ -64,6 +66,16 @@ function applyLanguage() {
   document.querySelectorAll('.remove-station').forEach(button => button.setAttribute('aria-label', tr('removeStation')));
   document.querySelector('#station-add-search').placeholder = tr('stationSearchPlaceholder');
   document.querySelector('#feedback-close').setAttribute('aria-label', tr('close'));
+  document.querySelector('#station-selectors').setAttribute('aria-label', tr('selectedStationsTitle'));
+  document.querySelector('.country-switch').setAttribute('aria-label', tr('country'));
+  document.querySelector('#station-map').setAttribute('aria-label', tr('mapToggle'));
+  document.querySelector('#map-info').textContent = tr('mapHint');
+  const countryLabels = {
+    de:{CH:'Schweiz',EU:'Europa'}, fr:{CH:'Suisse',EU:'Europe'},
+    it:{CH:'Svizzera',EU:'Europa'}, rm:{CH:'Svizra',EU:'Europa'},
+    en:{CH:'Switzerland',EU:'Europe'}, nl:{CH:'Zwitserland',EU:'Europa'}, zh:{CH:'瑞士',EU:'欧洲'}
+  }[currentLanguage];
+  document.querySelectorAll('[data-country-label]').forEach(element => { element.textContent = countryLabels[element.dataset.countryLabel]; });
   refreshSelectedStationLabels();
   updateStationCount();
   updateViewChrome();
@@ -118,7 +130,8 @@ function changeMetric(metricKey) {
 }
 
 function stationLabel(station) {
-  return `${station.name} (${station.canton})${station.elevationMetres ? ` · ${station.elevationMetres} ${tr('altitudeUnit')}` : ''}`;
+  const flag = { CH:'🇨🇭', DE:'🇩🇪', NL:'🇳🇱' }[station.countryCode] || '🇪🇺';
+  return `${flag} ${station.name} (${station.canton})${station.elevationMetres ? ` · ${station.elevationMetres} ${tr('altitudeUnit')}` : ''}`;
 }
 
 const cantonAliases = {
@@ -141,9 +154,10 @@ function matchingStations(query) {
   const selected = new Set(selectedStationIds());
   const cantonCodes = matchingCantonCodes(query);
   return stations.filter(station => {
+    if (!selectedCountries.has(station.countryCode)) return false;
     if (selected.has(station.id)) return false;
     if (cantonCodes.size) return cantonCodes.has(station.canton);
-    return !query || normalized(`${station.name} ${station.canton} ${station.id}`).includes(query);
+    return !query || normalized(`${station.name} ${station.canton} ${station.countryName} ${station.dataProvider} ${station.id}`).includes(query);
   });
 }
 
@@ -207,7 +221,7 @@ function showMapInfo(station, note = '') {
   const info = document.querySelector('#map-info');
   info.replaceChildren();
   const title = document.createElement('strong');
-  title.textContent = `${station.name} (${station.canton})`;
+  title.textContent = `${{ CH:'🇨🇭', DE:'🇩🇪', NL:'🇳🇱' }[station.countryCode] || '🇪🇺'} ${station.name} (${station.canton})`;
   const details = document.createElement('span');
   details.textContent = `${tr('altitude')}: ${station.elevationMetres || '–'} ${tr('altitudeUnit')}${note ? ` · ${note}` : ''}`;
   info.append(title, details);
@@ -217,25 +231,35 @@ function renderMap({ fitToQuery = false } = {}) {
   const panel = document.querySelector('#map-panel');
   if (currentView !== 'overview' || panel.hidden) return;
   if (!stationMap) {
-    stationMap = L.map('station-map', { minZoom: 6, maxZoom: 14 }).fitBounds([[45.75, 5.8], [47.85, 10.55]], { padding: [8, 8] });
+    stationMap = L.map('station-map', { minZoom: 4, maxZoom: 14 }).fitBounds([[45.5, 3.0], [55.5, 15.5]], { padding: [8, 8] });
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
     }).addTo(stationMap);
     stationMarkerLayer = L.layerGroup().addTo(stationMap);
+    stationMap.on('zoomend', () => renderMap());
   }
   const selectedIds = selectedStationIds();
   const query = normalized(document.querySelector('#station-add-search').value.trim());
   const cantonCodes = matchingCantonCodes(query);
   const visibleLocations = [];
+  const zoom = stationMap.getZoom();
+  const gridSize = query ? 0 : zoom <= 5 ? 1.2 : zoom === 6 ? .65 : zoom === 7 ? .32 : zoom === 8 ? .16 : 0;
+  const occupiedGridCells = new Set();
   stationMarkerLayer.clearLayers();
   stations.filter(station => Number.isFinite(station.latitude) && Number.isFinite(station.longitude)).forEach(station => {
+    if (!selectedCountries.has(station.countryCode)) return;
     const selectedIndex = selectedIds.indexOf(station.id);
-    const searchText = normalized(`${station.name} ${station.canton} ${station.id}`);
+    const searchText = normalized(`${station.name} ${station.canton} ${station.countryName} ${station.id}`);
     if (query && (cantonCodes.size ? !cantonCodes.has(station.canton) : !searchText.includes(query))) return;
+    if (gridSize && selectedIndex < 0) {
+      const cell = `${Math.floor(station.latitude / gridSize)}:${Math.floor(station.longitude / gridSize)}`;
+      if (occupiedGridCells.has(cell)) return;
+      occupiedGridCells.add(cell);
+    }
     visibleLocations.push([station.latitude, station.longitude]);
     const marker = L.circleMarker([station.latitude, station.longitude], {
-      radius: selectedIndex >= 0 ? 11 : 7,
+      radius: selectedIndex >= 0 ? 11 : zoom <= 5 ? 5 : 6,
       color: selectedIndex >= 0 ? '#7f2118' : '#ffffff',
       weight: selectedIndex >= 0 ? 3 : 2,
       fillColor: selectedIndex >= 0 ? '#d65337' : '#26322e',
@@ -264,7 +288,8 @@ function renderMap({ fitToQuery = false } = {}) {
     if (query && visibleLocations.length) {
       stationMap.fitBounds(visibleLocations, { padding: [45, 45], maxZoom: 10 });
     } else if (!query) {
-      stationMap.fitBounds([[45.75, 5.8], [47.85, 10.55]], { padding: [8, 8] });
+      const bounds = selectedCountries.size === 1 && selectedCountries.has('CH') ? [[45.75, 5.8], [47.85, 10.55]] : selectedCountries.size === 1 ? [[47.1, 5.8], [55.1, 15.1]] : [[45.5, 3.0], [55.5, 15.5]];
+      stationMap.fitBounds(bounds, { padding: [8, 8] });
     }
   }
 }
@@ -274,11 +299,30 @@ async function loadStations() {
     const response = await fetch('/api/stations');
     if (!response.ok) throw new Error(tr('noResults'));
     stations = await response.json();
-    const preferred = ['SMA', 'BAS'].map(id => stations.find(station => station.id === id)?.id).filter(Boolean);
-    addStation(preferred[0] || stations[0]?.id);
-    addStation(preferred[1] || stations[1]?.id);
+    const swissStations = stations.filter(station => station.countryCode === 'CH');
+    const preferred = swissStations.find(station => station.id === 'SMA');
+    addStation(preferred?.id || swissStations[0]?.id);
+    addStation(swissStations.find(station => station.id !== (preferred?.id || swissStations[0]?.id))?.id);
     await compare();
   } catch (error) { status.textContent = error.message; }
+}
+
+function chooseCountry(region) {
+  if (!['CH', 'EU'].includes(region) || region === selectedRegion) return;
+  selectedRegion = region;
+  selectedCountries.clear();
+  selectedCountries.add('CH');
+  if (region === 'EU') stations.forEach(station => selectedCountries.add(station.countryCode));
+  document.querySelectorAll('[data-country]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.country === selectedRegion)));
+  selectors.querySelectorAll('.station-row').forEach(row => {
+    const station = stations.find(item => item.id === row.dataset.stationId);
+    if (station && !selectedCountries.has(station.countryCode)) row.remove();
+  });
+  if (!selectedStationIds().length) stations.filter(station => selectedCountries.has(station.countryCode)).slice(0, 2).forEach(station => addStation(station.id));
+  document.querySelector('#station-add-search').value = '';
+  updateStationCount();
+  renderMap({ fitToQuery: true });
+  if (latestView) compare();
 }
 
 function selectedStationIds() { return [...selectors.querySelectorAll('.station-row')].map(row => row.dataset.stationId); }
@@ -836,6 +880,7 @@ document.querySelector('#map-toggle').addEventListener('click', event => {
   }
 });
 document.querySelector('#metric').addEventListener('change', event => changeMetric(event.target.value));
+document.querySelectorAll('[data-country]').forEach(button => button.addEventListener('click', () => chooseCountry(button.dataset.country)));
 document.querySelector('#view-filter-summary').addEventListener('change', event => {
   if (event.target.matches('.view-metric-select')) changeMetric(event.target.value);
 });

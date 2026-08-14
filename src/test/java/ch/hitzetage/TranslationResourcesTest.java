@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class TranslationResourcesTest {
 
-    private static final Set<String> LANGUAGES = Set.of("de", "fr", "it", "rm", "en", "zh");
+    private static final Set<String> LANGUAGES = Set.of("de", "fr", "it", "rm", "en", "nl", "zh");
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test

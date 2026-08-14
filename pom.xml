@@ -13,9 +13,9 @@
 
     <groupId>ch.hitzetage</groupId>
     <artifactId>hitzetage-schweiz</artifactId>
-    <version>0.7.1</version>
-    <name>Hitzetage Schweiz</name>
-    <description>Auswertung von Hitzetagen an MeteoSwiss-Messstationen</description>
+    <version>0.8.0</version>
+    <name>Hitzetage Schweiz und Europa</name>
+    <description>Auswertung von Hitzetagen an MeteoSwiss- und DWD-Messstationen</description>
 
     <properties>
         <java.version>21</java.version>

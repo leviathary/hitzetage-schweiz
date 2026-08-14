@@ -12,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/stations")
@@ -32,7 +33,11 @@ public class StationController {
 
     @GetMapping("/{stationId}/forecast")
     public MeteoSwissForecastService.ForecastResponse forecast(@PathVariable String stationId) {
-        return forecastService.forecast(findStation(stationId));
+        Station station = findStation(stationId);
+        if (!"CH".equals(station.countryCode())) {
+            return new MeteoSwissForecastService.ForecastResponse(station, LocalDateTime.now(), station.dataProvider().toLowerCase(java.util.Locale.ROOT) + "-forecast-pending", List.of());
+        }
+        return forecastService.forecast(station);
     }
 
     @GetMapping("/{stationId}/annual-values")
@@ -44,7 +49,7 @@ public class StationController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "fromYear darf nicht grösser als toYear sein");
         }
         Station station = findStation(stationId);
-        return new AnnualValuesResponse(station, 30.0, "meteoswiss", dataSource.findAnnualValues(station.id(), fromYear, toYear));
+        return new AnnualValuesResponse(station, 30.0, dataStatus(station), dataSource.findAnnualValues(station.id(), fromYear, toYear));
     }
 
     @GetMapping("/{stationId}/heat-days")
@@ -52,7 +57,7 @@ public class StationController {
             @PathVariable String stationId,
             @RequestParam @Min(1864) @Max(2100) int year) {
         Station station = findStation(stationId);
-        return new HeatDaysResponse(station, year, 30.0, "meteoswiss", dataSource.findHeatDays(station.id(), year));
+        return new HeatDaysResponse(station, year, 30.0, dataStatus(station), dataSource.findHeatDays(station.id(), year));
     }
 
     @GetMapping("/{stationId}/tropical-nights")
@@ -60,7 +65,7 @@ public class StationController {
             @PathVariable String stationId,
             @RequestParam @Min(1864) @Max(2100) int year) {
         Station station = findStation(stationId);
-        return new HeatDaysResponse(station, year, 20.0, "meteoswiss", dataSource.findTropicalNights(station.id(), year));
+        return new HeatDaysResponse(station, year, 20.0, dataStatus(station), dataSource.findTropicalNights(station.id(), year));
     }
 
     @GetMapping("/{stationId}/frost-days")
@@ -68,7 +73,7 @@ public class StationController {
             @PathVariable String stationId,
             @RequestParam @Min(1864) @Max(2100) int year) {
         Station station = findStation(stationId);
-        return new HeatDaysResponse(station, year, 0.0, "meteoswiss", dataSource.findFrostDays(station.id(), year));
+        return new HeatDaysResponse(station, year, 0.0, dataStatus(station), dataSource.findFrostDays(station.id(), year));
     }
 
     @GetMapping("/{stationId}/ice-days")
@@ -76,19 +81,19 @@ public class StationController {
             @PathVariable String stationId,
             @RequestParam @Min(1864) @Max(2100) int year) {
         Station station = findStation(stationId);
-        return new HeatDaysResponse(station, year, 0.0, "meteoswiss", dataSource.findIceDays(station.id(), year));
+        return new HeatDaysResponse(station, year, 0.0, dataStatus(station), dataSource.findIceDays(station.id(), year));
     }
 
     @GetMapping("/{stationId}/summer-days")
     public HeatDaysResponse summerDays(@PathVariable String stationId, @RequestParam @Min(1864) @Max(2100) int year) {
         Station station = findStation(stationId);
-        return new HeatDaysResponse(station, year, 25.0, "meteoswiss", dataSource.findSummerDays(station.id(), year));
+        return new HeatDaysResponse(station, year, 25.0, dataStatus(station), dataSource.findSummerDays(station.id(), year));
     }
 
     @GetMapping("/{stationId}/very-hot-days")
     public HeatDaysResponse veryHotDays(@PathVariable String stationId, @RequestParam @Min(1864) @Max(2100) int year) {
         Station station = findStation(stationId);
-        return new HeatDaysResponse(station, year, 35.0, "meteoswiss", dataSource.findVeryHotDays(station.id(), year));
+        return new HeatDaysResponse(station, year, 35.0, dataStatus(station), dataSource.findVeryHotDays(station.id(), year));
     }
 
     @GetMapping("/{stationId}/precipitation")
@@ -100,8 +105,10 @@ public class StationController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ungültiger Niederschlagszeitraum");
         }
         Station station = findStation(stationId);
-        return new PrecipitationResponse(station, "meteoswiss", dataSource.findPrecipitation(station.id(), fromYear, toYear, year));
+        return new PrecipitationResponse(station, dataStatus(station), dataSource.findPrecipitation(station.id(), fromYear, toYear, year));
     }
+
+    private String dataStatus(Station station) { return station.dataProvider().toLowerCase(java.util.Locale.ROOT); }
 
     private Station findStation(String stationId) {
         return dataSource.findStations().stream()
