@@ -6,6 +6,7 @@ import java.util.List;
 
 public record PrecipitationSummary(
         List<AnnualTotal> annual,
+        List<AnnualTotal> annualToDate,
         List<MonthlyTotal> monthly,
         List<DailyPrecipitation> daily,
         DailyPrecipitation strongestRainDay,

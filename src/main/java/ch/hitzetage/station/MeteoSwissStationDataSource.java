@@ -144,9 +144,15 @@ class MeteoSwissStationDataSource implements StationDataSource {
             }
         }
         Map<Integer, Double> annual = new java.util.TreeMap<>();
+        Map<Integer, Double> annualToDate = new java.util.TreeMap<>();
         Map<YearMonth, Double> monthly = new java.util.TreeMap<>();
+        LocalDate today = LocalDate.now();
         values.forEach((date, amount) -> {
             annual.merge(date.getYear(), amount, Double::sum);
+            if (date.getMonthValue() < today.getMonthValue()
+                    || (date.getMonthValue() == today.getMonthValue() && date.getDayOfMonth() <= today.getDayOfMonth())) {
+                annualToDate.merge(date.getYear(), amount, Double::sum);
+            }
             monthly.merge(YearMonth.from(date), amount, Double::sum);
         });
         List<DailyPrecipitation> daily = values.entrySet().stream()
@@ -172,6 +178,7 @@ class MeteoSwissStationDataSource implements StationDataSource {
         }
         return new PrecipitationSummary(
                 annual.entrySet().stream().map(e -> new PrecipitationSummary.AnnualTotal(e.getKey(), round(e.getValue()))).toList(),
+                annualToDate.entrySet().stream().map(e -> new PrecipitationSummary.AnnualTotal(e.getKey(), round(e.getValue()))).toList(),
                 monthly.entrySet().stream().filter(e -> e.getKey().getYear() == detailYear).map(e -> new PrecipitationSummary.MonthlyTotal(e.getKey(), round(e.getValue()))).toList(),
                 daily, strongest, driest, longestDry, longestDryYear);
     }

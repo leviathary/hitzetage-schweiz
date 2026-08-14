@@ -84,11 +84,14 @@ class DemoStationDataSource implements StationDataSource {
     public PrecipitationSummary findPrecipitation(String stationId, int fromYear, int toYear, int detailYear) {
         var annual = java.util.stream.IntStream.rangeClosed(fromYear, toYear)
                 .mapToObj(year -> new PrecipitationSummary.AnnualTotal(year, 760 + Math.floorMod(year * 47 + stationId.hashCode(), 430))).toList();
+        double elapsedYearShare = LocalDate.now().getDayOfYear() / (double) LocalDate.now().lengthOfYear();
+        var annualToDate = annual.stream()
+                .map(value -> new PrecipitationSummary.AnnualTotal(value.year(), Math.round(value.millimetres() * elapsedYearShare * 10.0) / 10.0)).toList();
         var monthly = java.util.stream.IntStream.rangeClosed(1, 12)
                 .mapToObj(month -> new PrecipitationSummary.MonthlyTotal(YearMonth.of(detailYear, month), 28 + Math.floorMod(month * 23 + stationId.hashCode(), 95))).toList();
         var daily = java.util.stream.IntStream.rangeClosed(1, 28)
                 .mapToObj(day -> new DailyPrecipitation(LocalDate.of(detailYear, 7, day), day % 5 == 0 ? 18 + day : day % 3 == 0 ? 3.4 : 0)).toList();
-        return new PrecipitationSummary(annual, monthly, daily,
+        return new PrecipitationSummary(annual, annualToDate, monthly, daily,
                 daily.stream().max(java.util.Comparator.comparingDouble(DailyPrecipitation::millimetres)).orElse(null),
                 monthly.stream().min(java.util.Comparator.comparingDouble(PrecipitationSummary.MonthlyTotal::millimetres)).orElse(null), 8, detailYear);
     }

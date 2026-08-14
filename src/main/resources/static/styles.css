@@ -220,6 +220,16 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 .precipitation-records span { margin-top:5px; color:#63716c; font-size:.68rem; line-height:1.35; }
 .precipitation-chart-card { margin-top:16px; padding:18px; border:1px solid #ffffffd5; border-radius:15px; background:#ffffff78; }
 .precipitation-chart-card h3 { margin:0 0 12px; font-size:.94rem; }
+.precipitation-year-heading { display:flex; align-items:start; justify-content:space-between; gap:18px; }
+.precipitation-year-heading .chart-interaction-hint { margin-bottom:0; }
+.precipitation-to-date-toggle { position:relative; display:flex; flex:none; align-items:center; gap:8px; width:auto; margin:0; padding:7px 11px; border:1px solid #aac9d4; border-radius:999px; background:#edf7f9c7; color:#315b66; cursor:pointer; font-size:.72rem; font-weight:700; }
+.precipitation-to-date-toggle:has(input:checked) { border-color:#2878b5; background:#d7edf6; color:#155f91; box-shadow:inset 0 0 0 1px #2878b533; }
+.precipitation-to-date-toggle input { width:14px; height:14px; margin:0; accent-color:#2878b5; }
+.precipitation-toggle-info { display:grid; width:17px; height:17px; place-items:center; border:1.5px solid #172822; border-radius:50%; color:#172822; font-family:Georgia,serif; font-size:.68rem; font-weight:800; line-height:1; cursor:help; }
+.precipitation-toggle-tooltip { position:absolute; z-index:8; top:calc(100% + 12px); right:0; display:block; visibility:hidden; width:280px; padding:10px 12px; border-radius:9px; background:#172822; color:#fff; box-shadow:0 8px 24px #17282242; font-size:.72rem; font-weight:500; line-height:1.45; opacity:0; pointer-events:none; transform:translateY(-4px); transition:opacity .15s ease,transform .15s ease,visibility .15s; }
+.precipitation-toggle-tooltip::before { content:''; position:absolute; right:13px; bottom:100%; border-right:7px solid transparent; border-bottom:7px solid #172822; border-left:7px solid transparent; }
+.precipitation-to-date-toggle:hover .precipitation-toggle-tooltip,.precipitation-to-date-toggle:focus-within .precipitation-toggle-tooltip { visibility:visible; opacity:1; transform:translateY(0); }
+.precipitation-to-date-hint { margin:10px 0 -8px; color:#315b66; font-size:.72rem; font-weight:700; }
 .precipitation-bars { display:flex; align-items:stretch; gap:8px; height:240px; overflow-x:auto; padding-top:25px; border-bottom:1px solid #b9c8c1; }
 .precipitation-bar-group { display:grid; flex:1 0 54px; grid-template-rows:1fr 25px; min-width:54px; }
 .precipitation-bar-stack { display:flex; align-items:end; justify-content:center; gap:3px; min-height:0; }
@@ -336,6 +346,8 @@ footer a { color: inherit; font-weight: 700; text-underline-offset: 3px; }
   .precipitation-heading label { width:100%; }
   .precipitation-records article { grid-template-columns:1fr; }
   .precipitation-records h3 { grid-column:auto; }
+  .precipitation-year-heading { align-items:stretch; flex-direction:column; }
+  .precipitation-to-date-toggle { align-self:flex-start; }
   .precipitation-compare-heading { align-items:stretch; flex-direction:column; }
   .precipitation-compare-controls { display:grid; grid-template-columns:1fr 1fr; }
   .precipitation-compare-controls label { width:100%; }
