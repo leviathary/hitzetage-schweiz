@@ -300,8 +300,20 @@ async function fetchPrecipitation(id, from, to, year) {
 let precipitationData = [];
 let precipitationComparisonData = [];
 let selectedPrecipitationYears = [];
+let precipitationToDate = false;
 const rainColors = ['#2778a8', '#45a7c4', '#285f91', '#58b4a7', '#487cb5', '#166a83'];
 const rainNumber = value => new Intl.NumberFormat(locale(), { maximumFractionDigits: 1 }).format(value || 0);
+const precipitationCutoff = () => ({ month:new Date().getMonth() + 1, day:new Date().getDate() });
+function precipitationValuesToDate(response) {
+  const { month:cutoffMonth, day:cutoffDay } = precipitationCutoff();
+  return response.precipitation.daily.filter(value => {
+    const month = Number(value.date.slice(5,7)), day = Number(value.date.slice(8,10));
+    return month < cutoffMonth || (month === cutoffMonth && day <= cutoffDay);
+  });
+}
+function precipitationTotalToDate(response) {
+  return precipitationValuesToDate(response).reduce((sum, value) => sum + value.millimetres, 0);
+}
 function rainBars(groups, valueFor, labelFor, className = '') {
   const maximum = Math.max(1, ...groups.flatMap(group => precipitationData.map(item => valueFor(item, group))));
   return groups.map(group => `<div class="precipitation-bar-group ${className}" data-rain-group="${group}"><div class="precipitation-bar-stack">${precipitationData.map((item, index) => { const value = valueFor(item, group); return `<span style="height:${Math.max(value ? 3 : 0, value / maximum * 100)}%;background:${rainColors[index]}" title="${item.station.name}: ${rainNumber(value)} mm"><i>${value ? rainNumber(value) : ''}</i></span>`; }).join('')}</div><small>${labelFor(group)}</small></div>`).join('');
@@ -315,7 +327,14 @@ function renderPrecipitation() {
   const from = Number(document.querySelector('#fromYear').value), to = Number(document.querySelector('#toYear').value);
   document.querySelector('#precipitation-record-period').textContent = `${tr('precipitationRecordsPeriod')} · ${from}–${to}`;
   const years = Array.from({length: to - from + 1}, (_, i) => from + i);
-  document.querySelector('#precipitation-annual').innerHTML = rainBars(years, (item, y) => item.precipitation.annual.find(v => v.year === y)?.millimetres || 0, y => y, 'clickable');
+  document.querySelector('#precipitation-annual').innerHTML = rainBars(years, (item, y) => {
+    if (!precipitationToDate) return item.precipitation.annual.find(v => v.year === y)?.millimetres || 0;
+    return item.precipitation.annualToDate?.find(v => v.year === y)?.millimetres || 0;
+  }, y => y, 'clickable');
+  const toDateHint = document.querySelector('#precipitation-to-date-hint');
+  const cutoff = new Date(currentYear, precipitationCutoff().month - 1, precipitationCutoff().day);
+  toDateHint.hidden = !precipitationToDate;
+  toDateHint.textContent = tr('precipitationToDateHint').replace('{date}', cutoff.toLocaleDateString(locale(), {day:'numeric',month:'long'}));
   document.querySelector('#precipitation-annual').querySelectorAll('[data-rain-group]').forEach(el => el.classList.toggle('selected', selectedPrecipitationYears.includes(Number(el.dataset.rainGroup))));
   renderPrecipitationComparison();
 }
@@ -326,7 +345,14 @@ function renderPrecipitationComparison() {
   const months = Array.from({length:12}, (_, i) => i + 1);
   document.querySelector('#precipitation-compare-daily').innerHTML = precipitationComparisonData.map((entry, stationIndex) => {
     const color = rainColors[stationIndex % rainColors.length];
-    const yearRows = comparisonYears.map(year => ({ year, months:entry.years[year].precipitation.monthly, total:entry.years[year].precipitation.monthly.reduce((sum,value)=>sum+value.millimetres,0) }));
+    const yearRows = comparisonYears.map(year => {
+      const response = entry.years[year];
+      if (!precipitationToDate) return { year, months:response.precipitation.monthly, total:response.precipitation.monthly.reduce((sum,value)=>sum+value.millimetres,0) };
+      const values = precipitationValuesToDate(response), { month:cutoffMonth } = precipitationCutoff();
+      const months = response.precipitation.monthly.filter(value => Number(value.month.slice(5)) < cutoffMonth)
+        .concat([{ month:`${year}-${String(cutoffMonth).padStart(2,'0')}`, millimetres:values.filter(value => Number(value.date.slice(5,7)) === cutoffMonth).reduce((sum,value)=>sum+value.millimetres,0) }]);
+      return { year, months, total:precipitationTotalToDate(response) };
+    });
     const maximum = Math.max(1, ...yearRows.flatMap(row => row.months.map(value => value.millimetres)));
     const monthLabels = months.map(month => `<span style="left:${(month - .5) / 12 * 100}%">${new Date(currentYear,month-1,1).toLocaleDateString(locale(),{month:'short'})}</span>`).join('');
     return `<article class="precipitation-timeline-card" data-station-id="${entry.station.id}" style="--rain-color:${color};--rain-days:12"><h4>${entry.station.name}</h4><p class="precipitation-timeline-hint">${tr('clickMonthForDays')}</p><div class="precipitation-timeline-labels" aria-hidden="true">${monthLabels}</div>${yearRows.map(row => `<div class="precipitation-timeline-row"><div class="precipitation-timeline-year"><strong>${row.year}</strong><span>${rainNumber(row.total)} mm</span></div><div class="precipitation-timeline-track">${row.months.map(value => { const month = Number(value.month.slice(5)); return `<button class="precipitation-rain-marker precipitation-month-marker" type="button" data-rain-year="${row.year}" data-rain-month="${month}" style="left:${(month - .5) / 12 * 100}%;height:${Math.max(3, value.millimetres / maximum * 42)}px" title="${new Date(row.year,month-1,1).toLocaleDateString(locale(),{month:'long',year:'numeric'})}: ${rainNumber(value.millimetres)} mm"><i>${rainNumber(value.millimetres)}</i></button>`; }).join('')}<span class="precipitation-timeline-arrow"></span></div></div>`).join('')}</article>`;
@@ -815,6 +841,10 @@ document.querySelector('#view-filter-summary').addEventListener('change', event 
 });
 document.querySelector('#fromYear').addEventListener('change', compare);
 document.querySelector('#toYear').addEventListener('change', compare);
+document.querySelector('#precipitation-to-date').addEventListener('change', event => {
+  precipitationToDate = event.target.checked;
+  renderPrecipitation();
+});
 document.querySelector('#heat-day-year').addEventListener('change', event => { selectedHeatDayYears = [Number(event.target.value)]; loadHeatDayDetails(); });
 document.querySelector('#heat-days-detail').addEventListener('click', event => {
   const button = event.target.closest('.remove-detail-year');
