@@ -1,6 +1,6 @@
 # Hitzetage Schweiz und Europa
 
-Webanwendung zum Vergleichen von Hitzetagen und Tropennächten an MeteoSwiss- und DWD-Messstationen. Historische Jahreswerte und langjährige Vergleiche werden länderübergreifend dargestellt; die Neun-Tage-Prognose ist derzeit für Schweizer Stationen verfügbar.
+Webanwendung zum Vergleichen von Hitzetagen und Tropennächten an offiziellen Messstationen in der Schweiz, Deutschland, den Niederlanden, Österreich, Italien, Polen, Irland, dem Vereinigten Königreich, Spanien, Dänemark, Schweden und Norwegen. Historische Jahreswerte und langjährige Vergleiche werden länderübergreifend dargestellt; die Neun-Tage-Prognose ist derzeit für Schweizer Stationen verfügbar.
 
 ## Live-Anwendung
 
@@ -15,7 +15,7 @@ Für Suchmaschinen stellt die Anwendung eine kanonische URL, strukturierte `WebA
 - **Backend:** Java 21 und Spring Boot
 - **Frontend:** HTML, CSS und JavaScript
 - **Betrieb:** ein Docker-Container, keine Datenbank erforderlich
-- **Sprachen:** Deutsch, Französisch, Italienisch, Rätoromanisch, Englisch und Chinesisch
+- **Sprachen:** Deutsch, Französisch, Italienisch, Rätoromanisch, Englisch, Niederländisch, Polnisch, Spanisch, Schwedisch, Norwegisch, Dänisch und Chinesisch
 
 ## Schnellstart mit Docker
 
@@ -150,7 +150,7 @@ Die Kartenbibliothek Leaflet wird lokal aus dem Docker-Container ausgeliefert. Z
 
 ## Datenquelle
 
-Schweizer Messwerte und Prognosen stammen aus dem offiziellen [MeteoSwiss-Open-Data-Angebot](https://www.meteoswiss.admin.ch/service-und-publikationen/service/open-data.html). Deutsche Stations- und Tageswerte stammen aus dem [Open-Data-Angebot des DWD](https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/daily/kl/). Für die Weiterverwendung gelten die jeweiligen Nutzungsbedingungen und Quellenangaben.
+Schweizer Messwerte und Prognosen stammen aus dem offiziellen [MeteoSwiss-Open-Data-Angebot](https://www.meteoswiss.admin.ch/service-und-publikationen/service/open-data.html). Deutsche Daten stammen vom [DWD](https://opendata.dwd.de/climate_environment/CDC/observations_germany/climate/daily/kl/), niederländische vom KNMI, österreichische von [GeoSphere Austria](https://dataset.api.hub.geosphere.at/v1/docs/) und dänische direkt aus den täglichen Klimadaten des DMI. Italien, Polen, Irland, das Vereinigte Königreich, Spanien, Schweden und Norwegen werden über den harmonisierten offiziellen Tagesdatensatz [NOAA/NCEI GHCN-Daily](https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily) eingebunden. Für die Weiterverwendung gelten die jeweiligen Nutzungsbedingungen und Quellenangaben.
 
 `MeteoSwissStationDataSource` lädt Schweizer Stationsmetadaten sowie historische und aktuelle Tageswerte über `data.geo.admin.ch`. `DwdStationDataSource` liest deutsche Stationsmetadaten und Tageswerte aus dem Climate Data Center des DWD. Die Schweizer Prognose stammt aus der Sammlung `ch.meteoschweiz.ogd-local-forecasting`. Häufig benötigte Daten werden im Arbeitsspeicher zwischengespeichert, um unnötige Mehrfachabrufe zu vermeiden.
 

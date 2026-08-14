@@ -28,7 +28,7 @@ const validViews = ['overview', 'years', 'details', 'precipitation', 'forecast']
 const validMetrics = ['heatDays', 'summerDays', 'veryHotDays', 'tropicalNights', 'frostDays', 'iceDays'];
 let currentView = validViews.includes(new URLSearchParams(location.search).get('view')) ? new URLSearchParams(location.search).get('view') : 'overview';
 const tr = key => translations[currentLanguage]?.[key] || translations.de?.[key] || key;
-const locale = () => ({de:'de-CH',fr:'fr-CH',it:'it-CH',rm:'rm-CH',en:'en-GB',nl:'nl-NL',zh:'zh-CN'}[currentLanguage]);
+const locale = () => ({de:'de-CH',fr:'fr-CH',it:'it-CH',rm:'rm-CH',en:'en-GB',nl:'nl-NL',pl:'pl-PL',es:'es-ES',sv:'sv-SE',nb:'nb-NO',da:'da-DK',zh:'zh-CN'}[currentLanguage]);
 const metricInfo = key => key === 'heatDays'
   ? { label: tr('heatDays'), threshold: tr('heatThreshold'), extremeLabel: tr('highest'), extremeKey: 'maximumTemperatureCelsius' }
   : key === 'summerDays'
@@ -73,7 +73,9 @@ function applyLanguage() {
   const countryLabels = {
     de:{CH:'Schweiz',EU:'Europa'}, fr:{CH:'Suisse',EU:'Europe'},
     it:{CH:'Svizzera',EU:'Europa'}, rm:{CH:'Svizra',EU:'Europa'},
-    en:{CH:'Switzerland',EU:'Europe'}, nl:{CH:'Zwitserland',EU:'Europa'}, zh:{CH:'瑞士',EU:'欧洲'}
+    en:{CH:'Switzerland',EU:'Europe'}, nl:{CH:'Zwitserland',EU:'Europa'},
+    pl:{CH:'Szwajcaria',EU:'Europa'}, es:{CH:'Suiza',EU:'Europa'}, sv:{CH:'Schweiz',EU:'Europa'},
+    nb:{CH:'Sveits',EU:'Europa'}, da:{CH:'Schweiz',EU:'Europa'}, zh:{CH:'瑞士',EU:'欧洲'}
   }[currentLanguage];
   document.querySelectorAll('[data-country-label]').forEach(element => { element.textContent = countryLabels[element.dataset.countryLabel]; });
   refreshSelectedStationLabels();
@@ -130,8 +132,9 @@ function changeMetric(metricKey) {
 }
 
 function stationLabel(station) {
-  const flag = { CH:'🇨🇭', DE:'🇩🇪', NL:'🇳🇱' }[station.countryCode] || '🇪🇺';
-  return `${flag} ${station.name} (${station.canton})${station.elevationMetres ? ` · ${station.elevationMetres} ${tr('altitudeUnit')}` : ''}`;
+  const flag = { CH:'🇨🇭', DE:'🇩🇪', NL:'🇳🇱', AT:'🇦🇹', IT:'🇮🇹', PL:'🇵🇱', IE:'🇮🇪', GB:'🇬🇧', ES:'🇪🇸', DK:'🇩🇰', SE:'🇸🇪', NO:'🇳🇴' }[station.countryCode] || '🇪🇺';
+  const delayed = station.dataAvailableThroughYear && station.dataAvailableThroughYear < currentYear ? ` · ${tr('dataThrough')} ${station.dataAvailableThroughYear}` : '';
+  return `${flag} ${station.name} (${station.canton})${station.elevationMetres ? ` · ${station.elevationMetres} ${tr('altitudeUnit')}` : ''}${delayed}`;
 }
 
 const cantonAliases = {
@@ -221,9 +224,10 @@ function showMapInfo(station, note = '') {
   const info = document.querySelector('#map-info');
   info.replaceChildren();
   const title = document.createElement('strong');
-  title.textContent = `${{ CH:'🇨🇭', DE:'🇩🇪', NL:'🇳🇱' }[station.countryCode] || '🇪🇺'} ${station.name} (${station.canton})`;
+  title.textContent = `${{ CH:'🇨🇭', DE:'🇩🇪', NL:'🇳🇱', AT:'🇦🇹', IT:'🇮🇹', PL:'🇵🇱', IE:'🇮🇪', GB:'🇬🇧', ES:'🇪🇸', DK:'🇩🇰', SE:'🇸🇪', NO:'🇳🇴' }[station.countryCode] || '🇪🇺'} ${station.name} (${station.canton})`;
   const details = document.createElement('span');
-  details.textContent = `${tr('altitude')}: ${station.elevationMetres || '–'} ${tr('altitudeUnit')}${note ? ` · ${note}` : ''}`;
+  const delayed = station.dataAvailableThroughYear && station.dataAvailableThroughYear < currentYear ? ` · ${tr('dataThrough')} ${station.dataAvailableThroughYear}` : '';
+  details.textContent = `${tr('altitude')}: ${station.elevationMetres || '–'} ${tr('altitudeUnit')}${delayed}${note ? ` · ${note}` : ''}`;
   info.append(title, details);
 }
 
@@ -231,7 +235,7 @@ function renderMap({ fitToQuery = false } = {}) {
   const panel = document.querySelector('#map-panel');
   if (currentView !== 'overview' || panel.hidden) return;
   if (!stationMap) {
-    stationMap = L.map('station-map', { minZoom: 4, maxZoom: 14 }).fitBounds([[45.5, 3.0], [55.5, 15.5]], { padding: [8, 8] });
+    stationMap = L.map('station-map', { minZoom: 3, maxZoom: 14 }).fitBounds([[45.75, 5.8], [47.85, 10.55]], { padding: [8, 8] });
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
@@ -262,10 +266,11 @@ function renderMap({ fitToQuery = false } = {}) {
       radius: selectedIndex >= 0 ? 11 : zoom <= 5 ? 5 : 6,
       color: selectedIndex >= 0 ? '#7f2118' : '#ffffff',
       weight: selectedIndex >= 0 ? 3 : 2,
-      fillColor: selectedIndex >= 0 ? '#d65337' : '#26322e',
-      fillOpacity: selectedIndex >= 0 ? 1 : .9
+      fillColor: selectedIndex >= 0 ? '#d65337' : station.dataAvailableThroughYear && station.dataAvailableThroughYear < currentYear ? '#75807c' : '#26322e',
+      fillOpacity: selectedIndex >= 0 ? 1 : station.dataAvailableThroughYear && station.dataAvailableThroughYear < currentYear ? .55 : .9
     });
-    marker.bindTooltip(`${station.name} (${station.canton}) · ${station.elevationMetres} ${tr('altitudeUnit')}`, { direction: 'top', offset: [0, -4] });
+    const availability = station.dataAvailableThroughYear && station.dataAvailableThroughYear < currentYear ? ` · ${tr('dataThrough')} ${station.dataAvailableThroughYear}` : '';
+    marker.bindTooltip(`${station.name} (${station.canton}) · ${station.elevationMetres} ${tr('altitudeUnit')}${availability}`, { direction: 'top', offset: [0, -4] });
     marker.on('mouseover', () => showMapInfo(station, selectedIndex >= 0 ? tr('alreadySelected') : ''));
     marker.on('click', () => {
       if (selectedStationIds().includes(station.id)) return showMapInfo(station, tr('alreadySelected'));
@@ -288,7 +293,7 @@ function renderMap({ fitToQuery = false } = {}) {
     if (query && visibleLocations.length) {
       stationMap.fitBounds(visibleLocations, { padding: [45, 45], maxZoom: 10 });
     } else if (!query) {
-      const bounds = selectedCountries.size === 1 && selectedCountries.has('CH') ? [[45.75, 5.8], [47.85, 10.55]] : selectedCountries.size === 1 ? [[47.1, 5.8], [55.1, 15.1]] : [[45.5, 3.0], [55.5, 15.5]];
+      const bounds = selectedCountries.size === 1 && selectedCountries.has('CH') ? [[45.75, 5.8], [47.85, 10.55]] : [[35.0, -11.0], [71.5, 32.0]];
       stationMap.fitBounds(bounds, { padding: [8, 8] });
     }
   }
@@ -464,7 +469,7 @@ function populateHeatDayYears(from, to) {
   if (!selectedHeatDayYears.length) selectedHeatDayYears = [Number(select.value)];
 }
 
-function renderHeatDays(yearGroups) {
+function renderHeatDays(yearGroups, annualData = []) {
   const detailMetricKey = document.querySelector('#metric').value;
   const frost = detailMetricKey === 'frostDays';
   const ice = detailMetricKey === 'iceDays';
@@ -505,12 +510,15 @@ function renderHeatDays(yearGroups) {
       ${yearGroups.map(group => {
         const item = group.items[stationIndex];
         const year = group.year;
+        const annualStation = annualData.find(entry => entry.station.id === item.station.id);
+        const dataAvailable = annualStation?.values.some(value => value.year === year) ?? false;
         const days = timelineValues(item, year);
         const forecastCount = days.filter(day => day.forecast).length;
         const currentRangeStart = new Date(year, firstMonth, 1);
         const currentRangeEnd = new Date(year, lastMonth + 1, 1);
         const currentRangeLength = (currentRangeEnd - currentRangeStart) / 86400000;
-        return `<div class="heat-days-year-row"><div class="heat-days-year-label"><strong>${year}</strong><span>${item.values.length}${forecastCount ? ` + ${forecastCount}` : ''} ${detailMetric.label}</span>${selectedHeatDayYears.length > 1 ? `<button class="remove-detail-year" type="button" data-year="${year}" aria-label="${tr('removeYear')}: ${year}" title="${tr('removeYear')}">×</button>` : ''}</div>${days.length ? `<div class="heat-days-timeline" style="--month-count:${monthCount}" aria-label="${item.station.name}: ${days.length} ${detailMetric.label} ${year}">${days.map(day => {
+        const countLabel = dataAvailable || forecastCount ? `${item.values.length}${forecastCount ? ` + ${forecastCount}` : ''} ${detailMetric.label}` : tr('noData');
+        return `<div class="heat-days-year-row"><div class="heat-days-year-label"><strong>${year}</strong><span>${countLabel}</span>${selectedHeatDayYears.length > 1 ? `<button class="remove-detail-year" type="button" data-year="${year}" aria-label="${tr('removeYear')}: ${year}" title="${tr('removeYear')}">×</button>` : ''}</div>${days.length ? `<div class="heat-days-timeline" style="--month-count:${monthCount}" aria-label="${item.station.name}: ${days.length} ${detailMetric.label} ${year}">${days.map(day => {
         const date = new Date(`${day.date}T12:00:00`);
         const minimum = day.minimumTemperatureCelsius == null ? '–' : `${formatter.format(day.minimumTemperatureCelsius)} °C`;
         const position = (date - currentRangeStart) / 86400000 / currentRangeLength * 100;
@@ -550,7 +558,7 @@ async function loadHeatDayDetails(ids = selectedStationIds()) {
   try {
     const groups = await Promise.all(selectedHeatDayYears.map(async year => ({ year, items: await Promise.all(ids.map(id => fetchDetailDays(id, year))) })));
     if (latestView) latestView.heatDays = groups;
-    renderHeatDays(groups);
+    renderHeatDays(groups, latestView?.data || []);
   } catch (error) {
     container.innerHTML = `<p class="heat-days-empty">${error.message}</p>`;
   }
@@ -691,8 +699,8 @@ function renderComparison(data, forecasts, from, to) {
       const details = value ? `${count} ${tr('measured')}${predicted ? ` + ${predicted} ${tr('predicted')}` : ''}; ${metric.extremeLabel} ${value[metric.extremeKey].toFixed(1)} °C` : tr('noData');
       const measuredShare = total ? count / total * 100 : 0;
       const forecastShare = total ? predicted / total * 100 : 0;
-      return `<div class="bar-stack" style="height:${total / maximum * 100}%;--bar-color:${colors[index]}" title="${item.station.name}: ${details}">
-        <span>${total || ''}</span>
+      return `<div class="bar-stack ${value || predicted ? '' : 'no-data'}" style="height:${total / maximum * 100}%;--bar-color:${colors[index]}" title="${item.station.name}: ${details}">
+        <span>${value || predicted ? (total || '') : '–'}</span>
         ${predicted ? `<div class="bar-forecast" style="height:${forecastShare}%"></div>` : ''}
         <div class="bar-measured" style="height:${measuredShare}%"></div>
       </div>`;
@@ -753,14 +761,14 @@ function renderOverview(data, forecasts, from, to) {
     const currentValue = item.values.find(value => value.year === currentYear);
     return {
       name: item.station.name,
-      current: currentValue?.[metricKey] ?? 0,
+      current: currentValue?.[metricKey] ?? null,
       average: values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : 0,
       forecast: forecastCounts.get(item.station.id) || 0,
       record: warmRecord || coldRecord ? currentValue : null,
       extreme: warmRecord || coldRecord ? currentValue?.[extremeKey] : null
     };
   });
-  const card = (title, key) => `<article><h3>${title}</h3>${rows.map((row, index) => `<div class="overview-value" style="--station-color:${colors[index]}"><span>${row.name}</span><strong>${formatter.format(row[key])}</strong><small>${metric.label}</small>${key === 'current' && row.record ? `<strong class="overview-record-value">${row.record[recordKey]}</strong><small class="overview-record overview-record-series">${recordLabel} (${tr('days')})</small><strong class="overview-record-value">${formatter.format(row.extreme)}°</strong><small class="overview-record">${extremeLabel} (°C)</small>` : ''}</div>`).join('')}</article>`;
+  const card = (title, key) => `<article><h3>${title}</h3>${rows.map((row, index) => `<div class="overview-value" style="--station-color:${colors[index]}"><span>${row.name}</span><strong>${row[key] == null ? '–' : formatter.format(row[key])}</strong><small>${row[key] == null ? tr('noData') : metric.label}</small>${key === 'current' && row.record ? `<strong class="overview-record-value">${row.record[recordKey]}</strong><small class="overview-record overview-record-series">${recordLabel} (${tr('days')})</small><strong class="overview-record-value">${formatter.format(row.extreme)}°</strong><small class="overview-record">${extremeLabel} (°C)</small>` : ''}</div>`).join('')}</article>`;
   document.querySelector('#overview-summary').innerHTML = card(`${tr('currentYearShort')} (${currentYear})`, 'current')
     + card(`${tr('periodAverage')} (${from}–${to})`, 'average')
     + card(tr('nextDaysShort'), 'forecast');
@@ -783,7 +791,7 @@ function renderLatestView() {
   const { data, forecasts, contexts, heatDays, from, to, stationCount: count } = latestView;
   latestForecasts = forecasts;
   renderComparison(data, forecasts, from, to);
-  renderHeatDays(heatDays);
+  renderHeatDays(heatDays, data);
   renderClimateContext(contexts, forecasts);
   renderForecast(forecasts);
   renderOverview(data, forecasts, from, to);
