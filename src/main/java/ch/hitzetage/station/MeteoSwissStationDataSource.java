@@ -136,6 +136,14 @@ class MeteoSwissStationDataSource implements StationDataSource {
     }
 
     @Override
+    public List<DailyTemperature> findDailyTemperatures(String stationId, int year) {
+        return dailyRows(stationId, year).stream().filter(row -> row.date().getYear() == year)
+                .filter(row -> row.maximum() != null || row.minimum() != null)
+                .map(row -> new DailyTemperature(row.date(), row.maximum(), row.minimum()))
+                .sorted(Comparator.comparing(DailyTemperature::date)).toList();
+    }
+
+    @Override
     public PrecipitationSummary findPrecipitation(String stationId, int fromYear, int toYear, int detailYear) {
         Map<LocalDate, Double> values = new java.util.TreeMap<>();
         for (DailyObservation row : dailyRows(stationId, Math.max(toYear, detailYear))) {

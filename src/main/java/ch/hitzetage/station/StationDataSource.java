@@ -20,6 +20,8 @@ public interface StationDataSource {
 
     List<DailyHeatDay> findVeryHotDays(String stationId, int year);
 
+    List<DailyTemperature> findDailyTemperatures(String stationId, int year);
+
     PrecipitationSummary findPrecipitation(String stationId, int fromYear, int toYear, int detailYear);
 }
 

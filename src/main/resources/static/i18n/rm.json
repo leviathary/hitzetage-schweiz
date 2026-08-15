@@ -200,5 +200,8 @@
   "precipitationDefinitionTitle": "Tge munta in millimeter precipitaziun?",
   "precipitationDefinitionText": "In millimeter precipitaziun correspunda ad in liter aua per meter quadrat.",
   "drySpellDefinitionTitle": "Tge è ina perioda sitga?",
-  "drySpellDefinitionText": "Ina successiun da dis consecutivs cun damain dad 1 mm precipitaziun per di."
+  "drySpellDefinitionText": "Ina successiun da dis consecutivs cun damain dad 1 mm precipitaziun per di.",
+  "navCalendar": "Chalender da temperatura", "experimental": "Experimental", "calendarTitle": "Chalender da temperatura", "calendarIntro": "Vesa d’in sguard ils dis che han cuntanschì ina limita da temperatura.",
+  "hotMode": "Dis chauds", "coldMode": "Dis fraids", "maximumThreshold": "Maximum dal di almain", "minimumThreshold": "Minimum dal di maximal", "matchingDays": "dis adattads", "fewerDays": "limita cuntanschida", "moreExtreme": "pli extrem", "calendarLoading": "Il chalender vegn chargià …", "calendarError": "Las temperaturas n’han betg pudì vegnir chargiadas."
+  ,"maximumAtMost": "Maximum dal di maximal"
 }

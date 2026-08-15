@@ -81,6 +81,18 @@ class DemoStationDataSource implements StationDataSource {
     }
 
     @Override
+    public List<DailyTemperature> findDailyTemperatures(String stationId, int year) {
+        return java.util.stream.IntStream.rangeClosed(1, LocalDate.of(year, 12, 31).lengthOfYear())
+                .mapToObj(day -> LocalDate.ofYearDay(year, day))
+                .map(date -> {
+                    double seasonal = 11 + 13 * Math.sin((date.getDayOfYear() - 105) * Math.PI * 2 / 365.25);
+                    double variation = Math.sin((date.getDayOfYear() * 17 + stationId.hashCode()) * .31) * 4;
+                    double maximum = Math.round((seasonal + variation + 5) * 10) / 10.0;
+                    return new DailyTemperature(date, maximum, Math.round((maximum - 8) * 10) / 10.0);
+                }).toList();
+    }
+
+    @Override
     public PrecipitationSummary findPrecipitation(String stationId, int fromYear, int toYear, int detailYear) {
         var annual = java.util.stream.IntStream.rangeClosed(fromYear, toYear)
                 .mapToObj(year -> new PrecipitationSummary.AnnualTotal(year, 760 + Math.floorMod(year * 47 + stationId.hashCode(), 430))).toList();

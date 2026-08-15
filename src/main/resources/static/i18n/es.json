@@ -200,5 +200,8 @@
   "precipitationDefinitionTitle": "¿Qué significa un milímetro de lluvia?",
   "precipitationDefinitionText": "Un milímetro de lluvia equivale a un litro de agua por metro cuadrado.",
   "drySpellDefinitionTitle": "¿Qué es un período de sequía?",
-  "drySpellDefinitionText": "Una serie de días consecutivos con menos de 1 mm de lluvia por día."
+  "drySpellDefinitionText": "Una serie de días consecutivos con menos de 1 mm de lluvia por día.",
+  "navCalendar": "Calendario térmico", "experimental": "Experimental", "calendarTitle": "Calendario térmico", "calendarIntro": "Descubre de un vistazo qué días alcanzaron un umbral de temperatura.",
+  "hotMode": "Días cálidos", "coldMode": "Días fríos", "maximumThreshold": "Máxima diaria al menos", "minimumThreshold": "Mínima diaria como máximo", "matchingDays": "días coincidentes", "fewerDays": "umbral alcanzado", "moreExtreme": "más extremo", "calendarLoading": "Cargando calendario …", "calendarError": "No se pudieron cargar las temperaturas."
+  ,"maximumAtMost": "Máxima diaria como máximo"
 }

@@ -80,6 +80,12 @@ class DwdStationDataSource implements StationDataSource {
     @Override public List<DailyHeatDay> findIceDays(String id, int year) { return temperatureDays(id, year, row -> row.maximum() != null && row.maximum() < 0); }
     @Override public List<DailyHeatDay> findSummerDays(String id, int year) { return temperatureDays(id, year, row -> row.maximum() != null && row.maximum() >= 25); }
     @Override public List<DailyHeatDay> findVeryHotDays(String id, int year) { return temperatureDays(id, year, row -> row.maximum() != null && row.maximum() >= 35); }
+    @Override public List<DailyTemperature> findDailyTemperatures(String id, int year) {
+        return dailyRows(id).values().stream().filter(row -> row.date().getYear() == year)
+                .filter(row -> row.maximum() != null || row.minimum() != null)
+                .map(row -> new DailyTemperature(row.date(), row.maximum(), row.minimum()))
+                .sorted(java.util.Comparator.comparing(DailyTemperature::date)).toList();
+    }
 
     private List<DailyHeatDay> temperatureDays(String id, int year, java.util.function.Predicate<Observation> predicate) {
         return dailyRows(id).values().stream().filter(row -> row.date().getYear() == year && predicate.test(row))

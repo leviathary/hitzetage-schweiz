@@ -200,5 +200,8 @@
   "precipitationDefinitionTitle": "Vad betyder en millimeter nederbörd?",
   "precipitationDefinitionText": "En millimeter nederbörd motsvarar en liter vatten per kvadratmeter.",
   "drySpellDefinitionTitle": "Vad är en torrperiod?",
-  "drySpellDefinitionText": "En körning av på varandra följande dagar med mindre än 1 mm nederbörd per dag."
+  "drySpellDefinitionText": "En körning av på varandra följande dagar med mindre än 1 mm nederbörd per dag.",
+  "navCalendar": "Temperaturkalender", "experimental": "Experimentell", "calendarTitle": "Temperaturkalender", "calendarIntro": "Se direkt vilka dagar som nådde en temperaturgräns.",
+  "hotMode": "Varma dagar", "coldMode": "Kalla dagar", "maximumThreshold": "Dygnsmaximum minst", "minimumThreshold": "Dygnsminimum högst", "matchingDays": "matchande dagar", "fewerDays": "gränsen nådd", "moreExtreme": "mer extremt", "calendarLoading": "Laddar temperaturkalender …", "calendarError": "Temperaturdata kunde inte laddas."
+  ,"maximumAtMost": "Dygnsmaximum högst"
 }

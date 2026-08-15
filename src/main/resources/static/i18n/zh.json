@@ -200,5 +200,8 @@
   "precipitationDefinitionTitle": "毫米降水量表示什么？",
   "precipitationDefinitionText": "一毫米降水相当于每平方米一升水。",
   "drySpellDefinitionTitle": "什么是干旱期？",
-  "drySpellDefinitionText": "连续多天每日降水量低于1毫米。"
+  "drySpellDefinitionText": "连续多天每日降水量低于1毫米。",
+  "navCalendar": "温度日历", "experimental": "实验功能", "calendarTitle": "温度日历", "calendarIntro": "一目了然地查看达到温度阈值的日期。",
+  "hotMode": "炎热日", "coldMode": "寒冷日", "maximumThreshold": "日最高温至少", "minimumThreshold": "日最低温至多", "matchingDays": "符合日期", "fewerDays": "刚好达到", "moreExtreme": "更极端", "calendarLoading": "正在加载温度日历…", "calendarError": "无法加载温度数据。"
+  ,"maximumAtMost": "日最高温至多"
 }

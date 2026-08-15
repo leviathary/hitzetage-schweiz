@@ -200,5 +200,8 @@
   "precipitationDefinitionTitle": "Hva betyr en millimeter nedbør?",
   "precipitationDefinitionText": "En millimeter nedbør tilsvarer en liter vann per kvadratmeter.",
   "drySpellDefinitionTitle": "Hva er en tørrperiode?",
-  "drySpellDefinitionText": "Et løp av påfølgende dager med mindre enn 1 mm nedbør per dag."
+  "drySpellDefinitionText": "Et løp av påfølgende dager med mindre enn 1 mm nedbør per dag.",
+  "navCalendar": "Temperaturkalender", "experimental": "Eksperimentell", "calendarTitle": "Temperaturkalender", "calendarIntro": "Se med ett blikk hvilke dager som nådde en temperaturgrense.",
+  "hotMode": "Varme dager", "coldMode": "Kalde dager", "maximumThreshold": "Døgnmaksimum minst", "minimumThreshold": "Døgnminimum høyst", "matchingDays": "matchende dager", "fewerDays": "grensen nådd", "moreExtreme": "mer ekstremt", "calendarLoading": "Laster temperaturkalender …", "calendarError": "Temperaturdata kunne ikke lastes."
+  ,"maximumAtMost": "Døgnmaksimum høyst"
 }

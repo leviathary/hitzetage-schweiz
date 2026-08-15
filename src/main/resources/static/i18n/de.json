@@ -200,5 +200,8 @@
   "precipitationDefinitionTitle": "Was bedeutet Niederschlag in Millimetern?",
   "precipitationDefinitionText": "Ein Millimeter Niederschlag entspricht einem Liter Wasser pro Quadratmeter.",
   "drySpellDefinitionTitle": "Was ist eine Trockenperiode?",
-  "drySpellDefinitionText": "Eine Folge aufeinanderfolgender Tage mit weniger als 1 mm Niederschlag pro Tag."
+  "drySpellDefinitionText": "Eine Folge aufeinanderfolgender Tage mit weniger als 1 mm Niederschlag pro Tag.",
+  "navCalendar": "Temperaturkalender", "experimental": "Experimentell", "calendarTitle": "Temperaturkalender", "calendarIntro": "Entdecke auf einen Blick, an welchen Tagen eine Temperaturgrenze erreicht wurde.",
+  "hotMode": "Heisse Tage", "coldMode": "Kalte Tage", "maximumThreshold": "Tagesmaximum mindestens", "minimumThreshold": "Tagesminimum höchstens", "matchingDays": "passende Tage", "fewerDays": "knapp erreicht", "moreExtreme": "extremer", "calendarLoading": "Temperaturkalender wird geladen …", "calendarError": "Temperaturdaten konnten nicht geladen werden."
+  ,"maximumAtMost": "Tagesmaximum höchstens"
 }

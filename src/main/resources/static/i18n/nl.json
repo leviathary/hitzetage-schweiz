@@ -200,5 +200,8 @@
   "precipitationDefinitionTitle": "Wat betekent een millimeter neerslag?",
   "precipitationDefinitionText": "Eén millimeter neerslag is gelijk aan één liter water per vierkante meter.",
   "drySpellDefinitionTitle": "Wat is een droge periode?",
-  "drySpellDefinitionText": "Een reeks opeenvolgende dagen met minder dan 1 mm neerslag per dag."
+  "drySpellDefinitionText": "Een reeks opeenvolgende dagen met minder dan 1 mm neerslag per dag.",
+  "navCalendar": "Temperatuurkalender", "experimental": "Experimenteel", "calendarTitle": "Temperatuurkalender", "calendarIntro": "Zie in één oogopslag op welke dagen een temperatuurgrens werd bereikt.",
+  "hotMode": "Warme dagen", "coldMode": "Koude dagen", "maximumThreshold": "Dagmaximum minstens", "minimumThreshold": "Dagminimum hoogstens", "matchingDays": "passende dagen", "fewerDays": "net bereikt", "moreExtreme": "extremer", "calendarLoading": "Temperatuurkalender laden …", "calendarError": "Temperatuurgegevens konden niet worden geladen."
+  ,"maximumAtMost": "Dagmaximum hoogstens"
 }

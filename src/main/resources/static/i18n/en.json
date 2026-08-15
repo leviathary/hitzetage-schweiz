@@ -200,5 +200,8 @@
   "precipitationDefinitionTitle": "What does a millimetre of rainfall mean?",
   "precipitationDefinitionText": "One millimetre of rainfall equals one litre of water per square metre.",
   "drySpellDefinitionTitle": "What is a dry spell?",
-  "drySpellDefinitionText": "A run of consecutive days with less than 1 mm of rainfall per day."
+  "drySpellDefinitionText": "A run of consecutive days with less than 1 mm of rainfall per day.",
+  "navCalendar": "Temperature calendar", "experimental": "Experimental", "calendarTitle": "Temperature calendar", "calendarIntro": "See at a glance which days reached a temperature threshold.",
+  "hotMode": "Hot days", "coldMode": "Cold days", "maximumThreshold": "Daily maximum at least", "minimumThreshold": "Daily minimum at most", "matchingDays": "matching days", "fewerDays": "just reached", "moreExtreme": "more extreme", "calendarLoading": "Loading temperature calendar …", "calendarError": "Temperature data could not be loaded."
+  ,"maximumAtMost": "Daily maximum at most"
 }

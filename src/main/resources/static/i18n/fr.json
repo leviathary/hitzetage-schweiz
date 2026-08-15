@@ -200,5 +200,8 @@
   "precipitationDefinitionTitle": "Que signifie un millimètre de précipitations ?",
   "precipitationDefinitionText": "Un millimètre de précipitations correspond à un litre d’eau par mètre carré.",
   "drySpellDefinitionTitle": "Qu’est-ce qu’une période sèche ?",
-  "drySpellDefinitionText": "Une suite de jours consécutifs avec moins de 1 mm de précipitations par jour."
+  "drySpellDefinitionText": "Une suite de jours consécutifs avec moins de 1 mm de précipitations par jour.",
+  "navCalendar": "Calendrier thermique", "experimental": "Expérimental", "calendarTitle": "Calendrier thermique", "calendarIntro": "Voyez en un coup d’œil les jours ayant atteint un seuil de température.",
+  "hotMode": "Jours chauds", "coldMode": "Jours froids", "maximumThreshold": "Maximum journalier au moins", "minimumThreshold": "Minimum journalier au plus", "matchingDays": "jours correspondants", "fewerDays": "seuil atteint", "moreExtreme": "plus extrême", "calendarLoading": "Chargement du calendrier …", "calendarError": "Les températures n’ont pas pu être chargées."
+  ,"maximumAtMost": "Maximum journalier au plus"
 }

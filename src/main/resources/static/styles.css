@@ -295,6 +295,48 @@ button:disabled { opacity: .5; cursor: not-allowed; }
 .precipitation-day-dialog-bar > span { position:relative; align-self:end; width:72%; min-height:0; margin:0 auto; border-radius:3px 3px 0 0; background:#287fae; }
 .precipitation-day-dialog-bar i { position:absolute; bottom:calc(100% + 3px); left:50%; transform:translateX(-50%); color:#40534c; font-size:.58rem; font-style:normal; white-space:nowrap; }
 .precipitation-day-dialog-bar small { align-self:center; color:#63716c; font-size:.61rem; text-align:center; }
+.temperature-calendar-heading { display:flex; align-items:end; justify-content:space-between; gap:24px; margin-bottom:18px; }
+.temperature-calendar-heading h2 { margin:2px 0 5px; }
+.temperature-calendar-heading p:not(.eyebrow) { margin:0; color:#63716c; font-size:.82rem; }
+.temperature-calendar-heading .eyebrow { display:inline-block; margin:0; padding:3px 7px; border-radius:999px; background:#f1df9e; color:#634d10; font-size:.61rem; }
+.temperature-calendar-selectors { display:flex; flex:none; gap:9px; }
+.temperature-calendar-selectors label { width:170px; margin:0; color:#52615c; font-size:.68rem; }
+.temperature-calendar-selectors label:last-child { width:100px; }
+.temperature-calendar-selectors select { margin-top:4px; }
+.temperature-calendar-controls { display:grid; grid-template-columns:auto minmax(260px,1fr) auto; align-items:center; gap:20px; padding:15px 17px; border:1px solid #ffffffd5; border-radius:15px; background:#ffffff7d; }
+.temperature-mode-controls { display:grid; gap:6px; }
+.temperature-mode-switch { display:flex; gap:4px; padding:4px; border-radius:11px; background:#dce7e2; }
+.temperature-mode-switch button { width:auto; min-width:105px; margin:0; padding:8px 12px; border-radius:8px; background:transparent; color:#51625b; box-shadow:none; font-size:.72rem; }
+.temperature-mode-switch button.active { background:#fff; color:#8e301e; box-shadow:0 3px 10px #173c2c1c; }
+.temperature-mode-switch button:last-child.active { color:#155b91; }
+.temperature-mode-controls select { padding:7px 10px; border-radius:9px; font-size:.7rem; }
+.temperature-threshold-control { display:grid; grid-template-columns:1fr auto; align-items:center; gap:6px 14px; margin:0; color:#52615c; font-size:.72rem; }
+.temperature-threshold-control strong { color:#172822; font-size:1rem; }
+.temperature-threshold-control input { grid-column:1/-1; width:100%; margin:0; accent-color:#c7482d; }
+.temperature-calendar-view:has(.temperature-calendar-grid.cold) .temperature-threshold-control input { accent-color:#2878b5; }
+.temperature-calendar-result { min-width:100px; text-align:right; }
+.temperature-calendar-result strong,.temperature-calendar-result span { display:block; }
+.temperature-calendar-result strong { font-size:1.5rem; }
+.temperature-calendar-result span { color:#63716c; font-size:.65rem; }
+.temperature-calendar-legend { display:flex; align-items:center; justify-content:flex-end; gap:5px; margin:10px 2px; color:#63716c; font-size:.62rem; }
+.temperature-calendar-legend i { width:15px; height:15px; border-radius:4px; background:#d34a30; opacity:calc(.2 * var(--legend-step,1)); }
+.temperature-calendar-view:has(.temperature-calendar-grid.cold) .temperature-calendar-legend i { background:#2878b5; }
+.temperature-calendar-legend i:nth-of-type(1) { --legend-step:1; }.temperature-calendar-legend i:nth-of-type(2) { --legend-step:2; }.temperature-calendar-legend i:nth-of-type(3) { --legend-step:3; }.temperature-calendar-legend i:nth-of-type(4) { --legend-step:4; }.temperature-calendar-legend i:nth-of-type(5) { --legend-step:5; }
+.temperature-calendar { overflow-x:auto; padding:14px; border:1px solid #ffffffd5; border-radius:15px; background:#ffffff72; }
+.temperature-calendar-grid { min-width:940px; }
+.temperature-calendar-row { display:grid; grid-template-columns:70px repeat(31,minmax(22px,1fr)); gap:4px; margin-bottom:4px; }
+.temperature-calendar-row > strong { align-self:center; color:#52615c; font-size:.68rem; text-transform:uppercase; }
+.temperature-calendar-days { margin-bottom:7px; }
+.temperature-calendar-days span { color:#718078; font-size:.55rem; text-align:center; }
+.temperature-calendar-cell { position:relative; aspect-ratio:1; min-height:22px; border:1px solid #d5ded9; border-radius:5px; background:#eef2ef; }
+.temperature-calendar-cell i { position:absolute; inset:0; display:grid; place-items:center; color:transparent; font-size:.5rem; font-style:normal; }
+.temperature-calendar-cell:hover i { color:#fff; text-shadow:0 1px 2px #0008; }
+.temperature-calendar-cell.outside { border-color:transparent; background:transparent; }
+.temperature-calendar-cell.no-data { background:repeating-linear-gradient(135deg,#eef2ef 0 3px,#e4eae6 3px 6px); }
+.temperature-calendar-cell.not-matched { opacity:.42; }
+.temperature-calendar-grid.hot .temperature-calendar-cell.matched { border-color:#fff; background:#d34a30; box-shadow:0 1px 3px #7f241d28; }
+.temperature-calendar-grid.cold .temperature-calendar-cell.matched { border-color:#fff; background:#2878b5; box-shadow:0 1px 3px #164f7d28; }
+.temperature-calendar-cell.intensity-1 { opacity:.35; }.temperature-calendar-cell.intensity-2 { opacity:.5; }.temperature-calendar-cell.intensity-3 { opacity:.68; }.temperature-calendar-cell.intensity-4 { opacity:.84; }.temperature-calendar-cell.intensity-5 { opacity:1; }
 .forecast-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-top: 36px; }
 .forecast-heading h2 { margin-bottom: 12px; }
 #forecast-updated { color: #72807a; font-size: .75rem; }
@@ -362,6 +404,11 @@ footer a { color: inherit; font-weight: 700; text-underline-offset: 3px; }
   .precipitation-compare-controls label { width:100%; }
   .precipitation-compare-summary article { grid-template-columns:1fr; }
   .precipitation-compare-summary h4 { grid-column:auto; }
+  .temperature-calendar-heading { align-items:stretch; flex-direction:column; }
+  .temperature-calendar-selectors { display:grid; grid-template-columns:1fr 110px; }
+  .temperature-calendar-selectors label,.temperature-calendar-selectors label:last-child { width:100%; }
+  .temperature-calendar-controls { grid-template-columns:1fr; }
+  .temperature-calendar-result { text-align:left; }
 }
 @media (min-width: 980px) {
   .overview-metric-label { width: max(322px, calc(40% - 60px)); }

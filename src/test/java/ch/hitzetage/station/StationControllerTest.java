@@ -128,6 +128,18 @@ class StationControllerTest {
     }
 
     @Test
+    void returnsDailyTemperaturesForCalendar() throws Exception {
+        mockMvc.perform(get("/api/stations/ZRH/daily-temperatures").param("year", "2024"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.station.id").value("ZRH"))
+                .andExpect(jsonPath("$.year").value(2024))
+                .andExpect(jsonPath("$.values", hasSize(366)))
+                .andExpect(jsonPath("$.values[0].date").value("2024-01-01"))
+                .andExpect(jsonPath("$.values[0].maximumTemperatureCelsius").isNumber())
+                .andExpect(jsonPath("$.values[0].minimumTemperatureCelsius").isNumber());
+    }
+
+    @Test
     void returnsPrecipitationBreakdown() throws Exception {
         mockMvc.perform(get("/api/stations/ZRH/precipitation")
                         .param("fromYear", "2022").param("toYear", "2024").param("year", "2024"))

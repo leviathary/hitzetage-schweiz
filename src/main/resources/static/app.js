@@ -24,7 +24,7 @@ async function loadTranslations(language) {
   return messages;
 }
 
-const validViews = ['overview', 'years', 'details', 'precipitation', 'forecast'];
+const validViews = ['overview', 'years', 'details', 'calendar', 'precipitation', 'forecast'];
 const validMetrics = ['heatDays', 'summerDays', 'veryHotDays', 'tropicalNights', 'frostDays', 'iceDays'];
 let currentView = validViews.includes(new URLSearchParams(location.search).get('view')) ? new URLSearchParams(location.search).get('view') : 'overview';
 const tr = key => translations[currentLanguage]?.[key] || translations.de?.[key] || key;
@@ -48,6 +48,9 @@ let stationMarkerLayer;
 let selectedHeatDayYears = [];
 let latestForecasts = [];
 let latestView = null;
+let calendarMode = 'hot';
+let calendarColdMeasure = 'minimum';
+let calendarData = null;
 const currentYear = new Date().getFullYear();
 document.querySelector('#fromYear').value = currentYear - 10;
 document.querySelector('#toYear').value = currentYear;
@@ -55,6 +58,7 @@ document.querySelector('#toYear').value = currentYear;
 function applyLanguage() {
   document.documentElement.lang = currentLanguage;
   document.querySelectorAll('[data-i18n]').forEach(element => { element.textContent = tr(element.dataset.i18n); });
+  document.querySelector('#calendar-threshold-label').textContent = tr(calendarMode === 'hot' ? 'maximumThreshold' : calendarColdMeasure === 'maximum' ? 'maximumAtMost' : 'minimumThreshold');
   document.querySelectorAll('[data-metric-select]').forEach(select => {
     select.querySelector('option[value="heatDays"]').textContent = tr('heatOption');
     select.querySelector('option[value="summerDays"]').textContent = tr('summerOption');
@@ -90,7 +94,7 @@ function updateViewChrome() {
     if (link.closest('.app-navigation')) link.setAttribute('aria-current', active ? 'page' : 'false');
   });
   const title = document.querySelector('#current-view-title');
-  if (title) title.textContent = tr({ years:'navYears', details:'navDetails', precipitation:'navPrecipitation', forecast:'navForecast' }[currentView] || 'navOverview');
+  if (title) title.textContent = tr({ years:'navYears', details:'navDetails', calendar:'navCalendar', precipitation:'navPrecipitation', forecast:'navForecast' }[currentView] || 'navOverview');
 }
 
 function setView(view, updateHistory = true) {
@@ -103,6 +107,7 @@ function setView(view, updateHistory = true) {
   if (updateHistory) history.pushState({ view: currentView }, '', currentView === 'overview' ? location.pathname : `${location.pathname}?view=${currentView}`);
   window.scrollTo({ top: 0, behavior: 'smooth' });
   if (currentView === 'overview') refreshVisibleMap();
+  if (currentView === 'calendar') loadTemperatureCalendar();
 }
 
 function metricOptionsMarkup(selectedMetric) {
@@ -114,7 +119,7 @@ function metricOptionsMarkup(selectedMetric) {
 function renderViewFilterSummary(data, from, to) {
   const metricKey = document.querySelector('#metric').value;
   const interactiveMetric = ['years', 'details'].includes(currentView);
-  const metricSummary = currentView === 'precipitation' ? '' : interactiveMetric
+  const metricSummary = ['calendar', 'precipitation'].includes(currentView) ? '' : interactiveMetric
     ? `<label class="view-metric-control"><span class="visually-hidden">${tr('metric')}</span><select class="view-metric-select" data-metric-select aria-label="${tr('metric')}">${metricOptionsMarkup(metricKey)}</select></label>`
     : `<span>${metricInfo(metricKey).label}</span>`;
   const stationSummary = `<span>${data.map(item => item.station.name).join(' · ')}</span>`;
@@ -459,6 +464,99 @@ async function fetchDetailDays(id, year) {
   return data;
 }
 
+async function fetchDailyTemperatures(id, year) {
+  const response = await fetch(`/api/stations/${encodeURIComponent(id)}/daily-temperatures?year=${year}`);
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.message || `${tr('calendarError')} (${id})`);
+  return data;
+}
+
+function syncTemperatureCalendarSelectors() {
+  if (!latestView) return;
+  const stationSelect = document.querySelector('#calendar-station');
+  const yearSelect = document.querySelector('#calendar-year');
+  const previousStation = stationSelect.value;
+  const previousYear = Number(yearSelect.value);
+  stationSelect.replaceChildren(...latestView.data.map(item => {
+    const option = document.createElement('option'); option.value = item.station.id; option.textContent = item.station.name; return option;
+  }));
+  if ([...stationSelect.options].some(option => option.value === previousStation)) stationSelect.value = previousStation;
+  yearSelect.innerHTML = Array.from({ length: latestView.to - latestView.from + 1 }, (_, index) => latestView.to - index)
+    .map(year => `<option value="${year}">${year}</option>`).join('');
+  yearSelect.value = String(previousYear >= latestView.from && previousYear <= latestView.to ? previousYear : latestView.to);
+}
+
+function renderTemperatureCalendar() {
+  if (!calendarData) return;
+  const thresholdSlider = document.querySelector('#calendar-threshold');
+  const threshold = Number(thresholdSlider.value);
+  const hot = calendarMode === 'hot';
+  const sliderMinimum = Number(thresholdSlider.min);
+  const sliderMaximum = Number(thresholdSlider.max);
+  const values = new Map(calendarData.values.map(value => [value.date, value]));
+  const monthFormatter = new Intl.DateTimeFormat(locale(), { month: 'short' });
+  const numberFormatter = new Intl.NumberFormat(locale(), { maximumFractionDigits: 1 });
+  let matches = 0;
+  const header = `<div class="temperature-calendar-row temperature-calendar-days"><strong></strong>${Array.from({length:31},(_,index)=>`<span>${index + 1}</span>`).join('')}</div>`;
+  const rows = Array.from({ length: 12 }, (_, monthIndex) => {
+    const daysInMonth = new Date(calendarData.year, monthIndex + 1, 0).getDate();
+    const cells = Array.from({ length: 31 }, (_, dayIndex) => {
+      const day = dayIndex + 1;
+      if (day > daysInMonth) return '<span class="temperature-calendar-cell outside"></span>';
+      const date = `${calendarData.year}-${String(monthIndex + 1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+      const value = values.get(date);
+      if (!value) return `<span class="temperature-calendar-cell no-data" title="${date}: ${tr('noData')}"></span>`;
+      const temperature = hot || calendarColdMeasure === 'maximum'
+        ? value.maximumTemperatureCelsius
+        : value.minimumTemperatureCelsius;
+      const matched = temperature != null && (hot ? temperature >= threshold : temperature <= threshold);
+      if (matched) matches++;
+      const temperatureProgress = temperature == null ? 0 : hot
+        ? (temperature - sliderMinimum) / (sliderMaximum - sliderMinimum)
+        : (sliderMaximum - temperature) / (sliderMaximum - sliderMinimum);
+      const intensity = Math.max(1, Math.min(5, Math.floor(temperatureProgress * 5) + 1));
+      const maximum = value.maximumTemperatureCelsius == null ? '–' : `${numberFormatter.format(value.maximumTemperatureCelsius)} °C`;
+      const minimum = value.minimumTemperatureCelsius == null ? '–' : `${numberFormatter.format(value.minimumTemperatureCelsius)} °C`;
+      const title = `${new Date(`${date}T12:00:00`).toLocaleDateString(locale())} · ${tr('maximum')}: ${maximum} · ${tr('minimum')}: ${minimum}`;
+      return `<span class="temperature-calendar-cell ${matched ? `matched intensity-${intensity}` : 'not-matched'}" title="${title}"><i>${day}</i></span>`;
+    }).join('');
+    return `<div class="temperature-calendar-row"><strong>${monthFormatter.format(new Date(calendarData.year, monthIndex, 1))}</strong>${cells}</div>`;
+  }).join('');
+  document.querySelector('#calendar-match-count').textContent = matches;
+  document.querySelector('#temperature-calendar').innerHTML = `<div class="temperature-calendar-grid ${hot ? 'hot' : 'cold'}">${header}${rows}</div>`;
+}
+
+async function loadTemperatureCalendar() {
+  if (!latestView) return;
+  syncTemperatureCalendarSelectors();
+  const stationId = document.querySelector('#calendar-station').value;
+  const year = Number(document.querySelector('#calendar-year').value);
+  if (!stationId || !year) return;
+  const container = document.querySelector('#temperature-calendar');
+  container.innerHTML = `<p>${tr('calendarLoading')}</p>`;
+  try {
+    calendarData = await fetchDailyTemperatures(stationId, year);
+    renderTemperatureCalendar();
+  } catch (error) {
+    container.innerHTML = `<p>${error.message}</p>`;
+  }
+}
+
+function setCalendarMode(mode) {
+  calendarMode = mode;
+  const hot = mode === 'hot';
+  document.querySelector('#calendar-hot-mode').classList.toggle('active', hot);
+  document.querySelector('#calendar-cold-mode').classList.toggle('active', !hot);
+  document.querySelector('#calendar-hot-mode').setAttribute('aria-pressed', String(hot));
+  document.querySelector('#calendar-cold-mode').setAttribute('aria-pressed', String(!hot));
+  document.querySelector('#calendar-cold-measure').hidden = hot;
+  const slider = document.querySelector('#calendar-threshold');
+  slider.min = hot ? '15' : '-20'; slider.max = hot ? '40' : '15'; slider.value = hot ? '20' : '5';
+  document.querySelector('#calendar-threshold-label').textContent = tr(hot ? 'maximumThreshold' : calendarColdMeasure === 'maximum' ? 'maximumAtMost' : 'minimumThreshold');
+  document.querySelector('#calendar-threshold-value').textContent = slider.value;
+  renderTemperatureCalendar();
+}
+
 function populateHeatDayYears(from, to) {
   const select = document.querySelector('#heat-day-year');
   const previous = Number(select.value);
@@ -795,6 +893,8 @@ function renderLatestView() {
   renderClimateContext(contexts, forecasts);
   renderForecast(forecasts);
   renderOverview(data, forecasts, from, to);
+  syncTemperatureCalendarSelectors();
+  if (currentView === 'calendar') loadTemperatureCalendar();
   const metric = metricInfo(document.querySelector('#metric').value);
   status.textContent = `${count} ${tr('stations')} · ${from}–${to} · ${metric.threshold}`;
 }
@@ -888,6 +988,19 @@ document.querySelector('#map-toggle').addEventListener('click', event => {
   }
 });
 document.querySelector('#metric').addEventListener('change', event => changeMetric(event.target.value));
+document.querySelector('#calendar-station').addEventListener('change', loadTemperatureCalendar);
+document.querySelector('#calendar-year').addEventListener('change', loadTemperatureCalendar);
+document.querySelector('#calendar-hot-mode').addEventListener('click', () => setCalendarMode('hot'));
+document.querySelector('#calendar-cold-mode').addEventListener('click', () => setCalendarMode('cold'));
+document.querySelector('#calendar-cold-measure').addEventListener('change', event => {
+  calendarColdMeasure = event.target.value;
+  document.querySelector('#calendar-threshold-label').textContent = tr(calendarColdMeasure === 'maximum' ? 'maximumAtMost' : 'minimumThreshold');
+  renderTemperatureCalendar();
+});
+document.querySelector('#calendar-threshold').addEventListener('input', event => {
+  document.querySelector('#calendar-threshold-value').textContent = event.target.value;
+  renderTemperatureCalendar();
+});
 document.querySelectorAll('[data-country]').forEach(button => button.addEventListener('click', () => chooseCountry(button.dataset.country)));
 document.querySelector('#view-filter-summary').addEventListener('change', event => {
   if (event.target.matches('.view-metric-select')) changeMetric(event.target.value);
@@ -940,6 +1053,7 @@ document.querySelector('#language').addEventListener('change', async event => {
     applyLanguage();
     renderLatestView();
     renderPrecipitation();
+    renderTemperatureCalendar();
   } catch (error) {
     event.target.value = currentLanguage;
     status.textContent = 'Die gewählte Sprache konnte nicht geladen werden.';

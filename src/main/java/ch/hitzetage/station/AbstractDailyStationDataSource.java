@@ -24,6 +24,12 @@ abstract class AbstractDailyStationDataSource implements StationDataSource {
     @Override public List<DailyHeatDay> findIceDays(String id, int year) { return days(id, year, row -> row.maximum() != null && row.maximum() < 0); }
     @Override public List<DailyHeatDay> findSummerDays(String id, int year) { return days(id, year, row -> row.maximum() != null && row.maximum() >= 25); }
     @Override public List<DailyHeatDay> findVeryHotDays(String id, int year) { return days(id, year, row -> row.maximum() != null && row.maximum() >= 35); }
+    @Override public List<DailyTemperature> findDailyTemperatures(String id, int year) {
+        return observations(id, LocalDate.of(year, 1, 1), LocalDate.of(year, 12, 31)).stream()
+                .filter(row -> row.maximum() != null || row.minimum() != null)
+                .map(row -> new DailyTemperature(row.date(), row.maximum(), row.minimum()))
+                .sorted(Comparator.comparing(DailyTemperature::date)).toList();
+    }
 
     private List<DailyHeatDay> days(String id, int year, Predicate<Observation> predicate) {
         return observations(id, LocalDate.of(year, 1, 1), LocalDate.of(year, 12, 31)).stream().filter(predicate)

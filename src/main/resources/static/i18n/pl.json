@@ -200,5 +200,8 @@
   "precipitationDefinitionTitle": "Co oznacza milimetr opadu?",
   "precipitationDefinitionText": "Jeden milimetr opadu odpowiada jednemu litrowi wody na metr kwadratowy.",
   "drySpellDefinitionTitle": "Czym jest okres bezdeszczowy?",
-  "drySpellDefinitionText": "Ciąg kolejnych dni z opadem mniejszym niż 1 mm na dobę."
+  "drySpellDefinitionText": "Ciąg kolejnych dni z opadem mniejszym niż 1 mm na dobę.",
+  "navCalendar": "Kalendarz temperatur", "experimental": "Eksperymentalne", "calendarTitle": "Kalendarz temperatur", "calendarIntro": "Zobacz od razu, w które dni osiągnięto próg temperatury.",
+  "hotMode": "Gorące dni", "coldMode": "Zimne dni", "maximumThreshold": "Maksimum dobowe co najmniej", "minimumThreshold": "Minimum dobowe co najwyżej", "matchingDays": "pasujące dni", "fewerDays": "próg osiągnięty", "moreExtreme": "bardziej ekstremalne", "calendarLoading": "Ładowanie kalendarza …", "calendarError": "Nie udało się wczytać temperatur."
+  ,"maximumAtMost": "Maksimum dobowe co najwyżej"
 }

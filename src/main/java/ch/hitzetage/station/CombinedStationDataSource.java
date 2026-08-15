@@ -47,5 +47,6 @@ class CombinedStationDataSource implements StationDataSource {
     @Override public List<DailyHeatDay> findIceDays(String id, int year) { return source(id).findIceDays(id, year); }
     @Override public List<DailyHeatDay> findSummerDays(String id, int year) { return source(id).findSummerDays(id, year); }
     @Override public List<DailyHeatDay> findVeryHotDays(String id, int year) { return source(id).findVeryHotDays(id, year); }
+    @Override public List<DailyTemperature> findDailyTemperatures(String id, int year) { return source(id).findDailyTemperatures(id, year); }
     @Override public PrecipitationSummary findPrecipitation(String id, int from, int to, int detail) { return source(id).findPrecipitation(id, from, to, detail); }
 }

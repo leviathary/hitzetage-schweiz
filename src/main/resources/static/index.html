@@ -50,6 +50,7 @@
     <a href="?view=overview" data-view-link="overview" data-i18n="navOverview">Übersicht</a>
     <a href="?view=years" data-view-link="years" data-i18n="navYears">Jahresvergleich</a>
     <a href="?view=details" data-view-link="details" data-i18n="navDetails">Detailtage</a>
+    <a href="?view=calendar" data-view-link="calendar" data-i18n="navCalendar">Temperaturkalender</a>
     <a href="?view=precipitation" data-view-link="precipitation" data-i18n="navPrecipitation">Niederschlag</a>
     <a href="?view=forecast" data-view-link="forecast" data-i18n="navForecast">Prognose</a>
   </nav>
@@ -137,6 +138,19 @@
     </div>
     <div id="heat-days-detail" class="heat-days-detail"></div>
   </section>
+  <section class="view-panel temperature-calendar-view" data-view="calendar" aria-labelledby="temperature-calendar-title">
+    <div class="temperature-calendar-heading">
+      <div><p class="eyebrow"><span data-i18n="experimental">Experimentell</span></p><h2 id="temperature-calendar-title" data-i18n="calendarTitle">Temperaturkalender</h2><p data-i18n="calendarIntro">Entdecke auf einen Blick, an welchen Tagen eine Temperaturgrenze erreicht wurde.</p></div>
+      <div class="temperature-calendar-selectors"><label><span data-i18n="station">Messstation</span><select id="calendar-station"></select></label><label><span data-i18n="year">Jahr</span><select id="calendar-year"></select></label></div>
+    </div>
+    <div class="temperature-calendar-controls">
+      <div class="temperature-mode-controls"><div class="temperature-mode-switch" role="group" aria-label="Temperaturmodus"><button id="calendar-hot-mode" type="button" class="active" aria-pressed="true" data-i18n="hotMode">Heisse Tage</button><button id="calendar-cold-mode" type="button" aria-pressed="false" data-i18n="coldMode">Kalte Tage</button></div><select id="calendar-cold-measure" hidden><option value="minimum" data-i18n="minimumThreshold">Tagesminimum höchstens</option><option value="maximum" data-i18n="maximumAtMost">Tagesmaximum höchstens</option></select></div>
+      <label class="temperature-threshold-control" for="calendar-threshold"><span id="calendar-threshold-label" data-i18n="maximumThreshold">Tagesmaximum mindestens</span><strong><output id="calendar-threshold-value">20</output> °C</strong><input id="calendar-threshold" type="range" min="15" max="40" step="1" value="20"></label>
+      <div class="temperature-calendar-result"><strong id="calendar-match-count">–</strong><span data-i18n="matchingDays">passende Tage</span></div>
+    </div>
+    <div class="temperature-calendar-legend" aria-hidden="true"><span data-i18n="fewerDays">weniger intensiv</span><i></i><i></i><i></i><i></i><i></i><span data-i18n="moreExtreme">extremer</span></div>
+    <div id="temperature-calendar" class="temperature-calendar"><p data-i18n="calendarLoading">Temperaturkalender wird geladen …</p></div>
+  </section>
   <section class="view-panel precipitation-view" data-view="precipitation" aria-labelledby="precipitation-title">
     <div class="precipitation-heading"><div><h2 id="precipitation-title" data-i18n="precipitationTitle">Niederschlag vergleichen</h2><p data-i18n="precipitationIntro">Jahressummen vergleichen und ein Jahr bis auf einzelne Regentage untersuchen.</p></div></div>
     <p id="precipitation-record-period" class="precipitation-record-period"></p>
@@ -169,5 +183,5 @@
       <div id="feedback-success" class="feedback-success" role="status" hidden><p data-i18n="feedbackThanks">Vielen Dank! Dein Feedback wurde gespeichert.</p></div>
     </form>
   </dialog>
-  <footer><span data-i18n="footer">Quellen: MeteoSwiss, DWD, KNMI, GeoSphere Austria und NOAA/NCEI</span><span aria-hidden="true"> · </span><button id="feedback-open" class="footer-link" type="button" data-i18n="feedback">Feedback</button><span aria-hidden="true"> · </span><a href="/privacy.html" data-i18n="privacy">Datenschutz</a><span aria-hidden="true"> · </span><span>Version 0.9.0</span></footer>
+  <footer><span data-i18n="footer">Quellen: MeteoSwiss, DWD, KNMI, GeoSphere Austria und NOAA/NCEI</span><span aria-hidden="true"> · </span><button id="feedback-open" class="footer-link" type="button" data-i18n="feedback">Feedback</button><span aria-hidden="true"> · </span><a href="/privacy.html" data-i18n="privacy">Datenschutz</a><span aria-hidden="true"> · </span><span>Version 0.10.0</span></footer>
 </main><script src="/vendor/leaflet/leaflet.js" defer></script><script src="/app.js" defer></script></body></html>

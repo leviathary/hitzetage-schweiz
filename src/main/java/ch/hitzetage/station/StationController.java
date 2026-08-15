@@ -96,6 +96,14 @@ public class StationController {
         return new HeatDaysResponse(station, year, 35.0, dataStatus(station), dataSource.findVeryHotDays(station.id(), year));
     }
 
+    @GetMapping("/{stationId}/daily-temperatures")
+    public DailyTemperaturesResponse dailyTemperatures(
+            @PathVariable String stationId,
+            @RequestParam @Min(1864) @Max(2100) int year) {
+        Station station = findStation(stationId);
+        return new DailyTemperaturesResponse(station, year, dataStatus(station), dataSource.findDailyTemperatures(station.id(), year));
+    }
+
     @GetMapping("/{stationId}/precipitation")
     public PrecipitationResponse precipitation(@PathVariable String stationId,
             @RequestParam @Min(1864) int fromYear,
@@ -130,6 +138,13 @@ public class StationController {
             double heatDayThresholdCelsius,
             String dataStatus,
             List<DailyHeatDay> values) {
+    }
+
+    public record DailyTemperaturesResponse(
+            Station station,
+            int year,
+            String dataStatus,
+            List<DailyTemperature> values) {
     }
 
     public record PrecipitationResponse(Station station, String dataStatus, PrecipitationSummary precipitation) {}
